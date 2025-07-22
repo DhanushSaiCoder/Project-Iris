@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./AutoCaliberateOnLaunch.module.css";
-import ToggleSwitch from "./../ToggleSwitch";
+import ToggleSwitch from "../ToggleSwitch";
 
 const AutoCaliberateOnLaunch = () => {
     const [enabled, setEnabled] = useState(false);

@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./SettingsPage.module.css";
 import AlertDistance from "../components/SettingsPage/AlertDistance";
-import HepticFeedback from "./../components/HepticFeedback/HepticFeedback";
-import AutoCaliberateOnLaunch from "../components/AutoCaliberateOnLaunch/AutoCaliberateOnLaunch";
+import HepticFeedback from "../components/SettingsPage/HepticFeedback/HepticFeedback";
+import AutoCaliberateOnLaunch from "../components/SettingsPage/AutoCaliberateOnLaunch/AutoCaliberateOnLaunch";
 
 const SettingsPage = () => {
     const navigate = useNavigate();

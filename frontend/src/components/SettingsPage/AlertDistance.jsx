@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./AlertDistance.module.css";
-import AlertDistanceSlider from "./../AlertDistanceSlider/AlertDistanceSlider";
+import AlertDistanceSlider from "./AlertDistanceSlider/AlertDistanceSlider";
 
 const AlertDistance = () => {
     

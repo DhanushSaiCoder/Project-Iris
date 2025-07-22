@@ -1,0 +1,21 @@
+:root {
+    /* Primary brand colors */
+    --color-primary: #ebf4ff;
+
+    /* Semantic colors */
+    --color-success: #2ecc71;
+    --color-warning: #ffc107;
+    --color-danger: #f55b5b;
+    --color-card: #202020;
+
+    --color-cta: #1e90ff;
+    --color-secondaryCta: #3a3a3a;
+
+    --color-borders: #ebf4ff;
+
+    /* Typography */
+    --color-text-primary: #ebf4ff;
+    --color-text-secondary: #ebf4ff75;
+    --color-text-other: #ebf4ff40;
+    
+}

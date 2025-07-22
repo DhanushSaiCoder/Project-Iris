@@ -47,6 +47,6 @@ input:checked + .slider::before {
 }
 
 /* Optional focus styling */
-input:focus + .slider {
+/* input:focus + .slider {
   box-shadow: 0 0 2px #1e90ff;
-}
+} */

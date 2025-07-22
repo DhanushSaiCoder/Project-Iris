@@ -1,0 +1,15 @@
+.ReCaliberateDevice button {
+    width: 100%;
+    background-color: #333;
+    color: var(--color-primary);
+    border: none;
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    font-size: large;
+    font-weight: 500;
+}

@@ -3,9 +3,10 @@ import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import styles from "./SettingsPage.module.css";
-import AlertDistance from "../components/SettingsPage/AlertDistance";
+import AlertDistance from "../components/SettingsPage/AlertDistance/AlertDistance";
 import HepticFeedback from "../components/SettingsPage/HepticFeedback/HepticFeedback";
 import AutoCaliberateOnLaunch from "../components/SettingsPage/AutoCaliberateOnLaunch/AutoCaliberateOnLaunch";
+import ReCaliberateDevice from "./../components/SettingsPage/ReCaliberateDeviceBtn/ReCaliberateDevice";
 
 const SettingsPage = () => {
     const navigate = useNavigate();
@@ -27,7 +28,8 @@ const SettingsPage = () => {
             <div className={styles.settingsContentDiv}>
                 <AlertDistance />
                 <HepticFeedback />
-                <AutoCaliberateOnLaunch/>
+                <AutoCaliberateOnLaunch />
+                <ReCaliberateDevice />
             </div>
         </div>
     );

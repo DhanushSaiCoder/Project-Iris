@@ -12,6 +12,7 @@ import PrivacyNotesPage from './pages/PrivacyNotesPage.jsx';
 import SessionSummaryPage from './pages/SessionSummaryPage.jsx';
 import SettingsPage from './pages/SettingsPage.jsx';
 import UserMonitoringPage from './pages/UserMonitoringPage.jsx';
+import Header from './components/Header/Header';
 import './App.css';
 
 import { MobileGuard } from './utils/MobileGuard';
@@ -24,24 +25,27 @@ const MobileLayout = () => (
 
 const App = () => {
     return (
-        <div className="App">
-            <Routes>
-                <Route path="/admin" element={<AdminDashboardPage />} />
-                <Route element={<MobileLayout />}>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/caliberation" element={<CaliberationPage />} />
-                    <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />
-                    <Route path="/developers" element={<DevelopersPage />} />
-                    <Route path="/help" element={<HelpPage />} />
-                    <Route path="/incompatible-browser" element={<IncompatibleBrowserPage />} />
-                    <Route path="/launch" element={<LaunchPage />} />
-                    <Route path="/privacy-notes" element={<PrivacyNotesPage />} />
-                    <Route path="/session-summary" element={<SessionSummaryPage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
-                    <Route path="/user-monitoring" element={<UserMonitoringPage />} />
-                </Route>
-            </Routes>
-        </div>
+        <Router>
+            <div className="App">
+                <Header />
+                <Routes>
+                    <Route path="/admin" element={<AdminDashboardPage />} />
+                    <Route element={<MobileLayout />}>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/caliberation" element={<CaliberationPage />} />
+                        <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />
+                        <Route path="/developers" element={<DevelopersPage />} />
+                        <Route path="/help" element={<HelpPage />} />
+                        <Route path="/incompatible-browser" element={<IncompatibleBrowserPage />} />
+                        <Route path="/launch" element={<LaunchPage />} />
+                        <Route path="/privacy-notes" element={<PrivacyNotesPage />} />
+                        <Route path="/session-summary" element={<SessionSummaryPage />} />
+                        <Route path="/settings" element={<SettingsPage />} />
+                        <Route path="/user-monitoring" element={<UserMonitoringPage />} />
+                    </Route>
+                </Routes>
+            </div>
+        </Router>
     );
 }
 

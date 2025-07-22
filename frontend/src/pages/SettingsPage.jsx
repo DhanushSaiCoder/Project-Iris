@@ -3,6 +3,7 @@ import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import styles from "./SettingsPage.module.css";
+import AlertDistance from "../components/SettingsPage/AlertDistance";
 
 
 const SettingsPage = () => {
@@ -20,6 +21,10 @@ const SettingsPage = () => {
                     Back
                 </div>
                 <h2>SETTINGS</h2>
+            </div>
+
+            <div className={styles.settingsContentDiv}>
+                <AlertDistance/>
             </div>
         </div>
     );

@@ -1,0 +1,63 @@
+.AlertDistance{
+    border-bottom: 1px solid var(--color-borders);
+    background-color: var(--color-background-2);
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 20px;
+
+    flex-direction: column;
+}
+
+.labelAndValue{
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.alertDistanceSlider {
+  -webkit-appearance: none; /* Remove default styling */
+  width: 100%;
+  height: 4px;
+  background: #ddd;         /* fallback track color */
+  border-radius: 5px;
+  outline: none;
+}
+
+/* Track */
+.alertDistanceSlider::-webkit-slider-runnable-track {
+  background: #1e90ff;
+  height: 4px;
+  border-radius: 5px;
+}
+.alertDistanceSlider::-moz-range-track {
+  background: #1e90ff;
+  height: 4px;
+  border-radius: 5px;
+}
+
+/* Thumb */
+.alertDistanceSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #1e90ff;
+  border: 2px solid #1e90ff;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -6px; /* vertically centers the thumb on the track */
+}
+.alertDistanceSlider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #1e90ff;
+  border: 2px solid #1e90ff;
+  border-radius: 50%;
+  cursor: pointer;
+}

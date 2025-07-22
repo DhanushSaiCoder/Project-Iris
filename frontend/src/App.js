@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Outlet, useLocation } from 'react-router-dom';
 import AdminDashboardPage from './pages/AdminDashboardPage.jsx';
 import CaliberationPage from './pages/CaliberationPage.jsx';
 import CameraAccessDeniedPage from './pages/CameraAccessDeniedPage.jsx';
@@ -25,29 +25,38 @@ const MobileLayout = () => (
     </MobileGuard>
 );
 
+const AppContent = () => {
+    const location = useLocation();
+    const showHeader = location.pathname !== '/settings';
+
+    return (
+        <div className="App">
+            {showHeader && <Header />}
+            <Routes>
+                <Route path="/admin" element={<AdminDashboardPage />} />
+                <Route element={<MobileLayout />}>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/caliberation" element={<CaliberationPage />} />
+                    <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />
+                    <Route path="/developers" element={<DevelopersPage />} />
+                    <Route path="/help" element={<HelpPage />} />
+                    <Route path="/incompatible-browser" element={<IncompatibleBrowserPage />} />
+                    <Route path="/launch" element={<LaunchPage />} />
+                    <Route path="/privacy-notes" element={<PrivacyNotesPage />} />
+                    <Route path="/session-summary" element={<SessionSummaryPage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    <Route path="/user-monitoring" element={<UserMonitoringPage />} />
+                </Route>
+            </Routes>
+            <Footer/>
+        </div>
+    );
+}
+
 const App = () => {
     return (
         <Router>
-            <div className="App">
-                <Header />
-                <Routes>
-                    <Route path="/admin" element={<AdminDashboardPage />} />
-                    <Route element={<MobileLayout />}>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="/caliberation" element={<CaliberationPage />} />
-                        <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />
-                        <Route path="/developers" element={<DevelopersPage />} />
-                        <Route path="/help" element={<HelpPage />} />
-                        <Route path="/incompatible-browser" element={<IncompatibleBrowserPage />} />
-                        <Route path="/launch" element={<LaunchPage />} />
-                        <Route path="/privacy-notes" element={<PrivacyNotesPage />} />
-                        <Route path="/session-summary" element={<SessionSummaryPage />} />
-                        <Route path="/settings" element={<SettingsPage />} />
-                        <Route path="/user-monitoring" element={<UserMonitoringPage />} />
-                    </Route>
-                </Routes>
-                <Footer/>
-            </div>
+            <AppContent />
         </Router>
     );
 }

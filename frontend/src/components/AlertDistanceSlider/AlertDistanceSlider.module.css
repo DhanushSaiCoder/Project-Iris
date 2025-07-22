@@ -1,0 +1,55 @@
+/* base track styling */
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: transparent;  /* we'll paint via inline style */
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Chrome/Safari track (we leave it transparent here) */
+.slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: transparent;
+}
+
+/* Chrome/Safari thumb */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1e90ff;
+  /* border: 2px solid #fff; */
+  margin-top: -6px; /* centers thumb vertically on 4px track */
+  cursor: pointer;
+}
+
+/* Firefox track */
+.slider::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: transparent;
+}
+
+/* Firefox filled portion */
+.slider::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: #1e90ff;
+}
+
+/* Firefox thumb */
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1e90ff;
+  /* border: 2px solid #fff; */
+  cursor: pointer;
+}

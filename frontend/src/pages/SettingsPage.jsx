@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./SettingsPage.module.css";
 import AlertDistance from "../components/SettingsPage/AlertDistance";
-
+import HepticFeedback from "./../components/HepticFeedback/HepticFeedback";
 
 const SettingsPage = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     return (
         <div className={styles.Settings}>
             <div className={styles.settingsHeader}>
@@ -24,7 +24,8 @@ const SettingsPage = () => {
             </div>
 
             <div className={styles.settingsContentDiv}>
-                <AlertDistance/>
+                <AlertDistance />
+                <HepticFeedback />
             </div>
         </div>
     );

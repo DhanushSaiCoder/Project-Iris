@@ -1,7 +1,10 @@
 import React from "react";
-import styles from "./SettingsPage.module.css";
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
+import styles from "./SettingsPage.module.css";
+
+
 const SettingsPage = () => {
     const navigate = useNavigate(); 
     return (

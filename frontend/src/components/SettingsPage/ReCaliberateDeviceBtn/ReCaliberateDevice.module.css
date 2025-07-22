@@ -1,5 +1,9 @@
+.ReCaliberateDevice{
+    position: absolute;
+    bottom: 0;
+}
 .ReCaliberateDevice button {
-    width: 100%;
+    width: 100vw;
     background-color: #333;
     color: var(--color-primary);
     border: none;

@@ -1,0 +1,6 @@
+.VideoStream{
+    width: 70vw;
+    height: 400px;
+    background-color: var(--color-card);
+    border-radius: 10px;
+}

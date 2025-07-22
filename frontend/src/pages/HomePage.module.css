@@ -1,0 +1,33 @@
+.videoStreamDiv {
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0 0 0;
+}
+.statusDiv {
+    padding: 20px;
+    text-align: center;
+}
+.statusDiv p {
+    color: var(--color-cta);
+}
+.statusSpan {
+    font-weight: bold;
+    color: var(--color-text-primary);
+}
+.startBtn {
+    width: 85%;
+    height: 56px;
+    background-color: var(--color-success);
+    border-radius: 5px;
+    border: none;
+    font-size: larger;
+}
+
+.startBtnDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}

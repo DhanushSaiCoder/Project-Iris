@@ -14,6 +14,7 @@ import SettingsPage from './pages/SettingsPage.jsx';
 import UserMonitoringPage from './pages/UserMonitoringPage.jsx';
 import Header from './components/Header/Header';
 import './App.css';
+import "./styles/variables.css"
 
 import { MobileGuard } from './utils/MobileGuard';
 

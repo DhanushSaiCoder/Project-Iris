@@ -16,8 +16,8 @@ export default function AlertDistanceSlider({
       to right,
       #1e90ff 0%,
       #1e90ff ${percent}%,
-      #ccc ${percent}%,
-      #ccc 100%
+      #555 ${percent}%,
+      #555 100%
     )
   `;
 

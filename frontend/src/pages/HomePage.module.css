@@ -1,3 +1,6 @@
+.HomePage {
+    min-height: calc(100vh - 140px);
+}
 .videoStreamDiv {
     width: 100vw;
     display: flex;
@@ -25,7 +28,7 @@
     font-size: larger;
 }
 
-.startBtnDiv{
+.startBtnDiv {
     display: flex;
     align-items: center;
     justify-content: center;

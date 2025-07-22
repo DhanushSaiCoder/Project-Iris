@@ -4,7 +4,7 @@ import styles from "./HomePage.module.css";
 
 const HomePage = () => {
     return (
-        <div>
+        <div className={styles.HomePage}>
             <div className={styles.videoStreamDiv}>
                 <VideoStream />
             </div>

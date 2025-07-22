@@ -17,6 +17,7 @@ import './App.css';
 import "./styles/variables.css"
 
 import { MobileGuard } from './utils/MobileGuard';
+import Footer from './components/Footer/Footer.jsx';
 
 const MobileLayout = () => (
     <MobileGuard>
@@ -45,6 +46,7 @@ const App = () => {
                         <Route path="/user-monitoring" element={<UserMonitoringPage />} />
                     </Route>
                 </Routes>
+                <Footer/>
             </div>
         </Router>
     );

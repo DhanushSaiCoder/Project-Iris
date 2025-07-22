@@ -1,3 +1,31 @@
 .Header{
     background-color: var(--color-background);
+    height: 56px;
+    width: 100vw;
+    border-bottom: 1px solid var(--color-borders);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 0 30px;
+}
+.logoImg{
+    width: 32px;
+    height: auto;
+}
+.headerTxt{
+    color: var(--color-text-primary);
+    font-family: "Oswald", sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+}
+.settingsIcon{
+    color: var(--color-text-primary);
+    margin-left: auto;
+    /* height: 100%;
+    padding: 0 20px; */
+}
+.settingsIcon:hover{
+    cursor: pointer;
 }

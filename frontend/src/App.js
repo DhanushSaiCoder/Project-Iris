@@ -27,7 +27,9 @@ const MobileLayout = () => (
 
 const AppContent = () => {
     const location = useLocation();
-    const showHeader = location.pathname !== '/settings';
+    const hiddenPaths = ['/settings', '/help'];
+    const showHeader = !hiddenPaths.includes(location.pathname);
+
 
     return (
         <div className="App">
@@ -48,7 +50,7 @@ const AppContent = () => {
                     <Route path="/user-monitoring" element={<UserMonitoringPage />} />
                 </Route>
             </Routes>
-            <Footer/>
+            <Footer />
         </div>
     );
 }

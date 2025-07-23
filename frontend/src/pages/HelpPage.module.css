@@ -16,11 +16,13 @@
 }
 
 .backButton {
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
     background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
     transition: background-color 0.2s;
-    border:none;
 }
 .backButton:hover {
     background-color: rgba(51, 51, 51, 0.2);
@@ -119,7 +121,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-
 }
 
 .bulletItem {

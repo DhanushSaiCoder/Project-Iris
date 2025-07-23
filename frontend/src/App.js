@@ -27,7 +27,7 @@ const MobileLayout = () => (
 
 const AppContent = () => {
     const location = useLocation();
-    const hiddenPaths = ['/settings', '/help'];
+    const hiddenPaths = ['/settings', '/help', '/privacy-notes'];
     const showHeader = !hiddenPaths.includes(location.pathname);
 
 

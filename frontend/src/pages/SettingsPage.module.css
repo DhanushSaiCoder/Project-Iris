@@ -1,7 +1,5 @@
 .Settings{
     min-height: calc(100vh - 140px);
-    position: relative;
-
 }
 .settingsHeader{
     height: 56px;
@@ -24,7 +22,4 @@
     
     position: absolute;
     left: 20px;
-}
-.settingsContentDiv{
-    height: 100%;
 }

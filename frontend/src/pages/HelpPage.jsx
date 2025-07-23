@@ -114,7 +114,7 @@ export default function HelpPage() {
       ].map((text, i) => (
         <li key={i} className={styles.bulletItem}>
           <span className={styles.bullet} />
-          <span>{text}</span>
+          <span >{text}</span>
         </li>
       ))}
     </ul>

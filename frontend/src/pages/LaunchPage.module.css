@@ -1,0 +1,91 @@
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+.card {
+  text-align: center;
+  color: var(--color-primary);
+  max-width: 320px;
+  width: 100%;
+  padding: 24px;
+}
+
+.logo {
+  width: 72px;
+  height: 72px;
+}
+
+.title {
+  font-size: 48px;
+  letter-spacing: -1px;
+  margin: 8px 0;
+  font-weight: 400;
+  font-family: 'Oswald';
+}
+
+.subtitle {
+  font-size: 14px;
+  line-height: 1.4;
+  opacity: 0.8;
+  margin-bottom: 48px;
+}
+
+.installButton {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-cta);
+  border: none;
+  border-radius: 4px;
+  color: var(--color-primary);
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.benefitsList,
+.drawbacksList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  color: var(--color-text-secondary);
+}
+
+.benefitsList li,
+.drawbacksList li {
+  font-size: 14px;
+  text-align: left;
+  margin: 4px 0;
+}
+.positive, .negative{
+    color: var(--color-text-secondary);
+}
+.positive::before {
+  content: '✔';
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--color-success);
+}
+
+.negative::before {
+  content: '–';
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--color-danger);
+}
+
+.continueButton {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-secondaryCta);
+  border: none;
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  cursor: not-allowed;
+  margin: 8px 0 0 0;
+}

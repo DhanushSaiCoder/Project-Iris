@@ -14,3 +14,16 @@ body {
     background-color: var(--color-background);
     color: var(--color-text-primary);
 }
+
+/* 1. Remove all focus outlines */
+*:focus {
+  outline: none !important;
+}
+
+/* 2. Disable WebKit tap highlight (mobile) */
+button,
+a,
+input,
+label {
+  -webkit-tap-highlight-color: transparent;
+}

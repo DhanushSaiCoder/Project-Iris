@@ -40,6 +40,7 @@ const AppContent = () => {
                 <Route element={<MobileLayout />}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/newSession" element={<NewSession />} />
+                    <Route path="/sessionSummary" element={<SessionSummaryPage />} />
                     <Route path="/caliberation" element={<CaliberationPage />} />
                     <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />
                     <Route path="/developers" element={<DevelopersPage />} />

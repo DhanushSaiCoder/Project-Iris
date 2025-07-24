@@ -58,6 +58,7 @@
 /* the big red stop button */
 .button {
   width: 90%;
+  height: 56px;
   padding: 0.75rem 0;
   margin-bottom: 1.5rem;
   background: var(--danger);

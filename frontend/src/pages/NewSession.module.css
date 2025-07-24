@@ -1,0 +1,82 @@
+/* NewSession.module.css */
+:root {
+  --bg: var(--color-background);
+  --bg-card: var(--color-card);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --danger: var(--color-danger);
+}
+
+/* full‑screen dark background, center the card */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  background: var(--color-background);
+  width: 100vw;
+  height: 100vh;
+  padding: 1rem;
+  padding-top: 24px;
+
+  box-sizing: border-box;
+}
+
+/* card like in your design */
+.card {
+  background: var(--color-background);
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* the live image/video */
+.image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+/* Status line */
+.status {
+  margin: 1rem 0 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.statusLabel {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+/* the big red stop button */
+.button {
+  width: 90%;
+  padding: 0.75rem 0;
+  margin-bottom: 1.5rem;
+  background: var(--danger);
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.button:hover {
+  background: rgba(255, 91, 91, 0.9);
+}
+
+.cameraStreamDiv{
+    width: 80vw;
+    aspect-ratio: 3/4;
+    border-radius: 10px;
+    background-color: var(--color-card);
+    border: 1px solid var(--color-borders);
+}

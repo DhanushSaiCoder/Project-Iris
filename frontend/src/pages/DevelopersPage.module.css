@@ -63,7 +63,7 @@
 }
 
 .developerCard {
-    border: 2px solid var(--color-borders);
+    border: 1px solid var(--color-borders);
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -111,7 +111,7 @@
 }
 
 .developerRole {
-    font-size: 0.875rem;
+    font-size: 0.5rem;
     color: var(--color-cta);
     margin: 0;
 }

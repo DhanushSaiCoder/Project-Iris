@@ -1,0 +1,45 @@
+.ActiveUsersTitleContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 10px;
+}
+
+.LinkView{
+    text-decoration: none;
+}
+
+.ActiveUsersDetails{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.UserCard{
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: var(--color-secondaryCta);
+    margin-top: 10px;
+    border-radius: 3px;
+}
+
+.SessionId{
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.SessionId span{
+    font-weight: lighter;
+}
+
+.Moniter{
+    font-size: 12px;
+    color: var(--color-cta);
+}

@@ -1,0 +1,53 @@
+.StatsTitleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 10px;
+}
+
+.ViewMore{
+    text-decoration: none;
+}
+
+.StatsDetailsContainer {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 12px;
+    scroll-snap-type: x mandatory;
+}
+
+.StatsDetailsContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.StatsDetailsCard {
+    min-width: 150px;
+    background-color: var(--color-secondaryCta);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    text-align: center;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    transition: transform 0.2s ease;
+}
+
+.StatsDetailsCard:hover {
+    transform: translateY(-4px);
+}
+
+.StatsDetailsCard h1 {
+    font-size: 32px;
+    margin: 0;
+    color: var(--color-primar);
+}
+
+.StatsDetailsCard p {
+    font-size: 14px;
+    color: var(--color-primar);
+    margin-top: 8px;
+}

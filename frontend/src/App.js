@@ -18,6 +18,7 @@ import "./styles/variables.css"
 
 import { MobileGuard } from './utils/MobileGuard';
 import Footer from './components/Footer/Footer.jsx';
+import NewSession from './pages/NewSession';
 
 const MobileLayout = () => (
     <MobileGuard>
@@ -38,6 +39,7 @@ const AppContent = () => {
                 <Route path="/admin" element={<AdminDashboardPage />} />
                 <Route element={<MobileLayout />}>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/newSession" element={<NewSession />} />
                     <Route path="/caliberation" element={<CaliberationPage />} />
                     <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />
                     <Route path="/developers" element={<DevelopersPage />} />

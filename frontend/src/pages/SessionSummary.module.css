@@ -1,0 +1,97 @@
+/* SessionSummary.module.css */
+.container {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  letter-spacing: 0.05em;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statValue {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+  text-align: center;
+}
+
+.detected {
+  margin-bottom: 32px;
+}
+
+.detectedTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+}
+
+.detectedList {
+  list-style-position: inside;
+  padding-left: 0;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.detectedList li {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.objectName {
+  font-weight: 500;
+}
+
+.objectDist {
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+.button {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.primary {
+  background-color: var(--color-cta);
+  color: #fff;
+}
+
+.secondary {
+  background-color: var(--color-secondaryCta);
+  color: #fff;
+}

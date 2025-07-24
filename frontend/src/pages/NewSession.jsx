@@ -2,6 +2,7 @@
 import React from "react";
 import styles from "./NewSession.module.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { nanoid } from "nanoid";
 
 export default function NewSession({
     imageUrl,
@@ -9,7 +10,13 @@ export default function NewSession({
 }) {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const sessionId = searchParams.get("sessionId");
+    let sessionId = searchParams.get("sessionId");
+    console.log(sessionId)
+    if(!sessionId) {
+        sessionId = nanoid(10)
+    }
+
+
 
     return (
         <div className={styles.container}>

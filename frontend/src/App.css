@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 * {
     padding: 0;
@@ -17,7 +17,7 @@ body {
 
 /* 1. Remove all focus outlines */
 *:focus {
-  outline: none !important;
+    outline: none !important;
 }
 
 /* 2. Disable WebKit tap highlight (mobile) */
@@ -25,5 +25,5 @@ button,
 a,
 input,
 label {
-  -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
 }

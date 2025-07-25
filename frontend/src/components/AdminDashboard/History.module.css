@@ -3,11 +3,14 @@
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
-    margin-top: 20px;
+    margin-top: 16px;
+
 }
 
-.Link{
+.Link {
+    font-size: 12px;
     text-decoration: none;
+    color: var(--text-secondary);
 }
 
 .HistoryTable {
@@ -18,10 +21,19 @@
 .HistoryTable th,
 .HistoryTable td {
     font-size: 12px;
-    text-align: center;
+    text-align: left;
+    padding: 8px;
 }
 
-.HistoryTable th{
+.HistoryTable th {
     font-size: 16px;
     font-weight: bold;
+    border-bottom: 1px solid var(--color-borders);
+}
+.HistoryTable tbody tr td{
+    color: var(--text-secondary);
+}
+.title {
+    font-size: 18px;
+    opacity: 75%;
 }

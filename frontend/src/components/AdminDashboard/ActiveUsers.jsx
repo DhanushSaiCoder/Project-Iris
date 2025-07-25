@@ -12,13 +12,13 @@ const ActiveUsers = () => {
     return (
         <div className={styles.ActiveUsersContainer}>
             <div className={styles.ActiveUsersTitleContainer}>
-                <p>ACTIVE USERS</p>
-                <Link to='/' className={styles.LinkView}>View More</Link>
+                <h1>ACTIVE USERS</h1>
+                <Link to='/' className={styles.ViewMore}>View More</Link>
             </div>
             <div className={styles.ActiveUsersDetails}>
                 {ActiveUsers.map((user, index) => (
                     <div key={user.id + index} className={styles.UserCard}>
-                        <p className={styles.SessionId}>SESSION ID: <span>{user.id}</span></p>
+                        <p className={styles.SessionId}>SESSION ID: {"  "}<span>{user.id}</span></p>
                         <p className={styles.Moniter}>Moniter User</p>
                     </div>
                 ))}

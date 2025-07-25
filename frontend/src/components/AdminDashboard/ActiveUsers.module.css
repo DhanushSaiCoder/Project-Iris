@@ -1,4 +1,4 @@
-.ActiveUsersTitleContainer{
+.ActiveUsersTitleContainer {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -6,18 +6,21 @@
     margin-top: 10px;
 }
 
-.LinkView{
+.ViewMore {
     text-decoration: none;
+    font-size: 12px;
+    text-decoration: none;
+    color: var(--text-secondary);
 }
 
-.ActiveUsersDetails{
+.ActiveUsersDetails {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
-.UserCard{
+.UserCard {
     width: 100%;
     display: flex;
     align-items: center;
@@ -26,18 +29,28 @@
     background-color: var(--color-card);
     margin-top: 8px;
     border-radius: 3px;
+    padding: 32px 18px;
 }
 
-.SessionId{
+.SessionId {
     font-weight: bold;
-    font-size: 15px;
+
 }
 
-.SessionId span{
+.SessionId span {
     font-weight: lighter;
 }
 
-.Moniter{
+.id {
+    color: var(--color-text-secondary);
+}
+
+.Moniter {
     font-size: 12px;
     color: var(--color-cta);
+}
+
+.ActiveUsersTitleContainer h1 {
+    font-size: 18px;
+    opacity: 75%;
 }

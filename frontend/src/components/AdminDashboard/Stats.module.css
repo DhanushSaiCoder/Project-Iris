@@ -5,9 +5,16 @@
     flex-direction: row;
     margin-top: 10px;
 }
+.statsTitle{
+    font-size: 18px;
+    opacity: 75%;
+}
+
 
 .ViewMore{
+    font-size: 12px;
     text-decoration: none;
+    color: var(--text-secondary);
 }
 
 .StatsDetailsContainer {
@@ -24,7 +31,7 @@
 
 .StatsDetailsCard {
     min-width: 150px;
-    background-color: var(--color-secondaryCta);
+    background-color: var(--color-card);
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     padding: 25px;
@@ -39,13 +46,12 @@
 }
 
 .StatsDetailsCard h1 {
-    font-size: 32px;
+    font-size: 56px;
     margin: 0;
-    color: var(--color-primar);
+    color: var(--color-primary);
 }
 
 .StatsDetailsCard p {
     font-size: 14px;
-    color: var(--color-primar);
-    margin-top: 8px;
+    color: var(--color-text-secondary);
 }

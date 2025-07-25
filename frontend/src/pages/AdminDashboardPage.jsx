@@ -6,7 +6,7 @@ import History from '../components/AdminDashboard/History';
 
 const AdminDashboardPage = () => {
     return (
-        <div>
+        <div className={styles.AdminDashboardPage}>
             <h1 className={styles.Title}>DASHBOARD</h1>
             <Stats />
             <ActiveUsers />

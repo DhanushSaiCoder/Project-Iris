@@ -23,7 +23,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px;
-    background-color: var(--color-secondaryCta);
+    background-color: var(--color-card);
     margin-top: 8px;
     border-radius: 3px;
 }

@@ -1,14 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./AlertDistanceSlider.module.css";
+import { SettingsContext } from "../../../context/SettingsContext";
 
-export default function AlertDistanceSlider({
-    value,
-    onChange,
-    min = 0,
-    max = 100,
-}) {
+export default function AlertDistanceSlider({ min = 0, max = 100 }) {
+    const { thresholdScore, setThresholdScore } = useContext(SettingsContext);
+
     // calculate percent fill
-    const percent = ((value - min) / (max - min)) * 100;
+    const percent = ((thresholdScore - min) / (max - min)) * 100;
 
     // inline background gradient: fill + grey remainder
     const background = `
@@ -26,8 +24,8 @@ export default function AlertDistanceSlider({
             type="range"
             min={min}
             max={max}
-            value={value}
-            onChange={(e) => onChange(Number(e.target.value))}
+            value={thresholdScore}
+            onChange={(e) => setThresholdScore(Number(e.target.value))}
             className={styles.slider}
             style={{ background }}
         />

@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import styles from "./HepticFeedback.module.css";
 import ToggleSwitch from "../ToggleSwitch";
+import { SettingsContext } from "../../../context/SettingsContext";
 
 const HepticFeedback = () => {
-    const [enabled, setEnabled] = useState(false);
+    const { hapticFeedback, setHapticFeedback } = useContext(SettingsContext);
 
     return (
         <div className={styles.hepticFeedback}>
             <p>Heptic Feedback</p>
             <ToggleSwitch
-                checked={enabled}
-                onChange={setEnabled}
-                label={enabled ? "On" : "Off"}
+                checked={hapticFeedback}
+                onChange={setHapticFeedback}
+                label={hapticFeedback ? "On" : "Off"}
             />
         </div>
     );

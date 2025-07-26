@@ -1,23 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import styles from "./AlertDistance.module.css";
 import AlertDistanceSlider from "../AlertDistanceSlider/AlertDistanceSlider";
+import { SettingsContext } from "../../../context/SettingsContext";
 
 const AlertDistance = () => {
-    
-    const [distance, setDistance] = useState(30);
-    
+    const { thresholdScore } = useContext(SettingsContext);
+
     return (
         <div className={styles.AlertDistance}>
             <div className={styles.labelAndValue}>
                 <p className={styles.settingLabel}>Alert Distance</p>
-                <p>~1.3m</p>
+                <p>{thresholdScore}</p>
             </div>
-            <AlertDistanceSlider
-                min={0}
-                max={100}
-                value={distance}
-                onChange={setDistance}
-            />
+            <AlertDistanceSlider min={0} max={100} />
         </div>
     );
 };

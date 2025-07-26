@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import styles from "./AutoCaliberateOnLaunch.module.css";
 import ToggleSwitch from "../ToggleSwitch";
+import { SettingsContext } from "../../../context/SettingsContext";
 
 const AutoCaliberateOnLaunch = () => {
-    const [enabled, setEnabled] = useState(false);
+    const { audioAnnouncements, setAudioAnnouncements } = useContext(SettingsContext);
 
     return (
         <div className={styles.AutoCaliberateOnLaunch}>
             <p>Auto-Caliberate on Launch</p>
             <ToggleSwitch
-                checked={enabled}
-                onChange={setEnabled}
-                label={enabled ? "On" : "Off"}
+                checked={audioAnnouncements}
+                onChange={setAudioAnnouncements}
+                label={audioAnnouncements ? "On" : "Off"}
             />
         </div>
     );

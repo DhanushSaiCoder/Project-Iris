@@ -11,13 +11,11 @@ export default function NewSession({
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     let sessionId = searchParams.get("sessionId");
-    console.log(sessionId)
     if(!sessionId) {
         sessionId = nanoid(10)
     }
 
-
-
+    console.log("sessionId: ", sessionId)
     return (
         <div className={styles.container}>
             <div className={styles.card}>

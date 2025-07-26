@@ -1,5 +1,5 @@
 // src/context/SettingsContext.jsx
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useMemo } from "react";
 
 // 1. Define default values
 const defaultSettings = {
@@ -57,16 +57,24 @@ export function SettingsProvider({ children }) {
     }, [hapticFeedback]);
 
     // 4. Provide state + setters
-    const value = {
-        thresholdScore,
-        setThresholdScore,
-        audioAnnouncements,
-        setAudioAnnouncements,
-        hapticFeedback,
-        setHapticFeedback,
-        sessionId,
-        setSessionId,
-    };
+    const value = useMemo(
+        () => ({
+            thresholdScore,
+            setThresholdScore,
+            audioAnnouncements,
+            setAudioAnnouncements,
+            hapticFeedback,
+            setHapticFeedback,
+            sessionId,
+            setSessionId,
+        }),
+        [
+            thresholdScore,
+            audioAnnouncements,
+            hapticFeedback,
+            sessionId,
+        ]
+    );
 
     return (
         <SettingsContext.Provider value={value}>

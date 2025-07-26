@@ -1,8 +1,9 @@
 // NewSession.jsx
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import styles from "./NewSession.module.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { nanoid } from "nanoid";
+import { SettingsContext } from "../context/SettingsContext";
 
 export default function NewSession({
     imageUrl,
@@ -10,12 +11,20 @@ export default function NewSession({
 }) {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    let sessionId = searchParams.get("sessionId");
-    if(!sessionId) {
-        sessionId = nanoid(10)
-    }
+    const { sessionId, setSessionId } = useContext(SettingsContext);
 
-    console.log("sessionId: ", sessionId)
+    useEffect(() => {
+        const idFromParams = searchParams.get("sessionId");
+        if (idFromParams) {
+            if (sessionId !== idFromParams) {
+                setSessionId(idFromParams);
+            }
+        } else if (!sessionId) {
+            setSessionId(nanoid(10));
+        }
+    }, [searchParams, sessionId, setSessionId]);
+
+    console.log("sessionId: ", sessionId);
     return (
         <div className={styles.container}>
             <div className={styles.card}>

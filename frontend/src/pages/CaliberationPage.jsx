@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "./CaliberationPage.module.css";
 import { SkipForward } from "lucide-react";
 import { useCamera } from "../hooks/useCamera"; // <-- import your hook
+import ModelTester from "../components/ModelTester";
 
 const STEPS = [
     {
@@ -38,6 +39,7 @@ export default function CaliberationPage() {
 
     // 1) Hook up camera
     const { videoRef, ready: cameraReady } = useCamera();
+
     const canvasRef = useRef(null);
 
     // Announce each step
@@ -109,7 +111,9 @@ export default function CaliberationPage() {
                     </div>
 
                     {/* Step Indicator */}
-                    <div className={styles.stepIndicator}>STEP {step + 1}/3</div>
+                    <div className={styles.stepIndicator}>
+                        STEP {step + 1}/3
+                    </div>
 
                     {/* Main Title */}
                     <h2 className={styles.stepTitle}>DEVICE CALIBRATION</h2>
@@ -155,6 +159,10 @@ export default function CaliberationPage() {
                     )}
                 </>
             )}
+            <div className={styles.tester}>
+                <ModelTester videoRef={videoRef} ready={cameraReady} />
+
+            </div>
         </div>
     );
 }

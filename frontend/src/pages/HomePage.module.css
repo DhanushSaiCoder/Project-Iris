@@ -2,7 +2,6 @@
     min-height: calc(100vh - 155px);
 }
 .videoStreamDiv {
-    width: 100vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -33,4 +32,13 @@
     align-items: center;
     justify-content: center;
     margin-top: 20px;
+}
+
+.endBtn {
+    width: 85%;
+    height: 56px;
+    background-color: var(--color-danger);
+    border-radius: 5px;
+    border: none;
+    font-size: larger;
 }

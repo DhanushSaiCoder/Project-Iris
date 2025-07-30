@@ -4,12 +4,22 @@ import { useModels } from "../../hooks/useModels";
 import { useDepthModel } from "../../hooks/useDepthModel";
 import styles from "./VideoStream.module.css";
 
-const VideoStream = () => {
+const VideoStream = ({ isDetecting: initialIsDetecting, onModelsLoaded, onVideoReady }) => {
     const { videoRef, ready: cameraReady } = useCamera();
     const { cocoModel, loading: cocoLoading } = useModels();
     const { depthMap, predictDepth, loading: depthLoading } = useDepthModel();
     const canvasRef = useRef(null);
-    const [isDetecting, setIsDetecting] = useState(true);
+    const [isDetecting, setIsDetecting] = useState(initialIsDetecting);
+
+    useEffect(() => {
+        setIsDetecting(initialIsDetecting);
+    }, [initialIsDetecting]);
+
+    useEffect(() => {
+        if (!cocoLoading && !depthLoading) {
+            onModelsLoaded();
+        }
+    }, [cocoLoading, depthLoading, onModelsLoaded]);
 
     useEffect(() => {
         if (cameraReady && videoRef.current) {
@@ -17,16 +27,17 @@ const VideoStream = () => {
                 if (canvasRef.current) {
                     canvasRef.current.width = videoRef.current.videoWidth;
                     canvasRef.current.height = videoRef.current.videoHeight;
+                    onVideoReady(videoRef.current.videoWidth);
                 }
             };
         }
-    }, [cameraReady, videoRef]);
+    }, [cameraReady, videoRef, onVideoReady]);
 
     useEffect(() => {
         let animationFrameId;
 
         const detect = async () => {
-            if (isDetecting && cameraReady && !cocoLoading && !depthLoading && videoRef.current && canvasRef.current && cocoModel) {
+            if (cameraReady && videoRef.current && canvasRef.current) {
                 const video = videoRef.current;
                 const canvas = canvasRef.current;
                 const ctx = canvas.getContext("2d");
@@ -36,12 +47,14 @@ const VideoStream = () => {
 
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                // Object detection
-                const predictions = await cocoModel.detect(video);
-                drawBoundingBoxes(predictions, ctx);
+                if (isDetecting && !cocoLoading && !depthLoading && cocoModel) {
+                    // Object detection
+                    const predictions = await cocoModel.detect(video);
+                    drawBoundingBoxes(predictions, ctx);
 
-                // Depth prediction (request)
-                predictDepth(video);
+                    // Depth prediction (request)
+                    predictDepth(video);
+                }
             }
             animationFrameId = requestAnimationFrame(detect);
         };
@@ -110,7 +123,7 @@ const VideoStream = () => {
         ctx.putImageData(newImageData, 0, 0);
     };
 
-    const statusText = cocoLoading || depthLoading ? "Loading Models..." : "Detection active";
+    const statusText = cocoLoading || depthLoading ? "Loading Models..." : (isDetecting ? "Detection active" : "Click start to begin");
 
     return (
         <div className={styles.VideoStream}>
@@ -123,7 +136,7 @@ const VideoStream = () => {
                 style={{ display: "none" }}
             />
             <canvas ref={canvasRef} className={styles.canvas} />
-            <div className={styles.statusOverlay}>{statusText}</div>
+            {/* <div className={styles.statusOverlay}>{statusText}</div> */}
         </div>
     );
 };

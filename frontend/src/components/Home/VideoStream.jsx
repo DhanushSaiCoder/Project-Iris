@@ -4,7 +4,7 @@ import { useModels } from "../../hooks/useModels";
 import { useDepthModel } from "../../hooks/useDepthModel";
 import styles from "./VideoStream.module.css";
 
-const VideoStream = ({ isDetecting: initialIsDetecting, onModelsLoaded }) => {
+const VideoStream = ({ isDetecting: initialIsDetecting, onLoadingChange }) => {
     const { videoRef, ready: cameraReady } = useCamera();
     const { cocoModel, loading: cocoLoading } = useModels();
     const { depthMap, predictDepth, loading: depthLoading } = useDepthModel();
@@ -16,12 +16,8 @@ const VideoStream = ({ isDetecting: initialIsDetecting, onModelsLoaded }) => {
     }, [initialIsDetecting]);
 
     useEffect(() => {
-        if (!cocoLoading && !depthLoading) {
-            onModelsLoaded();
-        }
-    }, [cocoLoading, depthLoading, onModelsLoaded]);
-
-    
+        onLoadingChange(cocoLoading || depthLoading);
+    }, [cocoLoading, depthLoading, onLoadingChange]);
 
     useEffect(() => {
         let animationFrameId;
@@ -32,20 +28,15 @@ const VideoStream = ({ isDetecting: initialIsDetecting, onModelsLoaded }) => {
                 const canvas = canvasRef.current;
                 const ctx = canvas.getContext("2d");
 
-                // Set canvas dimensions to match the video's intrinsic size for drawing accuracy
-                // but let CSS handle the display size
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
 
-                // Draw video onto canvas, scaling to fit the canvas's *displayed* size
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                 if (isDetecting && !cocoLoading && !depthLoading && cocoModel) {
-                    // Object detection
                     const predictions = await cocoModel.detect(video);
                     drawBoundingBoxes(predictions, ctx);
 
-                    // Depth prediction (request)
                     predictDepth(video);
                 }
             }

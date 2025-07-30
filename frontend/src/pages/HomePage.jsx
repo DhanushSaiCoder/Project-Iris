@@ -5,7 +5,7 @@ import styles from "./HomePage.module.css";
 
 const HomePage = () => {
     const [isDetecting, setIsDetecting] = useState(false);
-    const [modelsLoaded, setModelsLoaded] = useState(false);
+    const [modelsAreLoading, setModelsAreLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleStartDetection = () => {
@@ -13,7 +13,12 @@ const HomePage = () => {
     };
 
     const handleEndDetection = () => {
+        setIsDetecting(false);
         navigate("/session-summary");
+    };
+
+    const handleLoadingChange = (loading) => {
+        setModelsAreLoading(loading);
     };
 
     return (
@@ -22,14 +27,14 @@ const HomePage = () => {
                 <div className={styles.videoWrapper}>
                     <VideoStream
                         isDetecting={isDetecting}
-                        onModelsLoaded={() => setModelsLoaded(true)}
+                        onLoadingChange={handleLoadingChange}
                     />
                 </div>
             </div>
             <div className={styles.startBtnDiv}>
                 <button
                     className={
-                        !modelsLoaded
+                        isDetecting && modelsAreLoading
                             ? styles.disabledBtn
                             : isDetecting
                             ? styles.endBtn
@@ -38,13 +43,13 @@ const HomePage = () => {
                     onClick={
                         isDetecting ? handleEndDetection : handleStartDetection
                     }
-                    disabled={!modelsLoaded}
+                    disabled={isDetecting && modelsAreLoading}
                 >
-                    {modelsLoaded
-                        ? isDetecting
-                            ? "End Detection"
-                            : "Start Detection"
-                        : "Loading Models..."}
+                    {isDetecting
+                        ? modelsAreLoading
+                            ? "Loading Models..."
+                            : "End Detection"
+                        : "Start Detection"}
                 </button>
             </div>
         </div>

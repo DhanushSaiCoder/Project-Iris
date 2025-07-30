@@ -6,7 +6,6 @@ import styles from "./HomePage.module.css";
 const HomePage = () => {
     const [isDetecting, setIsDetecting] = useState(false);
     const [modelsLoaded, setModelsLoaded] = useState(false);
-    const [videoWidth, setVideoWidth] = useState(0);
     const navigate = useNavigate();
 
     const handleStartDetection = () => {
@@ -19,12 +18,13 @@ const HomePage = () => {
 
     return (
         <div className={styles.HomePage}>
-            <div className={styles.videoStreamDiv} style={{ width: videoWidth }}>
-                <VideoStream 
-                    isDetecting={isDetecting} 
-                    onModelsLoaded={() => setModelsLoaded(true)} 
-                    onVideoReady={setVideoWidth}
-                />
+            <div className={styles.videoStreamDiv}>
+                <div className={styles.videoWrapper}>
+                    <VideoStream 
+                        isDetecting={isDetecting} 
+                        onModelsLoaded={() => setModelsLoaded(true)} 
+                    />
+                </div>
             </div>
             <div className={styles.startBtnDiv}>
                 <button

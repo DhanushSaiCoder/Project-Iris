@@ -1,44 +1,111 @@
 .HomePage {
     min-height: calc(100vh - 155px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px; /* Add some overall padding */
 }
+
+.videoWrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    background-color: var(--color-card);
+    border-radius: 10px;
+    
+}
+
 .videoStreamDiv {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 0 0 0;
+    width: 100%; /* Allow it to take full width */
+    max-width: 800px;
+    margin: 0 auto; /* Center the video stream */
+
 }
+
 .statusDiv {
     padding: 20px;
     text-align: center;
 }
+
 .statusDiv p {
     color: var(--color-cta);
 }
+
 .statusSpan {
     font-weight: bold;
     color: var(--color-text-primary);
 }
-.startBtn {
+
+.startBtn,
+.endBtn {
     width: 85%;
+    max-width: 300px; /* Max width for buttons */
     height: 56px;
-    background-color: var(--color-success);
     border-radius: 5px;
     border: none;
     font-size: larger;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.startBtn {
+    background-color: var(--color-success);
+}
+
+.startBtn:hover {
+    background-color: var(
+        --color-success-dark
+    ); /* Assuming a darker shade exists */
+}
+
+.endBtn {
+    background-color: var(--color-danger);
+}
+
+.endBtn:hover {
+    background-color: var(
+        --color-danger-dark
+    ); /* Assuming a darker shade exists */
 }
 
 .startBtnDiv {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 30px; /* Increased margin for better spacing */
+    width: 100%;
 }
 
-.endBtn {
-    width: 85%;
-    height: 56px;
-    background-color: var(--color-danger);
-    border-radius: 5px;
-    border: none;
-    font-size: larger;
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+    .HomePage {
+        padding: 10px; /* Less padding on very small screens */
+    }
+
+    .videoStreamDiv {
+        /* No specific padding here, handled by .HomePage */
+    }
+
+    .startBtn,
+    .endBtn {
+        width: 90%; /* Slightly wider buttons on mobile */
+        font-size: medium;
+    }
+
+    .startBtnDiv {
+        margin-top: 20px; /* Adjust margin for mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .startBtn,
+    .endBtn {
+        width: 95%; /* Even wider buttons on very small screens */
+    }
 }

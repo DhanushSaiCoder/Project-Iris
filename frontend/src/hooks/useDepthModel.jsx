@@ -1,50 +1,52 @@
 // src/hooks/useDepthModel.js
-import { useState, useEffect } from "react";
-import * as tf from "@tensorflow/tfjs";
+import { useState, useEffect, useRef, useCallback } from "react";
 
-export function useDepthModel(modelUrl = "/models/midas/depth_model.json") {
-    const [model, setModel] = useState(null);
+export function useDepthModel() {
+    const workerRef = useRef(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [depthMap, setDepthMap] = useState(null);
 
     useEffect(() => {
-        let cancelled = false;
-        (async () => {
-            try {
-                await tf.ready();
-                await tf.setBackend("webgl");
-                const g = await tf.loadGraphModel(modelUrl);
-                if (!cancelled) setModel(g);
-            } catch (e) {
-                if (!cancelled) setError(e);
-            } finally {
-                if (!cancelled) setLoading(false);
+        // Initialize the worker
+        workerRef.current = new Worker(new URL("../workers/depth.worker.js", import.meta.url));
+
+        const onMessage = (e) => {
+            const { type, data, error: workerError } = e.data;
+            if (type === "model_loaded") {
+                setLoading(false);
+            } else if (type === "depth_map") {
+                setDepthMap(data);
+            } else if (type === "error") {
+                setError(workerError);
+                setLoading(false);
             }
-        })();
-        return () => {
-            cancelled = true;
         };
-    }, [modelUrl]);
 
-    async function predictDepth(mediaEl, size = 256) {
-        if (!model || !mediaEl) throw new Error("Model or media not ready");
-        let img = tf.browser.fromPixels(mediaEl);
-        img = tf.image
-            .resizeBilinear(img, [size, size])
-            .toFloat()
-            .div(127.5)
-            .sub(1);
-        const batched = img.expandDims(0).transpose([0, 3, 1, 2]); // Transpose to NCHW
-        const output = await model.executeAsync(batched);
-        let depth = Array.isArray(output) ? output[0] : output;
-        depth = depth.squeeze();
-        // normalize to [0,1]
-        const min = depth.min(),
-            max = depth.max();
-        const norm = depth.sub(min).div(max.sub(min));
-        tf.dispose([img, batched, output, depth, min, max]);
-        return norm;
-    }
+        workerRef.current.addEventListener("message", onMessage);
 
-    return { model, loading, error, predictDepth };
+        // Load the model
+        workerRef.current.postMessage({ type: "load" });
+
+        // Cleanup
+        return () => {
+            workerRef.current.removeEventListener("message", onMessage);
+            workerRef.current.terminate();
+        };
+    }, []);
+
+    const predictDepth = useCallback((mediaEl) => {
+        if (!workerRef.current || !mediaEl) return;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = mediaEl.videoWidth;
+        canvas.height = mediaEl.videoHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(mediaEl, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        workerRef.current.postMessage({ type: "predict", imageData }, [imageData.data.buffer]);
+    }, []);
+
+    return { loading, error, depthMap, predictDepth };
 }

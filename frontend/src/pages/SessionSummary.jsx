@@ -48,7 +48,7 @@ export default function SessionSummary({
 
             <button
                 className={`${styles.button} ${styles.primary}`}
-                onClick={() => navigate("/new-session")}
+                onClick={() => navigate("/")}
             >
                 New Session
             </button>

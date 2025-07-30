@@ -4,12 +4,13 @@ import { useModels } from "../../hooks/useModels";
 import { useDepthModel } from "../../hooks/useDepthModel";
 import styles from "./VideoStream.module.css";
 
-const VideoStream = ({ isDetecting: initialIsDetecting, onLoadingChange }) => {
+const VideoStream = ({ isDetecting: initialIsDetecting, onLoadingChange, onObjectDetection }) => {
     const { videoRef, ready: cameraReady } = useCamera();
     const { cocoModel, loading: cocoLoading } = useModels();
     const { depthMap, predictDepth, loading: depthLoading } = useDepthModel();
     const canvasRef = useRef(null);
     const [isDetecting, setIsDetecting] = useState(initialIsDetecting);
+    const lastDetected = useRef({});
 
     useEffect(() => {
         setIsDetecting(initialIsDetecting);
@@ -35,7 +36,22 @@ const VideoStream = ({ isDetecting: initialIsDetecting, onLoadingChange }) => {
 
                 if (isDetecting && !cocoLoading && !depthLoading && cocoModel) {
                     const predictions = await cocoModel.detect(video);
-                    drawBoundingBoxes(predictions, ctx);
+                    const filteredPredictions = predictions.filter(prediction => prediction.score > 0.6);
+                    drawBoundingBoxes(filteredPredictions, ctx);
+
+                    if (filteredPredictions.length > 0 && onObjectDetection) {
+                        const currentTime = Date.now();
+                        const objectsToSend = [];
+                        filteredPredictions.forEach(p => {
+                            if (!lastDetected.current[p.class] || (currentTime - lastDetected.current[p.class] > 2000)) { // 2 seconds debounce
+                                objectsToSend.push({ ...p, timestamp: new Date().toLocaleTimeString() });
+                                lastDetected.current[p.class] = currentTime;
+                            }
+                        });
+                        if (objectsToSend.length > 0) {
+                            onObjectDetection(objectsToSend);
+                        }
+                    }
 
                     predictDepth(video);
                 }
@@ -106,6 +122,8 @@ const VideoStream = ({ isDetecting: initialIsDetecting, onLoadingChange }) => {
         const newImageData = new ImageData(newData, width, height);
         ctx.putImageData(newImageData, 0, 0);
     };
+
+    
 
     const statusText = cocoLoading || depthLoading ? "Loading Models..." : (isDetecting ? "Detection active" : "Click start to begin");
 

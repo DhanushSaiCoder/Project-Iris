@@ -86,6 +86,10 @@
         padding: 10px; /* Less padding on very small screens */
     }
 
+    .videoWrapper {
+        padding-bottom: 133.33%; /* 3:4 aspect ratio for mobile */
+    }
+
     .videoStreamDiv {
         /* No specific padding here, handled by .HomePage */
     }

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import VideoStream from "../components/Home/VideoStream";
+import DetectedObjectsList from "../components/ObjectDetector/DetectedObjectsList";
 import styles from "./HomePage.module.css";
 
 const HomePage = () => {
     const [isDetecting, setIsDetecting] = useState(false);
     const [modelsAreLoading, setModelsAreLoading] = useState(false);
+    const [detectedObjects, setDetectedObjects] = useState([]);
     const navigate = useNavigate();
 
     const handleStartDetection = () => {
@@ -21,6 +23,10 @@ const HomePage = () => {
         setModelsAreLoading(loading);
     };
 
+    const handleObjectDetection = (objects) => {
+        setDetectedObjects(prevObjects => [...prevObjects, ...objects]);
+    };
+
     return (
         <div className={styles.HomePage}>
             <div className={styles.videoStreamDiv}>
@@ -28,6 +34,7 @@ const HomePage = () => {
                     <VideoStream
                         isDetecting={isDetecting}
                         onLoadingChange={handleLoadingChange}
+                        onObjectDetection={handleObjectDetection}
                     />
                 </div>
             </div>
@@ -52,6 +59,7 @@ const HomePage = () => {
                         : "Start Detection"}
                 </button>
             </div>
+            <DetectedObjectsList detectedObjects={detectedObjects} />
         </div>
     );
 };

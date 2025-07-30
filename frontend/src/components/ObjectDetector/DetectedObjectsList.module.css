@@ -1,0 +1,52 @@
+.container {
+    background-color: #1e1e1e; /* Dark background for terminal-like feel */
+    color: #00ff00; /* Green text for terminal-like feel */
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', 'monospace'; /* Monospace font */
+    font-size: 0.9em;
+    border: 1px solid #00ff00;
+    border-radius: 4px;
+    padding: 10px;
+    height: 200px; /* Fixed height */
+    overflow-y: auto; /* Scroll for overflow */
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px; /* Space below the button */
+}
+
+.header {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #00ffff; /* Cyan for header */
+}
+
+.list {
+    flex-grow: 1;
+}
+
+.noObjects {
+    color: #aaaaaa;
+    text-align: center;
+    padding: 20px;
+}
+
+.objectItem {
+    margin-bottom: 5px;
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Show ellipsis for overflow */
+}
+
+.timestamp {
+    color: #ffff00; /* Yellow for timestamp */
+    margin-right: 8px;
+}
+
+.objectName {
+    color: #00ff00; /* Green for object name */
+    margin-right: 8px;
+}
+
+.score {
+    color: #ff00ff; /* Magenta for score */
+}

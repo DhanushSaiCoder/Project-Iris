@@ -15,7 +15,6 @@
     overflow: hidden;
     background-color: var(--color-card);
     border-radius: 10px;
-    
 }
 
 .videoStreamDiv {
@@ -25,7 +24,6 @@
     width: 100%; /* Allow it to take full width */
     max-width: 800px;
     margin: 0 auto; /* Center the video stream */
-
 }
 
 .statusDiv {
@@ -58,20 +56,8 @@
     background-color: var(--color-success);
 }
 
-.startBtn:hover {
-    background-color: var(
-        --color-success-dark
-    ); /* Assuming a darker shade exists */
-}
-
 .endBtn {
     background-color: var(--color-danger);
-}
-
-.endBtn:hover {
-    background-color: var(
-        --color-danger-dark
-    ); /* Assuming a darker shade exists */
 }
 
 .startBtnDiv {
@@ -80,6 +66,18 @@
     justify-content: center;
     margin-top: 30px; /* Increased margin for better spacing */
     width: 100%;
+}
+
+.disabledBtn {
+    background-color: var(--color-secondaryCta);
+    width: 85%;
+    max-width: 300px; /* Max width for buttons */
+    height: 56px;
+    border-radius: 5px;
+    border: none;
+    font-size: larger;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 /* Media Queries for Mobile Responsiveness */

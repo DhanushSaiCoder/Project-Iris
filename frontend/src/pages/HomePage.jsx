@@ -20,16 +20,24 @@ const HomePage = () => {
         <div className={styles.HomePage}>
             <div className={styles.videoStreamDiv}>
                 <div className={styles.videoWrapper}>
-                    <VideoStream 
-                        isDetecting={isDetecting} 
-                        onModelsLoaded={() => setModelsLoaded(true)} 
+                    <VideoStream
+                        isDetecting={isDetecting}
+                        onModelsLoaded={() => setModelsLoaded(true)}
                     />
                 </div>
             </div>
             <div className={styles.startBtnDiv}>
                 <button
-                    className={isDetecting ? styles.endBtn : styles.startBtn}
-                    onClick={isDetecting ? handleEndDetection : handleStartDetection}
+                    className={
+                        !modelsLoaded
+                            ? styles.disabledBtn
+                            : isDetecting
+                            ? styles.endBtn
+                            : styles.startBtn
+                    }
+                    onClick={
+                        isDetecting ? handleEndDetection : handleStartDetection
+                    }
                     disabled={!modelsLoaded}
                 >
                     {modelsLoaded

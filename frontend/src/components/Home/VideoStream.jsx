@@ -52,16 +52,14 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
-                console.log("Canvas dimensions:", canvas.width, canvas.height);
+                
 
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                 if (isDetecting && !cocoLoading && !depthLoading && cocoModel) {
                     // Draw depth map first if available
                     if (depthMap) {
-                        console.log("Depth map data received, drawing visualization.");
-                        console.log("depthMap object:", depthMap);
-                        console.log("depthMap dimensions:", depthMap.width, depthMap.height);
+                        
                         drawDepthMap(depthMap.data, ctx, canvas.width, canvas.height, depthMap.width, depthMap.height);
                     }
 
@@ -90,7 +88,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                         }
                     }
 
-                    console.log("Calling predictDepth...");
+                    
                     predictDepth(video); // Predict for the next frame
                 }
             }

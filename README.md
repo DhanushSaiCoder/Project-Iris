@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="frontend/src/assets/images/logo.png" alt="Project Iris Logo" width="200"/>
+  <img src="../frontend/src/assets/images/logo.png" alt="Project Iris Logo" width="200"/>
 </div>
 
 <h1 align="center">Project-Iris</h1>
@@ -17,84 +17,110 @@
   <img src="https://img.shields.io/github/repo-size/DhanushSaiCoder/Project-Iris" alt="Repo Size Badge"/>
 </div>
 
-Project-Iris is a web-based application designed for user monitoring, likely through computer vision. The name "Iris" suggests a focus on eye-tracking or a similar visual monitoring technology. The application includes features for calibration, user sessions, and administrative oversight. It is built as a Progressive Web App (PWA), allowing for offline use and a native-like application experience.
+
+# Project Iris - Frontend
+
+Project Iris is a web-based application designed to provide real-time object detection and depth estimation capabilities, primarily for mobile devices. It leverages TensorFlow.js for on-device machine learning, offering features like user monitoring, administrative dashboards, and customizable settings.
+
+## Technologies Used
+
+-   **React:** A JavaScript library for building user interfaces.
+-   **TensorFlow.js:** A library for machine learning in JavaScript, enabling on-device model execution.
+    -   `@tensorflow-models/coco-ssd`: For object detection.
+    -   `@tensorflow/tfjs`: Core TensorFlow.js library.
+    -   `@tensorflow/tfjs-backend-webgl`: WebGL backend for accelerated computations.
+    -   `@tensorflow/tfjs-converter`: For loading pre-trained models.
+-   **React Router DOM:** For declarative routing in React applications.
+-   **Lucide React:** A collection of open-source icons.
+-   **Nano ID:** A tiny, secure, URL-friendly, unique string ID generator.
+-   **Web Vitals:** For measuring and reporting on the performance of the application.
+-   **PWA (Progressive Web App):** Configured for offline capabilities and enhanced user experience.
 
 ## Key Features
 
-*   **User Monitoring:** Real-time monitoring of the user, forming the core functionality of the application.
-*   **Calibration:** A dedicated calibration page to ensure accurate monitoring.
-*   **Session Management:** Users can start, stop, and view summaries of their monitoring sessions.
-*   **Settings:** A comprehensive settings page allowing users to configure options such as:
-    *   Alert Distance
-    *   Haptic Feedback
-    *   Auto-Calibration
-*   **Admin Dashboard:** A separate interface for administrators to manage and monitor the application.
-*   **Responsive Design:** The application includes a mobile guard to ensure a proper user experience on different devices.
-*   **PWA Enabled:** Can be installed on devices for offline access and a more integrated experience.
+-   **Real-time Object Detection:** Utilizes COCO-SSD model for detecting objects in video streams.
+-   **Depth Estimation:** Employs a MIDAS depth model for real-time depth perception.
+-   **Mobile-First Design:** Optimized for mobile devices with a dedicated `MobileGuard` component.
+-   **User Monitoring:** Provides a dedicated page for user monitoring.
+-   **Admin Dashboard:** Features active users, history, and statistics.
+-   **Customizable Settings:**
+    -   Alert Distance
+    -   Haptic Feedback
+    -   Auto-calibration on launch
+    -   Device re-calibration
+-   **Session Management:** Includes pages for new sessions and session summaries.
+-   **Camera Access Handling:** Dedicated page for camera access denied scenarios.
+-   **Incompatible Browser Detection:** Informs users about browser compatibility issues.
+-   **Help and Privacy Pages:** Provides essential information and privacy notes.
 
-## Tech Stack
+## Installation and Running Locally
 
-*   **Frontend:** React
-*   **Routing:** React Router
-*   **Styling:** CSS Modules and standard CSS
-*   **Build Tool:** Create React App
+To get the Project Iris frontend up and running on your local machine, follow these steps:
 
-## Getting Started
+1.  **Clone the repository:**
 
-To get a local copy up and running, follow these simple steps.
-
-### Prerequisites
-
-*   Node.js and npm (or yarn)
-
-### Installation
-
-1.  Clone the repo
-    ```sh
-    git clone https://github.com/DhanushSaiCoder/Project-Iris.git
+    ```bash
+    git clone <repository-url>
+    cd frontend
     ```
-2.  Navigate to the frontend directory
-    ```sh
-    cd Project-Iris/frontend
-    ```
-3.  Install NPM packages
-    ```sh
+
+2.  **Install dependencies:**
+
+    ```bash
     npm install
     ```
 
-### Usage
+3.  **Start the development server:**
 
-To run the application in development mode:
+    ```bash
+    npm start
+    ```
 
-```sh
-npm start
-```
+    This will open the application in your default browser at `http://localhost:3000`.
 
-This will open the application in your default browser at `http://localhost:3000`.
-
-To build the application for production:
-
-```sh
-npm run build
-```
+4.  **Build for production:**
+    ```bash
+    npm run build
+    ```
+    This command builds the app for production to the `build` folder.
 
 ## Project Structure
 
-The project follows a standard Create React App structure.
+The project follows a standard React application structure, with a focus on modularity and clear separation of concerns.
 
 ```
 frontend/
-├── public/         # Public assets and index.html
-└── src/
-    ├── assets/       # Images and other static assets
-    ├── components/   # Reusable React components
-    ├── context/      # React context providers
-    ├── hooks/        # Custom React hooks
-    ├── pages/        # Top-level page components
-    ├── styles/       # Global styles
-    └── utils/        # Utility functions
+├── public/                 # Public assets, including HTML template and ML models
+│   ├── models/             # Pre-trained machine learning models (e.g., MIDAS)
+│   └── ...
+├── src/                    # Source code
+│   ├── assets/             # Static assets like images
+│   ├── components/         # Reusable UI components
+│   │   ├── AdminDashboard/
+│   │   ├── common/
+│   │   ├── Footer/
+│   │   ├── Header/
+│   │   ├── Home/
+│   │   ├── ObjectDetector/
+│   │   └── SettingsPage/
+│   ├── context/            # React Context API for global state management (e.g., SettingsContext)
+│   ├── hooks/              # Custom React hooks for reusable logic (e.g., useCamera, useDepthModel)
+│   ├── pages/              # Top-level components representing different views/routes
+│   ├── styles/             # Global styles and CSS variables
+│   ├── utils/              # Utility functions and helpers (e.g., MobileGuard)
+│   ├── workers/            # Web Workers for offloading heavy computations (e.g., depth.worker.js)
+│   ├── App.js              # Main application component and routing
+│   ├── index.js            # Entry point of the React application
+│   └── ...
+├── package.json            # Project metadata and dependencies
+├── package-lock.json       # Dependency tree lock file
+└── README.md               # This file
 ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+This project is licensed under the MIT License.

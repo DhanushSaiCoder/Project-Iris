@@ -1,93 +1,105 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .container {
-    background-color: #0e0d0d; /* Slightly lighter dark background */
-    color: var(--text-primary); /* Soft white text */
-    font-family: "Cascadia Code", "Fira Code", "Consolas", "monospace"; /* Monospace font */
-    font-size: 0.9em;
-    border: 1px solid var(--color-borders); /* Subtle dark grey border */
-    border-radius: 4px;
-    height: 200px; /* Fixed height */
+    background-color: #1a1a1a; /* Darker, more modern background */
+    color: var(--text-primary);
+    font-family: "SF Pro Text", "Helvetica Neue", "Arial", sans-serif; /* Modern, clean font stack */
+    font-size: 0.95em;
+    border: 1px solid var(--color-borders);
+    border-radius: 8px; /* Slightly larger radius for a softer look */
+    height: 250px; /* Increased height for better spacing */
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
-    width: 100%; /* Take full width of parent */
-    max-width: 800px; /* Limit maximum width */
-    margin: 20px auto; /* Center horizontally and add top margin */
+    margin: 20px auto;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    overflow: hidden; /* Ensures children conform to border radius */
 }
 
 .header {
-    margin-bottom: 10px;
+    padding: 12px 15px;
     text-align: center;
-    color: var(--text-primary); /* Soft blue for header */
+    color: var(--text-primary);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     background-color: var(--color-background-2);
-    font-family: "Google Sans Code", monospace;
     border-bottom: 1px solid var(--color-borders);
-    padding: 10px;
-
-    
-
+    font-weight: 600; /* Bolder header text */
+    font-size: 0.8em;
 }
 
-.list {
-    flex-grow: 1;
-    padding-left: 10px;
-    overflow-y: auto; /* Scroll for overflow */
-}
-
-/* Scrollbar styling */
+/* Hide scrollbar for Chrome, Safari and Opera */
 .list::-webkit-scrollbar {
-    width: 8px; /* Width of the scrollbar */
+    display: none;
 }
 
-.list::-webkit-scrollbar-track {
-    background: #2a2a2a; /* Color of the scrollbar track */
-    border-radius: 10px;
-}
-
-.list::-webkit-scrollbar-thumb {
-    background: #555; /* Color of the scrollbar thumb */
-    border-radius: 10px;
-}
-
-.list::-webkit-scrollbar-thumb:hover {
-    background: #777; /* Color of the scrollbar thumb on hover */
+/* Hide scrollbar for IE, Edge and Firefox */
+.list {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    flex-grow: 1;
+    padding: 0 10px;
+    margin: 0;
+    overflow-y: auto;
+    list-style-type: none; /* Removes default list bullets */
+    scroll-behavior: smooth; /* Ensures smooth scrolling */
 }
 
 .noObjects {
-    color: var(--text-secondary); /* Muted grey for no objects message */
+    color: var(--text-secondary);
     text-align: center;
-    padding: 20px;
+    padding: 30px;
+    font-style: italic;
+}
+
+.noObjects p {
+    margin: 0;
 }
 
 .objectItem {
-    margin-bottom: 4px; /* Slightly reduced margin */
+    display: flex; /* Use flexbox for alignment */
+    justify-content: space-between; /* Distribute content evenly */
+    align-items: center; /* Vertically center content */
+    padding: 4px 10px;
+    margin-bottom: 5px;
+    border-radius: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    animation: fadeIn 0.5s ease-out forwards; /* Fade-in animation */
+    transition: background-color 0.2s ease; /* Smooth transition for hover */
+}
+
+.objectItem:hover {
+    background-color: #2c2c2c; /* Subtle hover effect */
 }
 
 .timestamp {
-    color: var(--text-secondary); /* Muted grey for timestamp */
-    margin-right: 8px;
-    font-family: "Google Sans Code", monospace;
-    font-size: smaller;
-
+    color: var(--text-secondary);
+    margin-right: 12px;
+    font-size: 0.85em;
 }
 
 .objectName {
-    color: var(--text-primary); /* Soft white for object name */
-    margin-right: 8px;
-    font-family: "Google Sans Code", monospace;
-    font-size: smaller;
-
-
+    color: var(--text-primary);
+    font-weight: 500; /* Slightly bolder object name */
+    flex-grow: 1; /* Allow name to take available space */
+    margin-right: 12px;
+    font-size: 0.9em;
 }
 
 .score {
-    color: var(--color-success); /* Soft green for score */
-    font-family: "Google Sans Code", monospace;
-    font-size: smaller;
-
-
+    color: var(--color-success);
+    font-weight: 500;
+    font-size: 0.9em;
 }

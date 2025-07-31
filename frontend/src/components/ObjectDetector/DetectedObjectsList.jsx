@@ -1,41 +1,49 @@
-import React from "react";
+import React, { useEffect, useRef, memo } from "react";
+import PropTypes from "prop-types";
 import styles from "./DetectedObjectsList.module.css";
-import { useEffect, useRef } from "react";
+
 const DetectedObjectsList = ({ detectedObjects }) => {
-    const listRef = useRef(null);
+    const listEndRef = useRef(null);
 
     useEffect(() => {
-        if (listRef.current) {
-            listRef.current.scrollTop = listRef.current.scrollHeight;
-        }
+        listEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [detectedObjects]);
 
     return (
         <div className={styles.container}>
-            <div className={styles.header}>Detected Objects</div>
-            <div ref={listRef} className={styles.list}>
+            <h2 className={styles.header}>Detected Objects</h2>
+            <ul className={styles.list}>
                 {detectedObjects.length === 0 ? (
                     <div className={styles.noObjects}>
-                        No objects detected yet.
+                        <p>Scanning for objects...</p>
                     </div>
                 ) : (
-                    detectedObjects.map((obj, index) => (
-                        <div key={index} className={styles.objectItem}>
-                            <span className={styles.timestamp}>
-                                [{obj.timestamp}]
-                            </span>
-                            <span className={styles.objectName}>
-                                {obj.class}
-                            </span>
-                            <span className={styles.score}>
-                                ({Math.round(obj.score * 100)}%)
-                            </span>
-                        </div>
-                    ))
+                    <>
+                        {detectedObjects.map((obj, index) => (
+                            <li key={`${obj.timestamp}-${index}`} className={styles.objectItem}>
+                                <span className={styles.timestamp}>[{obj.timestamp}]</span>
+                                <span className={styles.objectName}>{obj.class}</span>
+                                <span className={styles.score}>
+                                    ({Math.round(obj.score * 100)}%)
+                                </span>
+                            </li>
+                        ))}
+                        <div ref={listEndRef} />
+                    </>
                 )}
-            </div>
+            </ul>
         </div>
     );
 };
 
-export default DetectedObjectsList;
+DetectedObjectsList.propTypes = {
+    detectedObjects: PropTypes.arrayOf(
+        PropTypes.shape({
+            timestamp: PropTypes.string.isRequired,
+            class: PropTypes.string.isRequired,
+            score: PropTypes.number.isRequired,
+        })
+    ).isRequired,
+};
+
+export default memo(DetectedObjectsList);

@@ -11,9 +11,9 @@ const DetectedObjectsList = ({ detectedObjects }) => {
     }, [detectedObjects]);
 
     return (
-        <div ref={listRef} className={styles.container}>
+        <div className={styles.container}>
             <div className={styles.header}>Detected Objects</div>
-            <div className={styles.list}>
+            <div ref={listRef} className={styles.list}>
                 {detectedObjects.length === 0 ? (
                     <div className={styles.noObjects}>
                         No objects detected yet.

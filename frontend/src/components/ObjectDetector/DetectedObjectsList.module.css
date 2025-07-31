@@ -6,32 +6,12 @@
     border: 1px solid var(--color-borders); /* Subtle dark grey border */
     border-radius: 4px;
     height: 200px; /* Fixed height */
-    overflow-y: auto; /* Scroll for overflow */
     display: flex;
     flex-direction: column;
     margin-top: 20px;
     width: 100%; /* Take full width of parent */
     max-width: 800px; /* Limit maximum width */
     margin: 20px auto; /* Center horizontally and add top margin */
-}
-
-/* Scrollbar styling */
-.container::-webkit-scrollbar {
-    width: 8px; /* Width of the scrollbar */
-}
-
-.container::-webkit-scrollbar-track {
-    background: #2a2a2a; /* Color of the scrollbar track */
-    border-radius: 10px;
-}
-
-.container::-webkit-scrollbar-thumb {
-    background: #555; /* Color of the scrollbar thumb */
-    border-radius: 10px;
-}
-
-.container::-webkit-scrollbar-thumb:hover {
-    background: #777; /* Color of the scrollbar thumb on hover */
 }
 
 .header {
@@ -52,6 +32,26 @@
 .list {
     flex-grow: 1;
     padding-left: 10px;
+    overflow-y: auto; /* Scroll for overflow */
+}
+
+/* Scrollbar styling */
+.list::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.list::-webkit-scrollbar-track {
+    background: #2a2a2a; /* Color of the scrollbar track */
+    border-radius: 10px;
+}
+
+.list::-webkit-scrollbar-thumb {
+    background: #555; /* Color of the scrollbar thumb */
+    border-radius: 10px;
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+    background: #777; /* Color of the scrollbar thumb on hover */
 }
 
 .noObjects {

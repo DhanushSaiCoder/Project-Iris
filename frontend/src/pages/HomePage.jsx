@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VideoStream from "../components/Home/VideoStream";
 import DetectedObjectsList from "../components/ObjectDetector/DetectedObjectsList";
+import LoadingSpinner from "../components/common/LoadingSpinner";
 import styles from "./HomePage.module.css";
 
 const HomePage = () => {
@@ -24,42 +25,50 @@ const HomePage = () => {
     };
 
     const handleObjectDetection = (objects) => {
-        setDetectedObjects(prevObjects => [...prevObjects, ...objects]);
+        setDetectedObjects((prevObjects) => [...prevObjects, ...objects]);
     };
 
     return (
-        <div className={styles.HomePage}>
-            <div className={styles.videoStreamDiv}>
-                <div className={styles.videoWrapper}>
-                    <VideoStream
-                        isDetecting={isDetecting}
-                        onLoadingChange={handleLoadingChange}
-                        onObjectDetection={handleObjectDetection}
-                    />
+        <div className={styles.homePage}>
+            <div
+                className={`${styles.mainContentWrapper} ${
+                    isDetecting ? styles.detecting : ""
+                }`}
+            >
+                <div className={styles.videoStreamDiv}>
+                    <div className={styles.videoWrapper}>
+                        <VideoStream
+                            isDetecting={isDetecting}
+                            onLoadingChange={handleLoadingChange}
+                            onObjectDetection={handleObjectDetection}
+                        />
+                    </div>
                 </div>
+                {isDetecting && (
+                    <div className={styles.detectedObjectsListDiv}>
+                        <DetectedObjectsList detectedObjects={detectedObjects} />
+                    </div>
+                )}
             </div>
-            <div className={styles.startBtnDiv}>
+            <div className={styles.controlsDiv}>
                 <button
-                    className={
-                        isDetecting && modelsAreLoading
-                            ? styles.disabledBtn
-                            : isDetecting
-                            ? styles.endBtn
-                            : styles.startBtn
-                    }
+                    className={`${styles.controlBtn} ${
+                        isDetecting ? styles.endBtn : styles.startBtn
+                    } ${modelsAreLoading ? styles.disabledBtn : ""}`}
                     onClick={
                         isDetecting ? handleEndDetection : handleStartDetection
                     }
-                    disabled={isDetecting && modelsAreLoading}
+                    disabled={modelsAreLoading}
                 >
-                    {isDetecting
-                        ? modelsAreLoading
-                            ? "Loading Models..."
-                            : "End Detection"
-                        : "Start Detection"}
+                    {modelsAreLoading ? (
+                        <LoadingSpinner />
+                    ) : isDetecting ? (
+                        "End Detection"
+                    ) : (
+                        "Start Detection"
+                    )}
                 </button>
             </div>
-            <DetectedObjectsList detectedObjects={detectedObjects} />
         </div>
     );
 };

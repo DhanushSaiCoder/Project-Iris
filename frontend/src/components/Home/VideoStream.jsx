@@ -4,17 +4,12 @@ import { useModels } from "../../hooks/useModels";
 import { useDepthModel } from "../../hooks/useDepthModel";
 import styles from "./VideoStream.module.css";
 
-const VideoStream = ({ isDetecting: initialIsDetecting, onLoadingChange, onObjectDetection }) => {
+const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const { videoRef, ready: cameraReady } = useCamera();
-    const { cocoModel, loading: cocoLoading } = useModels();
-    const { depthMap, predictDepth, loading: depthLoading } = useDepthModel();
+    const { cocoModel, loading: cocoLoading, error: cocoError } = useModels();
+    const { depthMap, predictDepth, loading: depthLoading, error: depthError } = useDepthModel();
     const canvasRef = useRef(null);
-    const [isDetecting, setIsDetecting] = useState(initialIsDetecting);
     const lastDetected = useRef({});
-
-    useEffect(() => {
-        setIsDetecting(initialIsDetecting);
-    }, [initialIsDetecting]);
 
     useEffect(() => {
         onLoadingChange(cocoLoading || depthLoading);

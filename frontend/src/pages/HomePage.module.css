@@ -1,113 +1,107 @@
-.HomePage {
+.homePage {
     min-height: calc(100vh - 155px);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px; /* Add some overall padding */
+    padding: 20px;
+    gap: 20px;
+}
+
+.mainContentWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.mainContentWrapper.detecting {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.videoStreamDiv {
+    width: 100%;
+    max-width: 600px;
+    flex-shrink: 0;
 }
 
 .videoWrapper {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
     height: 0;
     overflow: hidden;
     background-color: var(--color-card);
-    border-radius: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.videoStreamDiv {
+.detectedObjectsListDiv {
+    width: 100%;
+    max-width: 300px;
+    align-self: stretch;
+}
+
+.controlsDiv {
     display: flex;
-    align-items: center;
     justify-content: center;
-    width: 100%; /* Allow it to take full width */
-    max-width: 800px;
-    margin: 0 auto; /* Center the video stream */
+    width: 100%;
 }
 
-.statusDiv {
-    padding: 20px;
-    text-align: center;
-}
-
-.statusDiv p {
-    color: var(--color-cta);
-}
-
-.statusSpan {
-    font-weight: bold;
-    color: var(--color-text-primary);
-}
-
-.startBtn,
-.endBtn {
-    width: 85%;
-    max-width: 300px; /* Max width for buttons */
+.controlBtn {
+    width: 100%;
+    max-width: 300px;
     height: 56px;
-    border-radius: 5px;
+    border-radius: 8px;
     border: none;
-    font-size: larger;
+    font-size: 1.2rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .startBtn {
     background-color: var(--color-success);
+    color: white;
+}
+
+.startBtn:hover {
+    background-color: #218838;
 }
 
 .endBtn {
     background-color: var(--color-danger);
+    color: white;
 }
 
-.startBtnDiv {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 30px; /* Increased margin for better spacing */
-    width: 100%;
+.endBtn:hover {
+    background-color: #c82333;
 }
 
 .disabledBtn {
     background-color: var(--color-secondaryCta);
-    width: 85%;
-    max-width: 300px; /* Max width for buttons */
-    height: 56px;
-    border-radius: 5px;
-    border: none;
-    font-size: larger;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    cursor: not-allowed;
 }
 
-/* Media Queries for Mobile Responsiveness */
-@media (max-width: 768px) {
-    .HomePage {
-        padding: 10px; /* Less padding on very small screens */
+/* Media Queries for Responsiveness */
+@media (max-width: 900px) {
+    .mainContentWrapper.detecting {
+        flex-direction: column;
+        align-items: center;
     }
 
-    .videoWrapper {
-        padding-bottom: 133.33%; /* 3:4 aspect ratio for mobile */
-    }
-
-    .videoStreamDiv {
-        /* No specific padding here, handled by .HomePage */
-    }
-
-    .startBtn,
-    .endBtn {
-        width: 90%; /* Slightly wider buttons on mobile */
-        font-size: medium;
-    }
-
-    .startBtnDiv {
-        margin-top: 20px; /* Adjust margin for mobile */
+    .detectedObjectsListDiv {
+        max-width: 600px;
     }
 }
 
 @media (max-width: 480px) {
-    .startBtn,
-    .endBtn {
-        width: 95%; /* Even wider buttons on very small screens */
+    .controlBtn {
+        font-size: 1rem;
     }
 }

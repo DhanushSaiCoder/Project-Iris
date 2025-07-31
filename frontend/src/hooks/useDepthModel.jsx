@@ -13,11 +13,12 @@ export function useDepthModel() {
         workerRef.current = new Worker(new URL("../workers/depth.worker.js", import.meta.url));
 
         const onMessage = (e) => {
-            const { type, data, error: workerError } = e.data;
+            const { type, data, width, height, error: workerError } = e.data;
             if (type === "model_loaded") {
                 setLoading(false);
             } else if (type === "depth_map") {
-                setDepthMap(data);
+                console.log("useDepthModel: Received depth map from worker with dimensions:", width, height);
+                setDepthMap({ data, width, height });
             } else if (type === "prediction_complete") {
                 isBusyRef.current = false; // Worker is ready for a new frame
             } else if (type === "error") {

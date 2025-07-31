@@ -52,6 +52,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
+                console.log("Canvas dimensions:", canvas.width, canvas.height);
 
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -59,7 +60,9 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                     // Draw depth map first if available
                     if (depthMap) {
                         console.log("Depth map data received, drawing visualization.");
-                        drawDepthMap(depthMap, ctx, canvas.width, canvas.height);
+                        console.log("depthMap object:", depthMap);
+                        console.log("depthMap dimensions:", depthMap.width, depthMap.height);
+                        drawDepthMap(depthMap.data, ctx, canvas.width, canvas.height, depthMap.width, depthMap.height);
                     }
 
                     const predictions = await cocoModel.detect(video);
@@ -68,7 +71,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                     let processedPredictions = filteredPredictions.map(p => ({ ...p, isClose: false }));
 
                     if (depthMap) {
-                        processedPredictions = processPredictionsWithDepth(filteredPredictions, depthMap, canvas.width, canvas.height);
+                        processedPredictions = processPredictionsWithDepth(filteredPredictions, depthMap.data, canvas.width, canvas.height, depthMap.width, depthMap.height);
                     }
 
                     drawBoundingBoxes(processedPredictions, ctx);
@@ -87,6 +90,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                         }
                     }
 
+                    console.log("Calling predictDepth...");
                     predictDepth(video); // Predict for the next frame
                 }
             }
@@ -100,39 +104,59 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         };
     }, [cameraReady, cocoLoading, depthLoading, cocoModel, predictDepth, videoRef, isDetecting, depthMap, alertDistance]); // Add dependencies
 
-    const drawDepthMap = (depthData, ctx, width, height) => {
-        if (!depthData) return;
-        const depthMapWidth = 256;
-        const depthMapHeight = 256;
+    const drawDepthMap = (depthData, ctx, canvasWidth, canvasHeight, depthMapWidth, depthMapHeight) => {
+        if (!depthData) {
+            return;
+        }
 
-        const originalImageData = ctx.getImageData(0, 0, width, height);
-        const newData = new Uint8ClampedArray(originalImageData.data);
+        const imageData = ctx.createImageData(canvasWidth, canvasHeight);
+        const data = imageData.data;
 
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const dx = Math.floor(x * (depthMapWidth / width));
-                const dy = Math.floor(y * (depthMapHeight / height));
-                const depthIndex = dy * depthMapWidth + dx;
-                const depthValue = depthData[depthIndex];
-
-                if (depthValue > 0.1) { // Example threshold: only show "close" objects
-                    const i = (y * width + x) * 4;
-                    // Mix with original pixel color to make it look like an overlay
-                    newData[i] = newData[i] * (1 - depthValue * 0.5) + (255 * depthValue * 0.5); // R
-                    newData[i + 1] = newData[i+1] * (1 - depthValue * 0.5) + (0 * depthValue * 0.5); // G
-                    newData[i + 2] = newData[i+2] * (1 - depthValue * 0.5) + (255 * (1 - depthValue) * 0.5); // B
-                    newData[i + 3] = 255; // Alpha
+        // Find min and max depth values for normalization
+        let minDepth = Infinity;
+        let maxDepth = -Infinity;
+        for (let i = 0; i < depthMapHeight; i++) {
+            for (let j = 0; j < depthMapWidth; j++) {
+                const depthValue = depthData[i][j];
+                if (depthValue !== undefined) {
+                    minDepth = Math.min(minDepth, depthValue);
+                    maxDepth = Math.max(maxDepth, depthValue);
                 }
             }
         }
-        const newImageData = new ImageData(newData, width, height);
-        ctx.putImageData(newImageData, 0, 0);
+
+        const depthRange = maxDepth - minDepth;
+
+        for (let y = 0; y < canvasHeight; y++) {
+            for (let x = 0; x < canvasWidth; x++) {
+                const dx = Math.floor(x * (depthMapWidth / canvasWidth));
+                const dy = Math.floor(y * (depthMapHeight / canvasHeight));
+                const depthValue = depthData[dy] ? depthData[dy][dx] : undefined;
+
+                const i = (y * canvasWidth + x) * 4;
+
+                if (depthValue !== undefined) {
+                    // Normalize depth value to 0-255 for grayscale
+                    const normalizedDepth = depthRange > 0 ? (depthValue - minDepth) / depthRange : 0;
+                    const gray = Math.floor(normalizedDepth * 255);
+
+                    data[i] = gray;     // Red
+                    data[i + 1] = gray; // Green
+                    data[i + 2] = gray; // Blue
+                    data[i + 3] = 255;  // Alpha (fully opaque)
+                } else {
+                    // If no depth data, make it transparent or black
+                    data[i] = 0;
+                    data[i + 1] = 0;
+                    data[i + 2] = 0;
+                    data[i + 3] = 0; // Transparent
+                }
+            }
+        }
+        ctx.putImageData(imageData, 0, 0);
     };
 
-    const processPredictionsWithDepth = (predictions, depthData, canvasWidth, canvasHeight) => {
-        const depthMapWidth = 256;
-        const depthMapHeight = 256;
-
+    const processPredictionsWithDepth = (predictions, depthData, canvasWidth, canvasHeight, depthMapWidth, depthMapHeight) => {
         return predictions.map(prediction => {
             const [x, y, width, height] = prediction.bbox;
 
@@ -147,9 +171,8 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 
             for (let i = startY; i < endY; i++) {
                 for (let j = startX; j < endX; j++) {
-                    const depthIndex = i * depthMapWidth + j;
-                    if (depthData[depthIndex] !== undefined) {
-                        totalDepth += depthData[depthIndex];
+                    if (depthData[i] && depthData[i][j] !== undefined) {
+                        totalDepth += depthData[i][j];
                         pixelCount++;
                     }
                 }

@@ -70,18 +70,12 @@
     color: white;
 }
 
-.startBtn:hover {
-    background-color: #218838;
-}
 
 .endBtn {
     background-color: var(--color-danger);
     color: white;
 }
 
-.endBtn:hover {
-    background-color: #c82333;
-}
 
 .disabledBtn {
     background-color: var(--color-secondaryCta);

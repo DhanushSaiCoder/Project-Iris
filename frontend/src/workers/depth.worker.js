@@ -41,11 +41,15 @@ async function predictDepth(imageData) {
 
         // eslint-disable-next-line no-restricted-globals
         self.postMessage({ type: "depth_map", data: depthData, width: 256, height: 256 });
-
         tf.dispose([imageTensor, resized, batched, output, depth, min, max, normalized]);
+
     } catch (e) {
         // eslint-disable-next-line no-restricted-globals
         self.postMessage({ type: "error", error: e.message });
+    } finally {
+        // Signal that the prediction is complete and the worker is ready for a new frame.
+        // eslint-disable-next-line no-restricted-globals
+        self.postMessage({ type: "prediction_complete" });
     }
 }
 

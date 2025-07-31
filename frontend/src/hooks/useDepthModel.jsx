@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 export function useDepthModel() {
     const workerRef = useRef(null);
+    const isBusyRef = useRef(false); // To track if the worker is busy
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [depthMap, setDepthMap] = useState(null);
@@ -17,9 +18,12 @@ export function useDepthModel() {
                 setLoading(false);
             } else if (type === "depth_map") {
                 setDepthMap(data);
+            } else if (type === "prediction_complete") {
+                isBusyRef.current = false; // Worker is ready for a new frame
             } else if (type === "error") {
                 setError(workerError);
                 setLoading(false);
+                isBusyRef.current = false; // Reset busy state on error
             }
         };
 
@@ -36,7 +40,11 @@ export function useDepthModel() {
     }, []);
 
     const predictDepth = useCallback((mediaEl) => {
-        if (!workerRef.current || !mediaEl) return;
+        if (!workerRef.current || !mediaEl || isBusyRef.current) {
+            return; // Don't predict if worker is busy or not ready
+        }
+
+        isBusyRef.current = true; // Set worker to busy
 
         const canvas = document.createElement("canvas");
         canvas.width = mediaEl.videoWidth;

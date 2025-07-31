@@ -1,11 +1,10 @@
 .container {
-    background-color: #1a1a1a; /* Slightly lighter dark background */
-    color: #e0e0e0; /* Soft white text */
-    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', 'monospace'; /* Monospace font */
+    background-color: #0e0d0d; /* Slightly lighter dark background */
+    color: var(--text-primary); /* Soft white text */
+    font-family: "Cascadia Code", "Fira Code", "Consolas", "monospace"; /* Monospace font */
     font-size: 0.9em;
-    border: 1px solid #333333; /* Subtle dark grey border */
+    border: 1px solid var(--color-borders); /* Subtle dark grey border */
     border-radius: 4px;
-    padding: 10px;
     height: 200px; /* Fixed height */
     overflow-y: auto; /* Scroll for overflow */
     display: flex;
@@ -36,20 +35,27 @@
 }
 
 .header {
-    font-weight: bold;
     margin-bottom: 10px;
     text-align: center;
-    color: #66ccff; /* Soft blue for header */
+    color: var(--text-primary); /* Soft blue for header */
     text-transform: uppercase;
     letter-spacing: 1px;
+    background-color: var(--color-background-2);
+    font-family: "Google Sans Code", monospace;
+    border-bottom: 1px solid var(--color-borders);
+    padding: 10px;
+
+    
+
 }
 
 .list {
     flex-grow: 1;
+    padding-left: 10px;
 }
 
 .noObjects {
-    color: #888888; /* Muted grey for no objects message */
+    color: var(--text-secondary); /* Muted grey for no objects message */
     text-align: center;
     padding: 20px;
 }
@@ -62,15 +68,26 @@
 }
 
 .timestamp {
-    color: #999999; /* Muted grey for timestamp */
+    color: var(--text-secondary); /* Muted grey for timestamp */
     margin-right: 8px;
+    font-family: "Google Sans Code", monospace;
+    font-size: smaller;
+
 }
 
 .objectName {
-    color: #e0e0e0; /* Soft white for object name */
+    color: var(--text-primary); /* Soft white for object name */
     margin-right: 8px;
+    font-family: "Google Sans Code", monospace;
+    font-size: smaller;
+
+
 }
 
 .score {
-    color: #aaffaa; /* Soft green for score */
+    color: var(--color-success); /* Soft green for score */
+    font-family: "Google Sans Code", monospace;
+    font-size: smaller;
+
+
 }

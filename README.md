@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../frontend/src/assets/images/logo.png" alt="Project Iris Logo" width="200"/>
+  <img src="./frontend/src/assets/images/logo.png" alt="Project Iris Logo" width="200"/>
 </div>
 
 <h1 align="center">Project-Iris</h1>

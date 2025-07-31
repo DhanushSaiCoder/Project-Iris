@@ -1,0 +1,76 @@
+.container {
+    background-color: #1a1a1a; /* Slightly lighter dark background */
+    color: #e0e0e0; /* Soft white text */
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', 'monospace'; /* Monospace font */
+    font-size: 0.9em;
+    border: 1px solid #333333; /* Subtle dark grey border */
+    border-radius: 4px;
+    padding: 10px;
+    height: 200px; /* Fixed height */
+    overflow-y: auto; /* Scroll for overflow */
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    width: 100%; /* Take full width of parent */
+    max-width: 800px; /* Limit maximum width */
+    margin: 20px auto; /* Center horizontally and add top margin */
+}
+
+/* Scrollbar styling */
+.container::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.container::-webkit-scrollbar-track {
+    background: #2a2a2a; /* Color of the scrollbar track */
+    border-radius: 10px;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background: #555; /* Color of the scrollbar thumb */
+    border-radius: 10px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+    background: #777; /* Color of the scrollbar thumb on hover */
+}
+
+.header {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #66ccff; /* Soft blue for header */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.list {
+    flex-grow: 1;
+}
+
+.noObjects {
+    color: #888888; /* Muted grey for no objects message */
+    text-align: center;
+    padding: 20px;
+}
+
+.objectItem {
+    margin-bottom: 4px; /* Slightly reduced margin */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.timestamp {
+    color: #999999; /* Muted grey for timestamp */
+    margin-right: 8px;
+}
+
+.objectName {
+    color: #e0e0e0; /* Soft white for object name */
+    margin-right: 8px;
+}
+
+.score {
+    color: #aaffaa; /* Soft green for score */
+}

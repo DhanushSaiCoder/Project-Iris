@@ -1,6 +1,22 @@
-.VideoStream{
-    width: 70vw;
-    height: 400px;
+.VideoStream {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: var(--color-card);
     border-radius: 10px;
+    display: flex; /* Use flexbox to center the canvas */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Hide any overflow */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.canvas {
+    width: 100%; /* Make canvas responsive */
+    height: 100%; /* Make canvas responsive */
+    display: block; /* Remove extra space below canvas */
+    object-fit: contain; /* Ensure entire video is visible */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }

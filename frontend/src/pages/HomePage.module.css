@@ -1,36 +1,101 @@
-.HomePage {
+.homePage {
     min-height: calc(100vh - 155px);
-}
-.videoStreamDiv {
-    width: 100vw;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 0 0 0;
-}
-.statusDiv {
     padding: 20px;
-    text-align: center;
-}
-.statusDiv p {
-    color: var(--color-cta);
-}
-.statusSpan {
-    font-weight: bold;
-    color: var(--color-text-primary);
-}
-.startBtn {
-    width: 85%;
-    height: 56px;
-    background-color: var(--color-success);
-    border-radius: 5px;
-    border: none;
-    font-size: larger;
+    gap: 20px;
 }
 
-.startBtnDiv {
+.mainContentWrapper {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    width: 100%;
+    gap: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.mainContentWrapper.detecting {
+    flex-direction: row;
+    align-items: flex-start;
     justify-content: center;
-    margin-top: 20px;
+}
+
+.videoStreamDiv {
+    width: 100%;
+    max-width: 600px;
+    flex-shrink: 0;
+}
+
+.videoWrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    background-color: var(--color-card);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.detectedObjectsListDiv {
+    width: 100%;
+    max-width: 300px;
+    align-self: stretch;
+}
+
+.controlsDiv {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.controlBtn {
+    width: 100%;
+    max-width: 300px;
+    height: 56px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.startBtn {
+    background-color: var(--color-success);
+    color: white;
+}
+
+
+.endBtn {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+
+.disabledBtn {
+    background-color: var(--color-secondaryCta);
+    cursor: not-allowed;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 900px) {
+    .mainContentWrapper.detecting {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .detectedObjectsListDiv {
+        max-width: 600px;
+    }
+}
+
+@media (max-width: 480px) {
+    .controlBtn {
+        font-size: 1rem;
+    }
 }

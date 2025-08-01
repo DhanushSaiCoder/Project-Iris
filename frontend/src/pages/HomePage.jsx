@@ -18,10 +18,8 @@ const HomePage = () => {
   
   
   const handleEndDetection = () => {
-    localStorage.setItem("sessionObjects", JSON.stringify(detectedObjects));
-    
     setIsDetecting(false);
-    navigate("/session-summary");
+    navigate("/session-summary", { state: { detectedObjects } });
   };
   
   

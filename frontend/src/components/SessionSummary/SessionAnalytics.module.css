@@ -1,0 +1,106 @@
+/* src/components/SessionSummary/SessionAnalytics.module.css */
+.analyticsContainer {
+    background-color: var(--color-card);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--color-borders);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.metricItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-background-2);
+    padding: 1.5rem;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.metricItem:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.metricValue {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.metricLabel {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.25rem;
+}
+
+.chartTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    color: var(--color-text-primary);
+    font-weight: 700;
+}
+
+.detectionList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.detectionItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.itemInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.itemName {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.itemCount {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.progressBar {
+    background-color: var(--color-background-2);
+    border-radius: 8px;
+    height: 24px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.progressBarFill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+}
+
+.percentageLabel {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}

@@ -19,8 +19,6 @@ async function loadModel() {
         
         // eslint-disable-next-line no-restricted-globals
         console.log("depth.worker: Model loaded successfully.");
-        console.log("depth.worker: Model loaded successfully.");
-        console.log("depth.worker: Model loaded successfully.");
         self.postMessage({ type: "model_loaded" });
     } catch (e) {
         

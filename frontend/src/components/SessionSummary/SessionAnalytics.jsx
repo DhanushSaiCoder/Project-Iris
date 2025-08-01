@@ -2,7 +2,7 @@
 import React from "react";
 import styles from "./SessionAnalytics.module.css";
 
-const SessionAnalytics = ({ detectedObjects, colorMap }) => {
+const SessionAnalytics = ({ detectedObjects, colorMap, duration }) => {
     const totalDetections = detectedObjects.length;
     const uniqueClasses = [...new Set(detectedObjects.map((obj) => obj.class))];
     const uniqueDetectionsCount = uniqueClasses.length;
@@ -16,6 +16,12 @@ const SessionAnalytics = ({ detectedObjects, colorMap }) => {
         (a, b) => b[1] - a[1]
     );
 
+    const formatDuration = (ms) => {
+        const minutes = Math.floor(ms / 60000);
+        const seconds = ((ms % 60000) / 1000).toFixed(0);
+        return `${minutes}m ${seconds}s`;
+    };
+
     return (
         <div className={styles.analyticsContainer}>
             <div className={styles.metricsGrid}>
@@ -26,6 +32,10 @@ const SessionAnalytics = ({ detectedObjects, colorMap }) => {
                 <div className={styles.metricItem}>
                     <span className={styles.metricValue}>{uniqueDetectionsCount}</span>
                     <span className={styles.metricLabel}>Unique Objects</span>
+                </div>
+                <div className={styles.metricItem}>
+                    <span className={styles.metricValue}>{formatDuration(duration)}</span>
+                    <span className={styles.metricLabel}>Duration</span>
                 </div>
             </div>
 

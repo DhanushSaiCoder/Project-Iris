@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import VideoStream from "../components/Home/VideoStream";
 import DetectedObjectsList from "../components/ObjectDetector/DetectedObjectsList";
@@ -10,16 +10,20 @@ const HomePage = () => {
   const [isDetecting, setIsDetecting] = useState(false);
   const [modelsAreLoading, setModelsAreLoading] = useState(false);
   const [detectedObjects, setDetectedObjects] = useState([]);
+  const [sessionStartTime, setSessionStartTime] = useState(null);
   const navigate = useNavigate();
   
   const handleStartDetection = () => {
+    setSessionStartTime(Date.now());
     setIsDetecting(true);
   };
   
   
   const handleEndDetection = () => {
+    const sessionEndTime = Date.now();
+    const duration = sessionEndTime - sessionStartTime;
     setIsDetecting(false);
-    navigate("/session-summary", { state: { detectedObjects } });
+    navigate("/session-summary", { state: { detectedObjects, duration } });
   };
   
   

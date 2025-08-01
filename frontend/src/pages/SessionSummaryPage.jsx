@@ -22,7 +22,7 @@ const GRADIENT_PAIRS = [
 
 const SessionSummaryPage = () => {
     const location = useLocation();
-    const { detectedObjects } = location.state || { detectedObjects: [] };
+    const { detectedObjects, duration } = location.state || { detectedObjects: [], duration: 0 };
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
     if (!detectedObjects || detectedObjects.length === 0) {
@@ -52,7 +52,7 @@ const SessionSummaryPage = () => {
                 </p>
             </header>
 
-            <SessionAnalytics detectedObjects={detectedObjects} colorMap={colorMap} />
+            <SessionAnalytics detectedObjects={detectedObjects} colorMap={colorMap} duration={duration} />
 
             <div className={styles.detailsSection}>
                 <button 

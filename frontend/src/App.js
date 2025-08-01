@@ -43,7 +43,7 @@ const AppContent = () => {
                     <Route path="/sessionSummary" element={<SessionSummaryPage />} />
                     <Route path="/caliberation" element={<CaliberationPage />} />
                     <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />
-                    <Route path="/developers" element={<DevelopersPage />} />
+                    <Route path="/developers" element={<DevelopersPage/>}/>
                     <Route path="/help" element={<HelpPage />} />
                     <Route path="/incompatible-browser" element={<IncompatibleBrowserPage />} />
                     <Route path="/launch" element={<LaunchPage />} />

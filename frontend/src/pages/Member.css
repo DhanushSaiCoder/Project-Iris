@@ -1,0 +1,33 @@
+.member{
+ border-radius:12px;
+ padding:10px;
+ margin: 10px;
+ background-color: black;
+ box-shadow:0 0 8px;
+} 
+.image{
+height: 70px;
+width:70px;
+border-radius: 50%;
+margin-TOP:10px;
+background-color: #585656;
+margin-bottom: 10px;
+}
+.name{
+    color:#faf7f7;
+    font-size:20px;
+
+}
+.role{
+ color: #f1f4f6;
+ font-size: 15px;
+}
+.dot{
+    display:inline-block;
+    width:20px;
+    height: 20px;
+    margin-right: 5px;
+    background-color: #696767;
+    border-radius: 50%;
+
+}

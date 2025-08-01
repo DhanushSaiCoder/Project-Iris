@@ -1,90 +1,131 @@
 /* src/pages/SessionSummaryPage.module.css */
 .container {
-    padding: 2rem;
-    max-width: 800px;
+    padding: 2rem 1rem;
+    max-width: 900px;
     margin: 0 auto;
     color: var(--color-text-primary);
 }
 
-.title {
+.header {
     text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-    font-family: "Oswald", sans-serif;
-    font-weight: 600;
+    margin-bottom: 3rem;
 }
 
-.noData {
-    text-align: center;
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: "Oswald", sans-serif;
+}
+
+.subtitle {
     font-size: 1.2rem;
     color: var(--color-text-secondary);
-    margin-top: 4rem;
-    margin-bottom: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* No Data State */
+.noDataContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+}
+
+.noDataContent {
+    max-width: 500px;
+}
+
+.noDataText {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 1.5rem 0;
 }
 
 .detailsSection {
-    margin-top: 2rem;
+    margin-top: 3rem;
     background-color: var(--color-card);
-    border-radius: 12px;
-    padding: 1.5rem;
+    border-radius: 16px;
+    padding: 2rem;
     border: 1px solid var(--color-borders);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .detailsTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     color: var(--color-text-primary);
-    font-weight: 600;
-    padding-bottom: 0.5rem;
+    font-weight: 700;
+    padding-bottom: 1rem;
     border-bottom: 1px solid var(--color-borders);
 }
 
 .objectList {
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
+    padding-right: 1rem; /* For scrollbar spacing */
 }
 
 .objectItem {
     display: flex;
     justify-content: space-between;
-    padding: 0.75rem 0.5rem;
+    align-items: center;
+    padding: 0.8rem 0;
     border-bottom: 1px solid var(--color-borders);
+    transition: background-color 0.2s ease;
 }
 
 .objectItem:last-child {
     border-bottom: none;
 }
 
+.objectItem:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
 .objectName {
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 1rem;
 }
 
 .objectScore {
-    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    background-color: var(--color-background-2);
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
 }
 
 .actions {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+    justify-content: center;
     margin-top: 3rem;
 }
 
 .button {
-    width: 100%;
-    max-width: 300px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 2rem;
     height: 56px;
     border: none;
     border-radius: 8px;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 .primary {

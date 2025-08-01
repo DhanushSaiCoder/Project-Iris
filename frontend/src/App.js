@@ -13,6 +13,7 @@ import SessionSummaryPage from './pages/SessionSummaryPage.jsx';
 import SettingsPage from './pages/SettingsPage.jsx';
 import UserMonitoringPage from './pages/UserMonitoringPage.jsx';
 import Header from './components/Header/Header';
+import TimeLogger from './components/AdminDashboard/TimeLogger.jsx';
 import './App.css';
 import "./styles/variables.css"
 
@@ -37,7 +38,7 @@ const AppContent = () => {
             {showHeader && <Header />}
             <Routes>
                 <Route path="/admin" element={<AdminDashboardPage />} />
-                <Route element={<MobileLayout />}>
+                <Route element={<MobileLayout />} />
                     <Route path="/" element={<HomePage />} />
                     <Route path="/newSession" element={<NewSession />} />
                     <Route path="/sessionSummary" element={<SessionSummaryPage />} />
@@ -51,7 +52,8 @@ const AppContent = () => {
                     <Route path="/session-summary" element={<SessionSummaryPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
                     <Route path="/user-monitoring" element={<UserMonitoringPage />} />
-                </Route>
+                    <Route path="/admin/TimeLogger" element={ < TimeLogger/>} />
+            
             </Routes>
             <Footer />
         </div>

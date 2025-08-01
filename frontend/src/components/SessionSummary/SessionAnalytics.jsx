@@ -26,15 +26,21 @@ const SessionAnalytics = ({ detectedObjects, colorMap, duration }) => {
         <div className={styles.analyticsContainer}>
             <div className={styles.metricsGrid}>
                 <div className={styles.metricItem}>
-                    <span className={styles.metricValue}>{totalDetections}</span>
+                    <span className={styles.metricValue}>
+                        {totalDetections}
+                    </span>
                     <span className={styles.metricLabel}>Total Detections</span>
                 </div>
                 <div className={styles.metricItem}>
-                    <span className={styles.metricValue}>{uniqueDetectionsCount}</span>
+                    <span className={styles.metricValue}>
+                        {uniqueDetectionsCount}
+                    </span>
                     <span className={styles.metricLabel}>Unique Objects</span>
                 </div>
-                <div className={styles.metricItem}>
-                    <span className={styles.metricValue}>{formatDuration(duration)}</span>
+                <div className={`${styles.metricItem} ${styles.fullWidth}`}>
+                    <span className={styles.metricValue}>
+                        {formatDuration(duration)}
+                    </span>
                     <span className={styles.metricLabel}>Duration</span>
                 </div>
             </div>
@@ -42,34 +48,45 @@ const SessionAnalytics = ({ detectedObjects, colorMap, duration }) => {
             <h3 className={styles.chartTitle}>Detection Breakdown</h3>
             <div className={styles.detectionList}>
                 {sortedClasses.map(([className, count]) => {
-                    const percentage = totalDetections > 0 ? (count / totalDetections) * 100 : 0;
+                    const percentage =
+                        totalDetections > 0
+                            ? (count / totalDetections) * 100
+                            : 0;
                     const gradient = colorMap[className];
                     const isLabelInside = percentage >= 15;
 
                     return (
                         <div key={className} className={styles.detectionItem}>
                             <div className={styles.itemInfo}>
-                                <span className={styles.itemName}>{className}</span>
-                                <span className={styles.itemCount}>{count} detections</span>
+                                <span className={styles.itemName}>
+                                    {className}
+                                </span>
+                                <span className={styles.itemCount}>
+                                    {count} detections
+                                </span>
                             </div>
                             <div className={styles.progressBar}>
                                 <div
                                     className={styles.progressBarFill}
-                                    style={{ 
-                                        width: `${percentage}%`, 
-                                        background: `linear-gradient(to right, ${gradient[0]}, ${gradient[1]})` 
+                                    style={{
+                                        width: `${percentage}%`,
+                                        background: `linear-gradient(to right, ${gradient[0]}, ${gradient[1]})`,
                                     }}
                                 >
                                     {isLabelInside && (
-                                        <span className={`${styles.percentageLabel} ${styles.inside}`}>
+                                        <span
+                                            className={`${styles.percentageLabel} ${styles.inside}`}
+                                        >
                                             {percentage.toFixed(1)}%
                                         </span>
                                     )}
                                 </div>
                                 {!isLabelInside && (
-                                    <span 
+                                    <span
                                         className={`${styles.percentageLabel} ${styles.outside}`}
-                                        style={{ left: `calc(${percentage}% + 8px)` }}
+                                        style={{
+                                            left: `calc(${percentage}% + 8px)`,
+                                        }}
                                     >
                                         {percentage.toFixed(1)}%
                                     </span>

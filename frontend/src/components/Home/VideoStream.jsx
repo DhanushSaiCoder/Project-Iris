@@ -19,6 +19,13 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         if ("Notification" in window && Notification.permission !== "granted") {
             Notification.requestPermission();
         }
+
+        // Get service worker registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then(reg => {
+                window.serviceWorkerRegistration = reg;
+            });
+        }
     }, []);
 
     useEffect(() => {
@@ -31,10 +38,18 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         // Debounce alerts per object class (e.g., every 5 seconds)
         if (!lastAlerted.current[objectClass] || (currentTime - lastAlerted.current[objectClass] > 5000)) {
             if ("Notification" in window && Notification.permission === "granted") {
-                const notification = new Notification("Proximity Alert!", {
-                    body: `A ${objectClass} is too close!`,
-                    icon: "/logo192.png", // Optional: add an icon
-                });
+                if (window.serviceWorkerRegistration) {
+                    window.serviceWorkerRegistration.showNotification("Proximity Alert!", {
+                        body: `A ${objectClass} is too close!`,
+                        icon: "/logo192.png", // Optional: add an icon
+                    });
+                } else {
+                    // Fallback for browsers without service worker or if registration isn't ready
+                    const notification = new Notification("Proximity Alert!", {
+                        body: `A ${objectClass} is too close!`,
+                        icon: "/logo192.png",
+                    });
+                }
             }
             console.warn(`PROXIMITY ALERT: ${objectClass} is too close.`);
             lastAlerted.current[objectClass] = currentTime;

@@ -1,33 +1,31 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./SessionSummary.module.css";
 import { SettingsContext } from "../context/SettingsContext";
 
-// Helper function to format duration
-const formatDuration = (milliseconds) => {
-    const totalSeconds = Math.floor(milliseconds / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
 
-    return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-};
 
 export default function SessionSummary() {
     const navigate = useNavigate();
     const { sessionId } = useContext(SettingsContext);
+    const [detectedObjects, setDetectedObjects] = useState([])
 
-    const detectedObjects = JSON.parse(localStorage.getItem("sessionObjects")) || [];
-
+    useEffect(() => {
+        setDetectedObjects(JSON.parse(localStorage.getItem("sessionObjects")) || [])
+        console.log(detectedObjects)
+        
+    }, [])
     const alertsCount = detectedObjects.length;
-    console.log(detectedObjects);
+
+
+
 
     let sessionDuration = "0:00:00";
     if (detectedObjects.length > 0) {
         const firstTimestamp = new Date(detectedObjects[0].timestamp);
         const lastTimestamp = new Date(detectedObjects[detectedObjects.length - 1].timestamp);
         const durationMs = lastTimestamp - firstTimestamp;
-        sessionDuration = formatDuration(durationMs);
+        // sessionDuration = formatDuration(durationMs);
     }
 
     const uniqueObjectsMap = new Map();

@@ -1,0 +1,24 @@
+.ReadingDiv{
+    background-color: var(--color-background-2);
+    margin-left: 1%;
+    margin-right: 10%;
+    height: 90%;
+    width:auto;
+    padding-bottom: 50%;
+    padding-top: 5%;
+    padding-left: 5%;
+
+}
+.list{
+    list-style-type: none;
+}
+.Session{
+    font-weight: bold;
+    margin-left: 1%;
+}
+.Text{
+        font-weight: 100;
+    }
+.TimeLoggerDIv{
+     margin-left: 5%; 
+}

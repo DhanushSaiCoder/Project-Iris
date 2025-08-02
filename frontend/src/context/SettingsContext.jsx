@@ -3,17 +3,15 @@ import React, { createContext, useState, useEffect, useMemo } from "react";
 
 // 1. Define default values
 const defaultSettings = {
-    thresholdScore: null,
     audioAnnouncements: true,
     hapticFeedback: true,
     sessionId: null,
-    alertDistance: 0.5, // Default alert distance
+    alertDistance: 2, // Default alert distance in meters
 };
 
 // 2. Create Context
 export const SettingsContext = createContext({
     ...defaultSettings,
-    setThresholdScore: () => {},
     setAudioAnnouncements: () => {},
     setHapticFeedback: () => {},
     setSessionId: () => {},
@@ -23,12 +21,6 @@ export const SettingsContext = createContext({
 // 3. Create Provider component
 export function SettingsProvider({ children }) {
     // Initialize from localStorage or defaults
-    const [thresholdScore, setThresholdScore] = useState(() => {
-        const saved = localStorage.getItem("bw-threshold");
-        return saved !== null
-            ? JSON.parse(saved)
-            : defaultSettings.thresholdScore;
-    });
     const [audioAnnouncements, setAudioAnnouncements] = useState(() => {
         const saved = localStorage.getItem("bw-audio");
         return saved !== null
@@ -51,13 +43,6 @@ export function SettingsProvider({ children }) {
 
     // Persist to localStorage on changes
     useEffect(() => {
-        if (thresholdScore !== null)
-            localStorage.setItem(
-                "bw-threshold",
-                JSON.stringify(thresholdScore)
-            );
-    }, [thresholdScore]);
-    useEffect(() => {
         localStorage.setItem("bw-audio", JSON.stringify(audioAnnouncements));
     }, [audioAnnouncements]);
     useEffect(() => {
@@ -70,8 +55,6 @@ export function SettingsProvider({ children }) {
     // 4. Provide state + setters
     const value = useMemo(
         () => ({
-            thresholdScore,
-            setThresholdScore,
             audioAnnouncements,
             setAudioAnnouncements,
             hapticFeedback,
@@ -81,13 +64,7 @@ export function SettingsProvider({ children }) {
             alertDistance,
             setAlertDistance,
         }),
-        [
-            thresholdScore,
-            audioAnnouncements,
-            hapticFeedback,
-            sessionId,
-            alertDistance,
-        ]
+        [audioAnnouncements, hapticFeedback, sessionId, alertDistance]
     );
 
     return (

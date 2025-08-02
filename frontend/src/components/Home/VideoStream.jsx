@@ -19,7 +19,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         if ("Notification" in window && Notification.permission !== "granted") {
             Notification.requestPermission();
         }
-
+https://da918b5052af.ngrok-free.app
         // Get service worker registration
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.ready.then(reg => {

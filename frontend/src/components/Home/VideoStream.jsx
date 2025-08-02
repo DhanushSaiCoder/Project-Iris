@@ -37,19 +37,11 @@ https://da918b5052af.ngrok-free.app
         const currentTime = Date.now();
         // Debounce alerts per object class (e.g., every 5 seconds)
         if (!lastAlerted.current[objectClass] || (currentTime - lastAlerted.current[objectClass] > 5000)) {
-            if ("Notification" in window && Notification.permission === "granted") {
-                if (window.serviceWorkerRegistration) {
-                    window.serviceWorkerRegistration.showNotification("Proximity Alert!", {
-                        body: `A ${objectClass} is too close!`,
-                        icon: "/logo192.png", // Optional: add an icon
-                    });
-                } else {
-                    // Fallback for browsers without service worker or if registration isn't ready
-                    const notification = new Notification("Proximity Alert!", {
-                        body: `A ${objectClass} is too close!`,
-                        icon: "/logo192.png",
-                    });
-                }
+            if ("Notification" in window && Notification.permission === "granted" && window.serviceWorkerRegistration) {
+                window.serviceWorkerRegistration.showNotification("Proximity Alert!", {
+                    body: `A ${objectClass} is too close!`,
+                    icon: "/logo192.png", // Optional: add an icon
+                });
             }
             console.warn(`PROXIMITY ALERT: ${objectClass} is too close.`);
             lastAlerted.current[objectClass] = currentTime;
@@ -192,7 +184,8 @@ https://da918b5052af.ngrok-free.app
             }
 
             const avgDepth = pixelCount > 0 ? totalDepth / pixelCount : 0;
-            const isClose = avgDepth > alertDistance;
+            const avgDepthInMeters = (1 - avgDepth) * 10; // Convert normalized depth to meters
+            const isClose = avgDepthInMeters < alertDistance;
 
             if (isClose) {
                 showProximityAlert(prediction.class);

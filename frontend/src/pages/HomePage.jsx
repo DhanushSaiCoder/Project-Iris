@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import VideoStream from "../components/Home/VideoStream";
 import DetectedObjectsList from "../components/ObjectDetector/DetectedObjectsList";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import styles from "./HomePage.module.css";
 import SessionSummary from "./SessionSummary";
+import { SettingsContext } from "../context/SettingsContext";
 
 const HomePage = () => {
   const [isDetecting, setIsDetecting] = useState(false);
@@ -12,6 +13,7 @@ const HomePage = () => {
   const [detectedObjects, setDetectedObjects] = useState([]);
   const [sessionStartTime, setSessionStartTime] = useState(null);
   const navigate = useNavigate();
+  const { developerMode } = useContext(SettingsContext);
   
   const handleStartDetection = () => {
     setSessionStartTime(Date.now());
@@ -54,7 +56,7 @@ const HomePage = () => {
                         />
                     </div>
                 </div>
-                {isDetecting && (
+                {isDetecting && developerMode && (
                     <div className={styles.detectedObjectsListDiv}>
                         <DetectedObjectsList detectedObjects={detectedObjects} />
                     </div>

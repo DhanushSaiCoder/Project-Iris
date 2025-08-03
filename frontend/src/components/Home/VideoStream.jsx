@@ -165,7 +165,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                 }
             }
 
-            return { ...prediction, isClose };
+            return { ...prediction, isClose, avgDepthInMeters };
         });
     };
 
@@ -173,7 +173,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         // Do not clear the canvas here, to keep the depth map
         ctx.globalAlpha = 0.8;
         predictions.forEach(prediction => {
-            const { bbox, class: className, score, isClose } = prediction;
+            const { bbox, class: className, score, isClose, avgDepthInMeters } = prediction;
             const [x, y, width, height] = bbox;
 
             // Set color based on proximity
@@ -186,7 +186,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
             ctx.stroke();
             
             // Draw text background
-            const text = `${className} (${Math.round(score * 100)}%)`;
+            const text = `${className} (${Math.round(score * 100)}%)` + (avgDepthInMeters ? ` - ${avgDepthInMeters.toFixed(2)}m` : '');
             ctx.font = '18px Arial';
             const textWidth = ctx.measureText(text).width;
             ctx.fillStyle = color;

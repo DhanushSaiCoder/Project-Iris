@@ -3,7 +3,7 @@ import { useCamera } from "../../hooks/useCamera";
 import { useModels } from "../../hooks/useModels";
 import { useDepthModel } from "../../hooks/useDepthModel";
 import { SettingsContext } from "../../context/SettingsContext";
-import { speak, cancelSpeech } from "../../utils/speech";
+import { speak, cancelSpeech, clearSpeechQueue, setSpeechStatusCallback } from "../../utils/speech";
 import styles from "./VideoStream.module.css";
 
 const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
@@ -14,6 +14,8 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const canvasRef = useRef(null);
     const lastDetected = useRef({});
     const lastAlerted = useRef({}); // To debounce alerts
+    const lastGlobalSpeechTime = useRef(0); // To globally debounce speech
+    const GLOBAL_SPEECH_DEBOUNCE_MS = 3000; // 3 seconds debounce for all speech
 
     useEffect(() => {
         onLoadingChange(cocoLoading || depthLoading);
@@ -77,9 +79,15 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 
         return () => {
             cancelAnimationFrame(animationFrameId);
-            cancelSpeech();
         };
     }, [cameraReady, cocoLoading, depthLoading, cocoModel, predictDepth, videoRef, isDetecting, depthMap, alertDistance]); // Add dependencies
+
+    // Clear speech queue if audio announcements are turned off
+    useEffect(() => {
+        if (!audioAnnouncements) {
+            clearSpeechQueue();
+        }
+    }, [audioAnnouncements]);
 
     const drawDepthMap = (depthData, ctx, canvasWidth, canvasHeight, depthMapWidth, depthMapHeight) => {
         if (!depthData) {
@@ -161,9 +169,15 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 
             if (isClose) {
                 const currentTime = Date.now();
-                if (!lastAlerted.current[prediction.class] || (currentTime - lastAlerted.current[prediction.class] > 5000)) {
+                // Debounce per object class
+                const canAlertObjectClass = !lastAlerted.current[prediction.class] || (currentTime - lastAlerted.current[prediction.class] > 5000);
+                // Global debounce for all speech
+                const canSpeakGlobally = (currentTime - lastGlobalSpeechTime.current > GLOBAL_SPEECH_DEBOUNCE_MS);
+
+                if (canAlertObjectClass && canSpeakGlobally) {
                     if (audioAnnouncements) {
                         speak(`A ${prediction.class} is too close!`);
+                        lastGlobalSpeechTime.current = currentTime; // Update global speech time
                     }
                     lastAlerted.current[prediction.class] = currentTime;
                 }
@@ -204,6 +218,14 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     };
 
     const [distanceMultiplier, setDistanceMultiplier] = useState(2.25);
+    const [speechStatus, setSpeechStatus] = useState('Initializing speech...');
+
+    useEffect(() => {
+        setSpeechStatusCallback(setSpeechStatus);
+        return () => {
+            setSpeechStatusCallback(null); // Clean up callback on unmount
+        };
+    }, []);
 
     return (
         <div className={styles.videoContainer}>
@@ -229,6 +251,11 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                         onChange={(e) => setDistanceMultiplier(parseFloat(e.target.value))}
                         className={styles.slider}
                     />
+                </div>
+            )}
+            {developerMode && (
+                <div className={styles.speechStatus}>
+                    <p>Speech Status: {speechStatus}</p>
                 </div>
             )}
         </div>

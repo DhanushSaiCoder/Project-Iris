@@ -4,13 +4,14 @@ import { useModels } from "../../hooks/useModels";
 import { useDepthModel } from "../../hooks/useDepthModel";
 import { SettingsContext } from "../../context/SettingsContext";
 import { speak, cancelSpeech, clearSpeechQueue, setSpeechStatusCallback } from "../../utils/speech";
+import { triggerHapticFeedback } from "../../utils/haptics";
 import styles from "./VideoStream.module.css";
 
 const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const { videoRef, ready: cameraReady } = useCamera();
     const { cocoModel, loading: cocoLoading, error: cocoError } = useModels();
     const { depthMap, predictDepth, loading: depthLoading, error: depthError } = useDepthModel();
-    const { alertDistance, developerMode, audioAnnouncements } = useContext(SettingsContext);
+    const { alertDistance, developerMode, audioAnnouncements, hapticFeedback } = useContext(SettingsContext);
     const canvasRef = useRef(null);
     const lastDetected = useRef({});
     const lastAlerted = useRef({}); // To debounce alerts
@@ -178,6 +179,9 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                     if (audioAnnouncements) {
                         speak(`A ${prediction.class} is too close!`);
                         lastGlobalSpeechTime.current = currentTime; // Update global speech time
+                    }
+                    if (hapticFeedback) {
+                        triggerHapticFeedback(200); // Vibrate for 200ms
                     }
                     lastAlerted.current[prediction.class] = currentTime;
                 }

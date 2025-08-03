@@ -3,13 +3,14 @@ import { useCamera } from "../../hooks/useCamera";
 import { useModels } from "../../hooks/useModels";
 import { useDepthModel } from "../../hooks/useDepthModel";
 import { SettingsContext } from "../../context/SettingsContext";
+import { speak, cancelSpeech } from "../../utils/speech";
 import styles from "./VideoStream.module.css";
 
 const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const { videoRef, ready: cameraReady } = useCamera();
     const { cocoModel, loading: cocoLoading, error: cocoError } = useModels();
     const { depthMap, predictDepth, loading: depthLoading, error: depthError } = useDepthModel();
-    const { alertDistance, developerMode } = useContext(SettingsContext);
+    const { alertDistance, developerMode, audioAnnouncements } = useContext(SettingsContext);
     const canvasRef = useRef(null);
     const lastDetected = useRef({});
     const lastAlerted = useRef({}); // To debounce alerts
@@ -76,6 +77,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 
         return () => {
             cancelAnimationFrame(animationFrameId);
+            cancelSpeech();
         };
     }, [cameraReady, cocoLoading, depthLoading, cocoModel, predictDepth, videoRef, isDetecting, depthMap, alertDistance]); // Add dependencies
 
@@ -160,7 +162,9 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
             if (isClose) {
                 const currentTime = Date.now();
                 if (!lastAlerted.current[prediction.class] || (currentTime - lastAlerted.current[prediction.class] > 5000)) {
-                    alert(`A ${prediction.class} is too close!`);
+                    if (audioAnnouncements) {
+                        speak(`A ${prediction.class} is too close!`);
+                    }
                     lastAlerted.current[prediction.class] = currentTime;
                 }
             }

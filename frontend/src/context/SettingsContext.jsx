@@ -8,6 +8,7 @@ const defaultSettings = {
     sessionId: null,
     alertDistance: 2, // Default alert distance in meters
     developerMode: false,
+    autoCaliberateOnLaunch: false,
 };
 
 // 2. Create Context
@@ -16,8 +17,9 @@ export const SettingsContext = createContext({
     setAudioAnnouncements: () => {},
     setHapticFeedback: () => {},
     setSessionId: () => {},
-    setAlertDistance: () => {}, // Add setter for alert distance
+    setAlertDistance: () => {},
     setDeveloperMode: () => {},
+    setAutoCaliberateOnLaunch: () => {},
 });
 
 // 3. Create Provider component
@@ -48,6 +50,12 @@ export function SettingsProvider({ children }) {
             ? JSON.parse(saved)
             : defaultSettings.developerMode;
     });
+    const [autoCaliberateOnLaunch, setAutoCaliberateOnLaunch] = useState(() => {
+        const saved = localStorage.getItem("bw-auto-calibrate");
+        return saved !== null
+            ? JSON.parse(saved)
+            : defaultSettings.autoCaliberateOnLaunch;
+    });
 
     // Persist to localStorage on changes
     useEffect(() => {
@@ -62,6 +70,9 @@ export function SettingsProvider({ children }) {
     useEffect(() => {
         localStorage.setItem("bw-developer-mode", JSON.stringify(developerMode));
     }, [developerMode]);
+    useEffect(() => {
+        localStorage.setItem("bw-auto-calibrate", JSON.stringify(autoCaliberateOnLaunch));
+    }, [autoCaliberateOnLaunch]);
 
     // 4. Provide state + setters
     const value = useMemo(
@@ -76,8 +87,10 @@ export function SettingsProvider({ children }) {
             setAlertDistance,
             developerMode,
             setDeveloperMode,
+            autoCaliberateOnLaunch,
+            setAutoCaliberateOnLaunch,
         }),
-        [audioAnnouncements, hapticFeedback, sessionId, alertDistance, developerMode]
+        [audioAnnouncements, hapticFeedback, sessionId, alertDistance, developerMode, autoCaliberateOnLaunch]
     );
 
     return (

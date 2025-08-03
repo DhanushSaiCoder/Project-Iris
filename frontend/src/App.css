@@ -7,7 +7,7 @@
     box-sizing: border-box;
     color: var(--color-text-primary);
     font-family: "Atkinson Hyperlegible", sans-serif;
-
+    user-select: none;
 }
 body {
     background-color: var(--color-background);

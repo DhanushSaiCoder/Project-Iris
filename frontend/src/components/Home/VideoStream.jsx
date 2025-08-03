@@ -181,7 +181,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                         lastGlobalSpeechTime.current = currentTime; // Update global speech time
                     }
                     if (hapticFeedback) {
-                        triggerHapticFeedback(200); // Vibrate for 200ms
+                        triggerHapticFeedback('critical'); // Trigger mild haptic feedback
                     }
                     lastAlerted.current[prediction.class] = currentTime;
                 }

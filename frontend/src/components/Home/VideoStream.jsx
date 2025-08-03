@@ -3,58 +3,24 @@ import { useCamera } from "../../hooks/useCamera";
 import { useModels } from "../../hooks/useModels";
 import { useDepthModel } from "../../hooks/useDepthModel";
 import { SettingsContext } from "../../context/SettingsContext";
+import { speak, cancelSpeech, clearSpeechQueue, setSpeechStatusCallback } from "../../utils/speech";
+import { triggerHapticFeedback } from "../../utils/haptics";
 import styles from "./VideoStream.module.css";
 
 const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const { videoRef, ready: cameraReady } = useCamera();
     const { cocoModel, loading: cocoLoading, error: cocoError } = useModels();
     const { depthMap, predictDepth, loading: depthLoading, error: depthError } = useDepthModel();
-    const { alertDistance } = useContext(SettingsContext);
+    const { alertDistance, developerMode, audioAnnouncements, hapticFeedback } = useContext(SettingsContext);
     const canvasRef = useRef(null);
     const lastDetected = useRef({});
     const lastAlerted = useRef({}); // To debounce alerts
-
-    // Request notification permission on component mount
-    useEffect(() => {
-        if ("Notification" in window && Notification.permission !== "granted") {
-            Notification.requestPermission();
-        }
-
-        // Get service worker registration
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.ready.then(reg => {
-                window.serviceWorkerRegistration = reg;
-            });
-        }
-    }, []);
+    const lastGlobalSpeechTime = useRef(0); // To globally debounce speech
+    const GLOBAL_SPEECH_DEBOUNCE_MS = 3000; // 3 seconds debounce for all speech
 
     useEffect(() => {
         onLoadingChange(cocoLoading || depthLoading);
     }, [cocoLoading, depthLoading, onLoadingChange]);
-
-    // Function to show a notification
-    const showProximityAlert = (objectClass) => {
-        const currentTime = Date.now();
-        // Debounce alerts per object class (e.g., every 5 seconds)
-        if (!lastAlerted.current[objectClass] || (currentTime - lastAlerted.current[objectClass] > 5000)) {
-            if ("Notification" in window && Notification.permission === "granted") {
-                if (window.serviceWorkerRegistration) {
-                    window.serviceWorkerRegistration.showNotification("Proximity Alert!", {
-                        body: `A ${objectClass} is too close!`,
-                        icon: "/logo192.png", // Optional: add an icon
-                    });
-                } else {
-                    // Fallback for browsers without service worker or if registration isn't ready
-                    const notification = new Notification("Proximity Alert!", {
-                        body: `A ${objectClass} is too close!`,
-                        icon: "/logo192.png",
-                    });
-                }
-            }
-            console.warn(`PROXIMITY ALERT: ${objectClass} is too close.`);
-            lastAlerted.current[objectClass] = currentTime;
-        }
-    };
 
     useEffect(() => {
         let animationFrameId;
@@ -116,6 +82,13 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
             cancelAnimationFrame(animationFrameId);
         };
     }, [cameraReady, cocoLoading, depthLoading, cocoModel, predictDepth, videoRef, isDetecting, depthMap, alertDistance]); // Add dependencies
+
+    // Clear speech queue if audio announcements are turned off
+    useEffect(() => {
+        if (!audioAnnouncements) {
+            clearSpeechQueue();
+        }
+    }, [audioAnnouncements]);
 
     const drawDepthMap = (depthData, ctx, canvasWidth, canvasHeight, depthMapWidth, depthMapHeight) => {
         if (!depthData) {
@@ -192,13 +165,29 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
             }
 
             const avgDepth = pixelCount > 0 ? totalDepth / pixelCount : 0;
-            const isClose = avgDepth > alertDistance;
+            const avgDepthInMeters = (1 - avgDepth) * distanceMultiplier; // Convert normalized depth to meters
+            const isClose = avgDepthInMeters < alertDistance;
 
             if (isClose) {
-                showProximityAlert(prediction.class);
+                const currentTime = Date.now();
+                // Debounce per object class
+                const canAlertObjectClass = !lastAlerted.current[prediction.class] || (currentTime - lastAlerted.current[prediction.class] > 5000);
+                // Global debounce for all speech
+                const canSpeakGlobally = (currentTime - lastGlobalSpeechTime.current > GLOBAL_SPEECH_DEBOUNCE_MS);
+
+                if (canAlertObjectClass && canSpeakGlobally) {
+                    if (audioAnnouncements) {
+                        speak(`A ${prediction.class} is too close!`);
+                        lastGlobalSpeechTime.current = currentTime; // Update global speech time
+                    }
+                    if (hapticFeedback) {
+                        triggerHapticFeedback('critical'); // Trigger mild haptic feedback
+                    }
+                    lastAlerted.current[prediction.class] = currentTime;
+                }
             }
 
-            return { ...prediction, isClose };
+            return { ...prediction, isClose, avgDepthInMeters };
         });
     };
 
@@ -206,7 +195,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         // Do not clear the canvas here, to keep the depth map
         ctx.globalAlpha = 0.8;
         predictions.forEach(prediction => {
-            const { bbox, class: className, score, isClose } = prediction;
+            const { bbox, class: className, score, isClose, avgDepthInMeters } = prediction;
             const [x, y, width, height] = bbox;
 
             // Set color based on proximity
@@ -219,7 +208,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
             ctx.stroke();
             
             // Draw text background
-            const text = `${className} (${Math.round(score * 100)}%)`;
+            const text = `${className} (${Math.round(score * 100)}%)` + (avgDepthInMeters ? ` - ${avgDepthInMeters.toFixed(2)}m` : '');
             ctx.font = '18px Arial';
             const textWidth = ctx.measureText(text).width;
             ctx.fillStyle = color;
@@ -232,8 +221,18 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         ctx.globalAlpha = 1.0;
     };
 
+    const [distanceMultiplier, setDistanceMultiplier] = useState(2.25);
+    const [speechStatus, setSpeechStatus] = useState('Initializing speech...');
+
+    useEffect(() => {
+        setSpeechStatusCallback(setSpeechStatus);
+        return () => {
+            setSpeechStatusCallback(null); // Clean up callback on unmount
+        };
+    }, []);
+
     return (
-        <div className={styles.VideoStream}>
+        <div className={styles.videoContainer}>
             <video
                 ref={videoRef}
                 className={styles.video}
@@ -243,6 +242,26 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                 style={{ display: "none" }}
             />
             <canvas ref={canvasRef} className={styles.canvas} />
+            {developerMode && (
+                <div className={styles.calibrationControls}>
+                    <label htmlFor="distanceMultiplier">Distance Multiplier: {distanceMultiplier.toFixed(2)}</label>
+                    <input
+                        type="range"
+                        id="distanceMultiplier"
+                        min="1"
+                        max="50"
+                        step="0.5"
+                        value={distanceMultiplier}
+                        onChange={(e) => setDistanceMultiplier(parseFloat(e.target.value))}
+                        className={styles.slider}
+                    />
+                </div>
+            )}
+            {developerMode && (
+                <div className={styles.speechStatus}>
+                    <p>Speech Status: {speechStatus}</p>
+                </div>
+            )}
         </div>
     );
 };

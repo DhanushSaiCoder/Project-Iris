@@ -4,15 +4,15 @@ import ToggleSwitch from "../ToggleSwitch";
 import { SettingsContext } from "../../../context/SettingsContext";
 
 const AutoCaliberateOnLaunch = () => {
-    const { audioAnnouncements, setAudioAnnouncements } = useContext(SettingsContext);
+    const { autoCaliberateOnLaunch, setAutoCaliberateOnLaunch } = useContext(SettingsContext);
 
     return (
         <div className={styles.AutoCaliberateOnLaunch}>
             <p>Auto-Caliberate on Launch</p>
             <ToggleSwitch
-                checked={audioAnnouncements}
-                onChange={setAudioAnnouncements}
-                label={audioAnnouncements ? "On" : "Off"}
+                checked={autoCaliberateOnLaunch}
+                onChange={setAutoCaliberateOnLaunch}
+                label={autoCaliberateOnLaunch ? "On" : "Off"}
             />
         </div>
     );

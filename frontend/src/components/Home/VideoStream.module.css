@@ -1,4 +1,4 @@
-.VideoStream {
+.videoContainer {
     position: absolute;
     top: 0;
     left: 0;
@@ -6,17 +6,51 @@
     height: 100%;
     background-color: var(--color-card);
     border-radius: 10px;
-    display: flex; /* Use flexbox to center the canvas */
+    display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Hide any overflow */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .canvas {
-    width: 100%; /* Make canvas responsive */
-    height: 100%; /* Make canvas responsive */
-    display: block; /* Remove extra space below canvas */
-    object-fit: contain; /* Ensure entire video is visible */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    box-sizing: border-box;
+}
+
+.calibrationControls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-family: sans-serif;
+}
+
+.slider {
+    width: 250px;
+}
+
+.speechStatus {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    z-index: 10;
+    font-family: sans-serif;
+    font-size: 0.9em;
 }

@@ -1,0 +1,13 @@
+.container{
+    border-bottom: 1px solid var(--color-borders);
+    background-color: var(--color-background-2);
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.label{
+    margin: 0;
+}

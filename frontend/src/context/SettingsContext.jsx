@@ -3,32 +3,28 @@ import React, { createContext, useState, useEffect, useMemo } from "react";
 
 // 1. Define default values
 const defaultSettings = {
-    thresholdScore: null,
     audioAnnouncements: true,
     hapticFeedback: true,
     sessionId: null,
-    alertDistance: 0.5, // Default alert distance
+    alertDistance: 2, // Default alert distance in meters
+    developerMode: false,
+    autoCaliberateOnLaunch: false,
 };
 
 // 2. Create Context
 export const SettingsContext = createContext({
     ...defaultSettings,
-    setThresholdScore: () => {},
     setAudioAnnouncements: () => {},
     setHapticFeedback: () => {},
     setSessionId: () => {},
-    setAlertDistance: () => {}, // Add setter for alert distance
+    setAlertDistance: () => {},
+    setDeveloperMode: () => {},
+    setAutoCaliberateOnLaunch: () => {},
 });
 
 // 3. Create Provider component
 export function SettingsProvider({ children }) {
     // Initialize from localStorage or defaults
-    const [thresholdScore, setThresholdScore] = useState(() => {
-        const saved = localStorage.getItem("bw-threshold");
-        return saved !== null
-            ? JSON.parse(saved)
-            : defaultSettings.thresholdScore;
-    });
     const [audioAnnouncements, setAudioAnnouncements] = useState(() => {
         const saved = localStorage.getItem("bw-audio");
         return saved !== null
@@ -48,15 +44,20 @@ export function SettingsProvider({ children }) {
             ? JSON.parse(saved)
             : defaultSettings.alertDistance;
     });
+    const [developerMode, setDeveloperMode] = useState(() => {
+        const saved = localStorage.getItem("bw-developer-mode");
+        return saved !== null
+            ? JSON.parse(saved)
+            : defaultSettings.developerMode;
+    });
+    const [autoCaliberateOnLaunch, setAutoCaliberateOnLaunch] = useState(() => {
+        const saved = localStorage.getItem("bw-auto-calibrate");
+        return saved !== null
+            ? JSON.parse(saved)
+            : defaultSettings.autoCaliberateOnLaunch;
+    });
 
     // Persist to localStorage on changes
-    useEffect(() => {
-        if (thresholdScore !== null)
-            localStorage.setItem(
-                "bw-threshold",
-                JSON.stringify(thresholdScore)
-            );
-    }, [thresholdScore]);
     useEffect(() => {
         localStorage.setItem("bw-audio", JSON.stringify(audioAnnouncements));
     }, [audioAnnouncements]);
@@ -66,12 +67,16 @@ export function SettingsProvider({ children }) {
     useEffect(() => {
         localStorage.setItem("bw-alert-distance", JSON.stringify(alertDistance));
     }, [alertDistance]);
+    useEffect(() => {
+        localStorage.setItem("bw-developer-mode", JSON.stringify(developerMode));
+    }, [developerMode]);
+    useEffect(() => {
+        localStorage.setItem("bw-auto-calibrate", JSON.stringify(autoCaliberateOnLaunch));
+    }, [autoCaliberateOnLaunch]);
 
     // 4. Provide state + setters
     const value = useMemo(
         () => ({
-            thresholdScore,
-            setThresholdScore,
             audioAnnouncements,
             setAudioAnnouncements,
             hapticFeedback,
@@ -80,14 +85,12 @@ export function SettingsProvider({ children }) {
             setSessionId,
             alertDistance,
             setAlertDistance,
+            developerMode,
+            setDeveloperMode,
+            autoCaliberateOnLaunch,
+            setAutoCaliberateOnLaunch,
         }),
-        [
-            thresholdScore,
-            audioAnnouncements,
-            hapticFeedback,
-            sessionId,
-            alertDistance,
-        ]
+        [audioAnnouncements, hapticFeedback, sessionId, alertDistance, developerMode, autoCaliberateOnLaunch]
     );
 
     return (

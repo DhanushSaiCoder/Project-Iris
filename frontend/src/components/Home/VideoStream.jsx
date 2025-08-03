@@ -14,39 +14,9 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const lastDetected = useRef({});
     const lastAlerted = useRef({}); // To debounce alerts
 
-    // Request notification permission on component mount
-    useEffect(() => {
-        if ("Notification" in window && Notification.permission !== "granted") {
-            Notification.requestPermission();
-        }
-https://da918b5052af.ngrok-free.app
-        // Get service worker registration
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.ready.then(reg => {
-                window.serviceWorkerRegistration = reg;
-            });
-        }
-    }, []);
-
     useEffect(() => {
         onLoadingChange(cocoLoading || depthLoading);
     }, [cocoLoading, depthLoading, onLoadingChange]);
-
-    // Function to show a notification
-    const showProximityAlert = (objectClass) => {
-        const currentTime = Date.now();
-        // Debounce alerts per object class (e.g., every 5 seconds)
-        if (!lastAlerted.current[objectClass] || (currentTime - lastAlerted.current[objectClass] > 5000)) {
-            if ("Notification" in window && Notification.permission === "granted" && window.serviceWorkerRegistration) {
-                window.serviceWorkerRegistration.showNotification("Proximity Alert!", {
-                    body: `A ${objectClass} is too close!`,
-                    icon: "/logo192.png", // Optional: add an icon
-                });
-            }
-            console.warn(`PROXIMITY ALERT: ${objectClass} is too close.`);
-            lastAlerted.current[objectClass] = currentTime;
-        }
-    };
 
     useEffect(() => {
         let animationFrameId;
@@ -188,7 +158,11 @@ https://da918b5052af.ngrok-free.app
             const isClose = avgDepthInMeters < alertDistance;
 
             if (isClose) {
-                showProximityAlert(prediction.class);
+                const currentTime = Date.now();
+                if (!lastAlerted.current[prediction.class] || (currentTime - lastAlerted.current[prediction.class] > 5000)) {
+                    alert(`A ${prediction.class} is too close!`);
+                    lastAlerted.current[prediction.class] = currentTime;
+                }
             }
 
             return { ...prediction, isClose };

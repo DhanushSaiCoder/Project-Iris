@@ -7,6 +7,7 @@ const defaultSettings = {
     hapticFeedback: true,
     sessionId: null,
     alertDistance: 2, // Default alert distance in meters
+    developerMode: false,
 };
 
 // 2. Create Context
@@ -16,6 +17,7 @@ export const SettingsContext = createContext({
     setHapticFeedback: () => {},
     setSessionId: () => {},
     setAlertDistance: () => {}, // Add setter for alert distance
+    setDeveloperMode: () => {},
 });
 
 // 3. Create Provider component
@@ -40,6 +42,12 @@ export function SettingsProvider({ children }) {
             ? JSON.parse(saved)
             : defaultSettings.alertDistance;
     });
+    const [developerMode, setDeveloperMode] = useState(() => {
+        const saved = localStorage.getItem("bw-developer-mode");
+        return saved !== null
+            ? JSON.parse(saved)
+            : defaultSettings.developerMode;
+    });
 
     // Persist to localStorage on changes
     useEffect(() => {
@@ -51,6 +59,9 @@ export function SettingsProvider({ children }) {
     useEffect(() => {
         localStorage.setItem("bw-alert-distance", JSON.stringify(alertDistance));
     }, [alertDistance]);
+    useEffect(() => {
+        localStorage.setItem("bw-developer-mode", JSON.stringify(developerMode));
+    }, [developerMode]);
 
     // 4. Provide state + setters
     const value = useMemo(
@@ -63,8 +74,10 @@ export function SettingsProvider({ children }) {
             setSessionId,
             alertDistance,
             setAlertDistance,
+            developerMode,
+            setDeveloperMode,
         }),
-        [audioAnnouncements, hapticFeedback, sessionId, alertDistance]
+        [audioAnnouncements, hapticFeedback, sessionId, alertDistance, developerMode]
     );
 
     return (

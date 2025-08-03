@@ -8,6 +8,7 @@ import HepticFeedback from "../components/SettingsPage/HepticFeedback/HepticFeed
 import AutoCaliberateOnLaunch from "../components/SettingsPage/AutoCaliberateOnLaunch/AutoCaliberateOnLaunch";
 import ReCaliberateDevice from "./../components/SettingsPage/ReCaliberateDeviceBtn/ReCaliberateDevice";
 import AdminDashboardBtn from "../components/SettingsPage/AdminDashboard/AdminDashboardBtn";
+import DeveloperMode from "../components/SettingsPage/DeveloperMode/DeveloperMode";
 
 const SettingsPage = () => {
     const navigate = useNavigate();
@@ -30,6 +31,7 @@ const SettingsPage = () => {
                 <AlertDistance />
                 <HepticFeedback />
                 <AutoCaliberateOnLaunch />
+                <DeveloperMode />
                 <div className={styles.buttonsDiv}>
                     <ReCaliberateDevice />
                     <AdminDashboardBtn />

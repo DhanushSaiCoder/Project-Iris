@@ -9,7 +9,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const { videoRef, ready: cameraReady } = useCamera();
     const { cocoModel, loading: cocoLoading, error: cocoError } = useModels();
     const { depthMap, predictDepth, loading: depthLoading, error: depthError } = useDepthModel();
-    const { alertDistance } = useContext(SettingsContext);
+    const { alertDistance, developerMode } = useContext(SettingsContext);
     const canvasRef = useRef(null);
     const lastDetected = useRef({});
     const lastAlerted = useRef({}); // To debounce alerts
@@ -154,7 +154,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
             }
 
             const avgDepth = pixelCount > 0 ? totalDepth / pixelCount : 0;
-            const avgDepthInMeters = (1 - avgDepth) * 10; // Convert normalized depth to meters
+            const avgDepthInMeters = (1 - avgDepth) * distanceMultiplier; // Convert normalized depth to meters
             const isClose = avgDepthInMeters < alertDistance;
 
             if (isClose) {
@@ -199,8 +199,10 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         ctx.globalAlpha = 1.0;
     };
 
+    const [distanceMultiplier, setDistanceMultiplier] = useState(2.25);
+
     return (
-        <div className={styles.VideoStream}>
+        <div className={styles.videoContainer}>
             <video
                 ref={videoRef}
                 className={styles.video}
@@ -210,6 +212,21 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                 style={{ display: "none" }}
             />
             <canvas ref={canvasRef} className={styles.canvas} />
+            {developerMode && (
+                <div className={styles.calibrationControls}>
+                    <label htmlFor="distanceMultiplier">Distance Multiplier: {distanceMultiplier.toFixed(2)}</label>
+                    <input
+                        type="range"
+                        id="distanceMultiplier"
+                        min="1"
+                        max="50"
+                        step="0.5"
+                        value={distanceMultiplier}
+                        onChange={(e) => setDistanceMultiplier(parseFloat(e.target.value))}
+                        className={styles.slider}
+                    />
+                </div>
+            )}
         </div>
     );
 };

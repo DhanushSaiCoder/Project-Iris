@@ -60,7 +60,7 @@ To get the Project Iris frontend up and running on your local machine, follow th
 1.  **Clone the repository:**
 
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/DhanushSaiCoder/Project-Iris.git
     cd frontend
     ```
 

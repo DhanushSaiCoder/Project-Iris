@@ -1,28 +1,26 @@
 // src/pages/CalibrationPage.jsx
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./CaliberationPage.module.css";
 import { SkipForward } from "lucide-react";
-import { useCamera } from "../hooks/useCamera"; // <-- import your hook
-import ModelTester from "../components/ModelTester";
-import { useDepthModel } from "./../hooks/useDepthModel";
-import * as tf from "@tensorflow/tfjs";
+import { useCamera } from "../hooks/useCamera";
+import { useDepthModel } from "../hooks/useDepthModel";
+import { triggerHapticFeedback } from "../utils/haptics";
+import AlertDistanceSlider from "../components/SettingsPage/AlertDistanceSlider/AlertDistanceSlider";
 
 const STEPS = [
     {
         title: "Position Alignment",
-        instruction:
-            "Hold your phone in your pocket or armband, camera forward.",
+        instruction: "Hold your phone in your pocket or armband, camera forward.",
         primaryLabel: "Continue",
     },
     {
         title: "Reference Distance Recording",
         instruction: "Hold your hand at the distance you want to be alerted.",
-        primaryLabel: "Record Distance",
+        primaryLabel: "Start Recording",
     },
     {
-        title: "Verification",
-        instruction:
-            "As you walk to your hand, alert should fire at your set distance.",
+        title: "Verification & Tuning",
+        instruction: "As you move your hand, the alert should fire at your set distance. Fine-tune with the slider.",
         primaryLabel: "Done",
     },
 ];
@@ -30,6 +28,7 @@ const STEPS = [
 const onFinish = () => {
     window.location.href = "/";
 };
+
 const onSkip = () => {
     onFinish();
 };
@@ -38,149 +37,181 @@ export default function CaliberationPage() {
     const [step, setStep] = useState(0);
     const [refScore, setRefScore] = useState(null);
     const [sensitivity, setSensitivity] = useState(1.0);
+    const [isRecording, setIsRecording] = useState(false);
+    const [currentDepth, setCurrentDepth] = useState(null);
+    const [isVideoReady, setIsVideoReady] = useState(false);
+    const [countdown, setCountdown] = useState(10);
 
-    // 1) Hook up camera
     const { videoRef, ready: cameraReady } = useCamera();
-
-    const {
-        predictDepth,
-        loading: depthLoading,
-        error: depthError,
-    } = useDepthModel();
-
+    const { predictDepth, loading: depthLoading, error: depthError, depthMap } = useDepthModel();
     const canvasRef = useRef(null);
+    const samples = useRef([]);
+    const isRecordingRef = useRef(false);
+    const countdownIntervalRef = useRef(null);
 
-    // Announce each step
+    const speak = useCallback((text) => {
+        const msg = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.speak(msg);
+    }, []);
+
+    const finish = useCallback(() => {
+        if (refScore) {
+            localStorage.setItem("bw-threshold", refScore * sensitivity);
+            speak("Calibration complete.");
+            onFinish();
+        } else {
+            speak("Calibration incomplete. Please record a distance first.");
+        }
+    }, [refScore, sensitivity, speak]);
+
+    const next = useCallback(() => {
+        if (step < 2) {
+            setStep(step + 1);
+        } else {
+            finish();
+        }
+    }, [step, finish]);
+
+    const startRecording = useCallback(() => {
+        setIsRecording(true);
+        isRecordingRef.current = true;
+        samples.current = [];
+        setCountdown(10);
+        speak("Recording for 10 seconds.");
+
+        countdownIntervalRef.current = setInterval(() => {
+            setCountdown(prev => prev - 1);
+        }, 1000);
+
+        setTimeout(() => {
+            clearInterval(countdownIntervalRef.current);
+            setIsRecording(false);
+            isRecordingRef.current = false;
+            if (samples.current.length > 0) {
+                const avg = samples.current.reduce((a, b) => a + b, 0) / samples.current.length;
+                setRefScore(avg);
+                speak("Reference distance recorded.");
+                next();
+            } else {
+                speak("Could not record a reference distance. Please try again.");
+            }
+        }, 10000);
+    }, [next, speak]);
+
     useEffect(() => {
         if (!cameraReady) return;
-        const msg = new SpeechSynthesisUtterance(
-            `Step ${step + 1} of 3: ${STEPS[step].title}. ${
-                STEPS[step].instruction
-            }`
-        );
-        window.speechSynthesis.speak(msg);
-    }, [step, cameraReady]);
+        const { title, instruction } = STEPS[step];
+        speak(`Step ${step + 1} of 3: ${title}. ${instruction}`);
+    }, [step, cameraReady, speak]);
 
-    // Navigation functions
-    const next = () => (step < 2 ? setStep(step + 1) : onFinish());
-    const recordDistance = async () => {
-        // draw frame to canvas
-        const ctx = canvasRef.current.getContext("2d");
-        ctx.drawImage(videoRef.current, 0, 0, 320, 240);
+    useEffect(() => {
+        if (!depthMap) return;
 
-        // 1) get normalized depth map tensor at 256×256
-        const depthMap = await predictDepth(videoRef.current, 256);
-        // 2) sample a small central patch (e.g. 50×50)
-        const [h, w] = depthMap.shape;
-        const y0 = Math.floor((h - 50) / 2),
-            x0 = Math.floor((w - 50) / 2);
-        const patch = depthMap.slice([y0, x0], [50, 50]);
-        // 3) compute average relative depth
-        const avg = (await patch.mean().data())[0];
-        tf.dispose([depthMap, patch]);
-        setRefScore(avg);
-        next();
-    };
-    const handleTune = (factor) => {
-        setSensitivity((s) => +(s * factor).toFixed(2));
-        const tuneMsg = new SpeechSynthesisUtterance(
-            factor > 1 ? "Less sensitive" : "More sensitive"
-        );
-        window.speechSynthesis.speak(tuneMsg);
-    };
-    const finish = () => {
-        localStorage.setItem("bw-threshold", refScore * sensitivity);
-        window.speechSynthesis.speak(
-            new SpeechSynthesisUtterance("Calibration complete.")
-        );
-        onFinish();
-    };
+        const { data, width, height } = depthMap;
+        if (!data || !width || !height) return;
 
-    const { title, instruction, primaryLabel } = STEPS[step];
+        const patchSize = 50;
+        const y0 = Math.floor((height - patchSize) / 2);
+        const x0 = Math.floor((width - patchSize) / 2);
+
+        let sum = 0;
+        for (let y = y0; y < y0 + patchSize; y++) {
+            for (let x = x0; x < x0 + patchSize; x++) {
+                if (data[y] && data[y][x]) {
+                    sum += data[y][x];
+                }
+            }
+        }
+        const avg = sum / (patchSize * patchSize);
+        setCurrentDepth(avg);
+
+        if (isRecordingRef.current) {
+            samples.current.push(avg);
+        }
+
+        if (step === 2 && refScore && avg < refScore * sensitivity) {
+            triggerHapticFeedback("warning");
+        }
+
+    }, [depthMap, step, refScore, sensitivity]);
+
+    useEffect(() => {
+        if (!isVideoReady || !videoRef.current || depthLoading) return;
+        
+        const video = videoRef.current;
+        const predict = () => predictDepth(video);
+
+        const interval = setInterval(predict, 200);
+
+        return () => clearInterval(interval);
+    }, [isVideoReady, videoRef, predictDepth, depthLoading]);
+
+    const renderStepContent = () => {
+        const { title, instruction, primaryLabel } = STEPS[step];
+        return (
+            <>
+                <div className={styles.skipButton} onClick={onSkip}>
+                    SKIP <SkipForward size={16} />
+                </div>
+                <div className={styles.stepIndicator}>STEP {step + 1}/3</div>
+                <h2 className={styles.stepTitle}>DEVICE CALIBRATION</h2>
+                <h3 className={styles.subTitle}>{title}</h3>
+                <p className={styles.instruction}>{instruction}</p>
+
+                {step === 0 && <button className={`${styles.button} ${styles.primary}`} onClick={next}>{primaryLabel}</button>}
+
+                {step === 1 && (
+                    <>
+                        <button className={`${styles.button} ${styles.primary}`} onClick={startRecording} disabled={isRecording || !isVideoReady || depthLoading}>
+                            {isRecording ? `Recording... (${countdown})` : primaryLabel}
+                        </button>
+                        {depthError && <p style={{ color: "red" }}>{depthError.message}</p>}
+                    </>
+                )}
+
+                {step === 2 && (
+                    <>
+                        <div className={styles.verification}>
+                            <p>Current Depth: {currentDepth ? currentDepth.toFixed(4) : "N/A"}</p>
+                            <p>Reference Depth: {refScore ? refScore.toFixed(4) : "N/A"}</p>
+                            <p>Sensitivity: {sensitivity.toFixed(2)}</p>
+                        </div>
+                        <AlertDistanceSlider min={0.5} max={1.5} step={0.05} value={sensitivity} onChange={(e) => setSensitivity(Number(e.target.value))} />
+                        <button className={`${styles.button} ${styles.done}`} onClick={finish}>{primaryLabel}</button>
+                    </>
+                )}
+            </>
+        );
+    };
 
     return (
         <div className={styles.container}>
-            {/* Hidden video & canvas for frame capture */}
             <video
                 ref={videoRef}
-                style={{ display: "none" }}
+                autoPlay
                 playsInline
                 muted
+                className={styles.videoFeed}
+                onLoadedMetadata={() => setIsVideoReady(true)}
+                style={{
+                    visibility: step === 1 ? 'visible' : 'hidden',
+                }}
             />
             <canvas
                 ref={canvasRef}
-                width={320}
-                height={240}
-                style={{ display: "none" }}
+                className={styles.depthOverlay}
+                style={{
+                    visibility: step === 1 ? 'visible' : 'hidden',
+                }}
             />
 
-            {/* Show a loading state until camera is ready */}
             {!cameraReady ? (
-                <div className={styles.loadingContainer}>
-                    <p>Starting camera…</p>
-                </div>
+                <div className={styles.loadingContainer}><p>Starting camera…</p></div>
             ) : depthLoading ? (
-                <div className={styles.depthLoader}>
-                    <p>Analyzing depth…</p>
-                </div>
+                <div className={styles.depthLoader}><p>Loading depth model…</p></div>
             ) : (
-                <>
-                    {/* Skip button */}
-                    <div className={styles.skipButton} onClick={onSkip}>
-                        SKIP <SkipForward size={16} />
-                    </div>
-                    {/* Step Indicator */}
-                    <div className={styles.stepIndicator}>
-                        STEP {step + 1}/3
-                    </div>
-                    {/* Main Title */}
-                    <h2 className={styles.stepTitle}>DEVICE CALIBRATION</h2>
-                    {/* Subtitle & Instruction */}
-                    <h3 className={styles.subTitle}>{title}</h3>
-                    <p className={styles.instruction}>{instruction}</p>
-                    {/* Steps 1 & 2 */}
-                    {step < 2 && (
-                        <button
-                            className={`${styles.button} ${styles.primary}`}
-                            onClick={step === 1 ? recordDistance : next}
-                        >
-                            {primaryLabel}
-                        </button>
-                    )}
-                    {/* steps UI */}
-                    {step === 1 && depthError && (
-                        <p style={{ color: "red" }}>{depthError.message}</p>
-                    )}
-                    {/* Step 3 */}
-                    {step === 2 && (
-                        <>
-                            <div className={styles.tuning}>
-                                <button
-                                    className={styles.tuningButton}
-                                    onClick={() => handleTune(1.1)}
-                                >
-                                    Less Sensitive
-                                </button>
-                                <button
-                                    className={styles.tuningButton}
-                                    onClick={() => handleTune(0.9)}
-                                >
-                                    More Sensitive
-                                </button>
-                            </div>
-                            <button
-                                className={`${styles.button} ${styles.done}`}
-                                onClick={finish}
-                            >
-                                {primaryLabel}
-                            </button>
-                        </>
-                    )}
-                </>
+                renderStepContent()
             )}
-            <div className={styles.tester}>
-                <ModelTester videoRef={videoRef} ready={cameraReady} />
-            </div>
         </div>
     );
 }

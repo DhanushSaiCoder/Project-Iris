@@ -40,12 +40,14 @@ export default function CaliberationPage() {
     const [isRecording, setIsRecording] = useState(false);
     const [currentDepth, setCurrentDepth] = useState(null);
     const [isVideoReady, setIsVideoReady] = useState(false);
+    const [countdown, setCountdown] = useState(10);
 
     const { videoRef, ready: cameraReady } = useCamera();
     const { predictDepth, loading: depthLoading, error: depthError, depthMap } = useDepthModel();
     const canvasRef = useRef(null);
     const samples = useRef([]);
     const isRecordingRef = useRef(false);
+    const countdownIntervalRef = useRef(null);
 
     const speak = useCallback((text) => {
         const msg = new SpeechSynthesisUtterance(text);
@@ -74,9 +76,15 @@ export default function CaliberationPage() {
         setIsRecording(true);
         isRecordingRef.current = true;
         samples.current = [];
+        setCountdown(10);
         speak("Recording for 10 seconds.");
 
+        countdownIntervalRef.current = setInterval(() => {
+            setCountdown(prev => prev - 1);
+        }, 1000);
+
         setTimeout(() => {
+            clearInterval(countdownIntervalRef.current);
             setIsRecording(false);
             isRecordingRef.current = false;
             if (samples.current.length > 0) {
@@ -128,7 +136,6 @@ export default function CaliberationPage() {
     }, [depthMap, step, refScore, sensitivity]);
 
     useEffect(() => {
-        // Wait until the camera is ready, the video metadata is loaded, AND the depth model is no longer loading.
         if (!isVideoReady || !videoRef.current || depthLoading) return;
         
         const video = videoRef.current;
@@ -156,7 +163,7 @@ export default function CaliberationPage() {
                 {step === 1 && (
                     <>
                         <button className={`${styles.button} ${styles.primary}`} onClick={startRecording} disabled={isRecording || !isVideoReady || depthLoading}>
-                            {isRecording ? `Recording...` : primaryLabel}
+                            {isRecording ? `Recording... (${countdown})` : primaryLabel}
                         </button>
                         {depthError && <p style={{ color: "red" }}>{depthError.message}</p>}
                     </>

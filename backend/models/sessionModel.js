@@ -1,32 +1,18 @@
-import mongoose from "mongoose";
+// models/Session.js
+import mongoose from 'mongoose'
 
-const SessionSchema = new mongoose.Schema(
-    {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
+const sessionSchema = new mongoose.Schema({
+    userId: { type: String, required: true },
+    duration: { type: Number, required: true },
+    uniqueObjects: { type: Number, required: true },
+    totalDetections: { type: Number, required: true },
+    allDetections: [
+        {
+            class: String,
+            confidence: Number,
+            timestamp: String,
         },
-        duration: {
-            type: Number,
-            required: true,
-        },
-        uniqueObjects: {
-            type: Number,
-            required: true,
-        },
-        totalDetections: {
-            type: Number,
-            required: true,
-        },
-        allDetections: {
-            type: [String],
-            default: [],
-        },
-    },
-    {
-        timestamps: true,
-    }
-);
+    ],
+}, { timestamps: true });
 
-export default mongoose.model("Session", SessionSchema);
+export default mongoose.model("Session", sessionSchema);

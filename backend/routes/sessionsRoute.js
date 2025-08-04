@@ -6,41 +6,29 @@ const router = express.Router();
 // POST: Create a new summary
 router.post("/", async (req, res) => {
     try {
-        const {
-            userId,
-            duration,
-            uniqueObjects,
-            totalDetections,
-            allDetections,
-        } = req.body;
+        console.log("Incoming POST data:", req.body); // Add this
+        const { userId, duration, uniqueObjects, totalDetections, allDetections } = req.body;
 
-        if (
-            !userId ||
-            duration === undefined ||
-            uniqueObjects === undefined ||
-            totalDetections === undefined ||
-            !Array.isArray(allDetections)
-        ) {
-            return res.status(400).json({
-                message: "Send all required fields: userId, duration, uniqueObjects, totalDetections, allDetections",
-            });
+        if (!userId || !duration || !Array.isArray(allDetections)) {
+            return res.status(400).json({ error: "Invalid or missing data" });
         }
 
-        const newSession = {
+        const newSession = new Session({
             userId,
             duration,
             uniqueObjects,
             totalDetections,
             allDetections,
-        };
+        });
 
-        const session = await Session.create(newSession);
-        return res.status(201).json(session);
+        await newSession.save();
+        res.status(201).json({ message: "Session saved", session: newSession });
     } catch (err) {
-        console.error("Error creating session:", err.message);
-        res.status(500).json({ message: "Internal Server Error", error: err.message });
+        console.error("Error saving session:", err); // Log the full error
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
 
 // GET: Fetch all summaries
 router.get("/", async (req, res) => {

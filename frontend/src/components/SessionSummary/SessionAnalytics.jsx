@@ -1,8 +1,11 @@
-// src/components/SessionSummary/SessionAnalytics.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import styles from "./SessionAnalytics.module.css";
 
 const SessionAnalytics = ({ detectedObjects, colorMap, duration }) => {
+    const [isPosted, setIsPosted] = useState(false);
+    const userId = "user123"; // Replace with dynamic user ID if available
+
     const totalDetections = detectedObjects.length;
     const uniqueClasses = [...new Set(detectedObjects.map((obj) => obj.class))];
     const uniqueDetectionsCount = uniqueClasses.length;
@@ -21,6 +24,28 @@ const SessionAnalytics = ({ detectedObjects, colorMap, duration }) => {
         const seconds = ((ms % 60000) / 1000).toFixed(0);
         return `${minutes}m ${seconds}s`;
     };
+
+    useEffect(() => {
+        if (!isPosted && detectedObjects.length > 0) {
+            const payload = {
+                userId,
+                duration,
+                uniqueObjects: uniqueDetectionsCount,
+                totalDetections,
+                allDetections: detectedObjects,
+            };
+
+            axios
+                .post("http://localhost:5555/session", payload)
+                .then((response) => {
+                    console.log("Session posted successfully:", response.data);
+                    setIsPosted(true);
+                })
+                .catch((error) => {
+                    console.error("Error posting session:", error.message);
+                });
+        }
+    }, [detectedObjects, duration, uniqueDetectionsCount, totalDetections, isPosted]);
 
     return (
         <div className={styles.analyticsContainer}>

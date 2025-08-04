@@ -7,23 +7,19 @@ const SessionSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
-        startTime: {
-            type: Date,
+        duration: {
+            type: Number,
             required: true,
         },
-        endTime: {
-            type: Date,
+        uniqueObjects: {
+            type: Number,
             required: true,
         },
-        noOfAlerts: {
+        totalDetections: {
             type: Number,
-            default: 0,
+            required: true,
         },
-        abstraclesDetected: {
-            type: Number,
-            default: false,
-        },
-        objectsDetected: {
+        allDetections: {
             type: [String],
             default: [],
         },

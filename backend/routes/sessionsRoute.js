@@ -3,38 +3,35 @@ import Session from "../models/sessionModel.js";
 
 const router = express.Router();
 
-// POST: Create a new session
+// POST: Create a new summary
 router.post("/", async (req, res) => {
     try {
         const {
             userId,
-            startTime,
-            endTime,
-            noOfAlerts,
-            abstraclesDetected,
-            objectsDetected,
+            duration,
+            uniqueObjects,
+            totalDetections,
+            allDetections,
         } = req.body;
 
         if (
             !userId ||
-            !startTime ||
-            !endTime ||
-            noOfAlerts === undefined ||
-            abstraclesDetected === undefined ||
-            !Array.isArray(objectsDetected)
+            duration === undefined ||
+            uniqueObjects === undefined ||
+            totalDetections === undefined ||
+            !Array.isArray(allDetections)
         ) {
             return res.status(400).json({
-                message: "Send all required fields: userId, startTime, endTime, noOfAlerts, abstraclesDetected, objectsDetected",
+                message: "Send all required fields: userId, duration, uniqueObjects, totalDetections, allDetections",
             });
         }
 
         const newSession = {
             userId,
-            startTime,
-            endTime,
-            noOfAlerts,
-            abstraclesDetected,
-            objectsDetected,
+            duration,
+            uniqueObjects,
+            totalDetections,
+            allDetections,
         };
 
         const session = await Session.create(newSession);
@@ -45,29 +42,30 @@ router.post("/", async (req, res) => {
     }
 });
 
-// GET: Fetch all sessions
+// GET: Fetch all summaries
 router.get("/", async (req, res) => {
     try {
         const sessions = await Session.find({});
         return res.status(200).json({ Count: sessions.length, data: sessions });
     } catch (err) {
-        console.error("Error in retrieving sessions:", err.message);
+        console.error("Error retrieving sessions:", err.message);
         res.status(500).json({ error: err.message });
     }
 });
 
+// GET: Fetch summary by ID
 router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const session = await Session.findById(id);
 
         if (!session) {
-            return res.status(404).json({ message: "session not found" });
+            return res.status(404).json({ message: "Session not found" });
         }
 
         return res.status(200).json(session);
     } catch (err) {
-        console.error("Error retrieving book:", err.message);
+        console.error("Error retrieving session:", err.message);
         res.status(500).send({ error: err.message });
     }
 });

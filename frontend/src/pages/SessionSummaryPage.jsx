@@ -113,7 +113,7 @@ const SessionSummaryPage = () => {
                                     className={styles.objectScore}
                                     style={{ background: `linear-gradient(to right, ${colorMap[obj.class][0]}, ${colorMap[obj.class][1]})` }}
                                 >
-                                    {`${(obj.score * 100).toFixed(0)}%`}
+                                    {typeof obj.score === 'number' ? `${(obj.score * 100).toFixed(0)}%` : 'N/A'}
                                 </span>
                             </div>
                         ))}

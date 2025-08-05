@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Header.module.css";
-import logo from "../../assets/images/logo.png";
+
 import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -20,7 +20,7 @@ const Header = () => {
             <img
                 onClick={handleLogoClick}
                 className={styles.logoImg}
-                src={logo}
+                src="/logo.png"
                 alt="My Brand Logo"
             />
             <h2 onClick={handleLogoClick} className={styles.headerTxt}>

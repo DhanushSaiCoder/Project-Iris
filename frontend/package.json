@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.3.0",
+    "@mui/x-charts": "^8.9.2",
     "@tensorflow-models/coco-ssd": "^2.2.3",
     "@tensorflow-models/depth-estimation": "^0.0.4",
     "@tensorflow/tfjs": "^4.22.0",

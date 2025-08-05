@@ -4,6 +4,8 @@ import styles from './AdminDashboardPage.module.css';
 import Stats from '../components/AdminDashboard/Stats';
 import ActiveUsers from '../components/AdminDashboard/ActiveUsers';
 import History from '../components/AdminDashboard/History';
+import ObjectDetectionChart from '../components/AdminDashboard/ObjectDetectionChart';
+import chartStyles from './Charts.module.css';
 
 const AdminDashboardPage = () => {
     const [sessions, setSessions] = useState([]);
@@ -39,6 +41,11 @@ const AdminDashboardPage = () => {
             <Stats sessions={sessions} />
             <ActiveUsers sessions={sessions} />
             <History sessions={sessions} />
+
+            <div className={chartStyles.ChartsContainer}>
+                <h2 className={chartStyles.Title}>CHARTS</h2>
+                <ObjectDetectionChart sessions={sessions} />
+            </div>
         </div>
     );
 }

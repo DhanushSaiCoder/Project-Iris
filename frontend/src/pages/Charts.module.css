@@ -1,0 +1,15 @@
+.ChartsContainer {
+    background-color: var(--secondary-background-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    margin-bottom: 20px;
+}
+
+.ChartsContainer h2 {
+    color: var(--text-color);
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}

@@ -35,8 +35,9 @@ const SessionAnalytics = ({ detectedObjects, colorMap, duration }) => {
                 allDetections: detectedObjects,
             };
 
+                        console.log("REACT_APP_BACKEND_URL:", process.env.REACT_APP_BACKEND_URL);
             axios
-                .post("http://localhost:5555/session", payload)
+                .post(`${process.env.REACT_APP_BACKEND_URL}/session`, payload)
                 .then((response) => {
                     console.log("Session posted successfully:", response.data);
                     setIsPosted(true);

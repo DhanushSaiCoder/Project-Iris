@@ -15,6 +15,7 @@ import UserMonitoringPage from './pages/UserMonitoringPage.jsx';
 import Header from './components/Header/Header';
 import TimeLogger from './components/AdminDashboard/TimeLogger.jsx';
 import AllStatsPage from './pages/AllStatsPage.jsx';
+import AllActiveUsersPage from './pages/AllActiveUsersPage.jsx';
 import './App.css';
 import "./styles/variables.css"
 
@@ -40,6 +41,7 @@ const AppContent = () => {
             <Routes>
                 <Route path="/admin" element={<AdminDashboardPage />} />
                 <Route path="/all-stats" element={<AllStatsPage />} />
+                <Route path="/all-active-users" element={<AllActiveUsersPage />} />
                 <Route element={<MobileLayout />} />
                     <Route path="/" element={<HomePage />} />
                     <Route path="/newSession" element={<NewSession />} />

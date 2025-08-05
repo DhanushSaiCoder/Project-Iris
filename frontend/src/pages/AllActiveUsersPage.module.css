@@ -1,0 +1,91 @@
+.container {
+    padding: 20px;
+    background-color: var(--color-background);
+    min-height: 100vh;
+    color: var(--color-text-primary);
+}
+
+.title {
+    font-size: 2.2em;
+    color: var(--color-primary);
+    margin-bottom: 40px;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.userList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 50px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.userCard {
+    background-color: var(--color-card);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+    border: 1px solid var(--color-borders);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.userCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.userId {
+    font-size: 1.2em;
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.userId span {
+    color: var(--color-text-secondary);
+    font-weight: 400;
+}
+
+.monitorButton {
+    color: var(--color-cta);
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.monitorButton:hover {
+    background-color: #1a73e8;
+    transform: translateY(-2px);
+}
+
+.backLink {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 12px 25px;
+    background-color: var(--color-cta);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.backLink:hover {
+    background-color: #1a73e8; /* A slightly darker blue for hover */
+    transform: translateY(-2px);
+}

@@ -19,7 +19,7 @@ const ActiveUsers = ({ sessions }) => {
         <div className={styles.ActiveUsersContainer}>
             <div className={styles.ActiveUsersTitleContainer}>
                 <h1>ACTIVE USERS</h1>
-                <Link to='/' className={styles.ViewMore}>View More</Link>
+                <Link to='/all-active-users' className={styles.ViewMore}>View More</Link>
             </div>
             <div className={styles.ActiveUsersDetails}>
                 {uniqueUserIds.length > 0 ? (

@@ -13,7 +13,7 @@ const History = ({ sessions }) => {
         <div className={styles.HistoryContainer}>
             <div className={styles.HistoryTitleContainer}>
                 <h1 className={styles.title}>HISTORY</h1>
-                <Link to="/" className={styles.Link}>
+                <Link to="/all-history" className={styles.Link}>
                     View More
                 </Link>
             </div>

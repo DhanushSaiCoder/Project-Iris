@@ -1,0 +1,87 @@
+.container {
+    padding: 20px;
+    background-color: var(--color-background);
+    min-height: 100vh;
+    color: var(--color-text-primary);
+}
+
+.title {
+    font-size: 2.2em;
+    color: var(--color-primary);
+    margin-bottom: 40px;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.tableContainer {
+    overflow-x: auto;
+    background-color: var(--color-card);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    margin-bottom: 50px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.HistoryTable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px; /* Ensure table doesn't get too small */
+}
+
+.HistoryTable th,
+.HistoryTable td {
+    font-size: 14px;
+    text-align: left;
+    padding: 12px 15px;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--color-borders);
+}
+
+.HistoryTable th {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--color-primary);
+    background-color: var(--color-background-2);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.HistoryTable tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.HistoryTable tbody tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.HistoryTable tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.HistoryTable tbody tr td{
+    color: var(--color-text-primary);
+}
+
+.backLink {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 12px 25px;
+    background-color: var(--color-cta);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.backLink:hover {
+    background-color: #1a73e8; /* A slightly darker blue for hover */
+    transform: translateY(-2px);
+}

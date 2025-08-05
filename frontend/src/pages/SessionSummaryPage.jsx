@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 import SessionAnalytics from "../components/SessionSummary/SessionAnalytics";
 import NoDataState from "../components/SessionSummary/NoDataState";
+import SessionSummarySkeleton from "../components/SessionSummary/SessionSummarySkeleton";
 import styles from "./SessionSummaryPage.module.css";
 import { List, ChevronDown, ChevronUp, PlayCircle } from "lucide-react";
 
@@ -21,8 +23,41 @@ const GRADIENT_PAIRS = [
 
 const SessionSummaryPage = () => {
     const location = useLocation();
-    const { detectedObjects, duration } = location.state || { detectedObjects: [], duration: 0 };
+    const [detectedObjects, setDetectedObjects] = useState(location.state?.detectedObjects || []);
+    const [duration, setDuration] = useState(location.state?.duration || 0);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const sessionId = new URLSearchParams(location.search).get('sessionId');
+
+        if (sessionId && (detectedObjects.length === 0 || duration === 0)) {
+            const fetchSessionData = async () => {
+                try {
+                    const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/session/${sessionId}`);
+                    setDetectedObjects(response.data.allDetections);
+                    setDuration(response.data.duration);
+                    setLoading(false);
+                } catch (err) {
+                    console.error("Error fetching session data:", err);
+                    setError(err);
+                    setLoading(false);
+                }
+            };
+            fetchSessionData();
+        } else {
+            setLoading(false);
+        }
+    }, [location.search, detectedObjects.length, duration]);
+
+    if (loading) {
+        return <SessionSummarySkeleton />;
+    }
+
+    if (error) {
+        return <div className={styles.container}>Error loading session summary: {error.message}</div>;
+    }
 
     if (!detectedObjects || detectedObjects.length === 0) {
         return <NoDataState />;

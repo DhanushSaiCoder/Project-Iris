@@ -4,4 +4,12 @@
 }
 .AdminDashboardPage{
     padding: 8px 24px;
+    box-sizing: border-box;
+}
+
+@media (min-width: 1024px) {
+    .AdminDashboardPage {
+        max-width: 70%; /* Adjust as needed, 60-70% */
+        margin: 0 auto;
+    }
 }

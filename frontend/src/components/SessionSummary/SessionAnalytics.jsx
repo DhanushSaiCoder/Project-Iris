@@ -25,29 +25,6 @@ const SessionAnalytics = ({ detectedObjects, colorMap, duration }) => {
         return `${minutes}m ${seconds}s`;
     };
 
-    useEffect(() => {
-        if (!isPosted && detectedObjects.length > 0) {
-            const payload = {
-                userId,
-                duration,
-                uniqueObjects: uniqueDetectionsCount,
-                totalDetections,
-                allDetections: detectedObjects,
-            };
-
-                        console.log("REACT_APP_BACKEND_URL:", process.env.REACT_APP_BACKEND_URL);
-            axios
-                .post(`${process.env.REACT_APP_BACKEND_URL}/session`, payload)
-                .then((response) => {
-                    console.log("Session posted successfully:", response.data);
-                    setIsPosted(true);
-                })
-                .catch((error) => {
-                    console.error("Error posting session:", error.message);
-                });
-        }
-    }, [detectedObjects, duration, uniqueDetectionsCount, totalDetections, isPosted]);
-
     return (
         <div className={styles.analyticsContainer}>
             <div className={styles.metricsGrid}>

@@ -1,4 +1,3 @@
-// src/pages/SessionSummaryPage.jsx
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import SessionAnalytics from "../components/SessionSummary/SessionAnalytics";

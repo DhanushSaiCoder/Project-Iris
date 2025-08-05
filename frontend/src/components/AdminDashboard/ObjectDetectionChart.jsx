@@ -52,16 +52,18 @@ const ObjectDetectionChart = ({ sessions, topN = 8 }) => {
           },
         ]}
         height={250}
-        legendPosition="right"
-        legendProps={{
-          rootProps: {
-            sx: {
-              maxHeight: 200,
-              overflowY: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 4,
-              flexWrap: 'wrap',
+        legend={{
+          position: { vertical: 'middle', horizontal: 'right' },
+          slotProps: {
+            root: {
+              sx: {
+                maxHeight: 200,
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 4,
+                flexWrap: 'wrap',
+              },
             },
           },
         }}

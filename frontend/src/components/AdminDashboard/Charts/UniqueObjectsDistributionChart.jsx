@@ -31,8 +31,8 @@ const UniqueObjectsDistributionChart = ({ sessions }) => {
 
     return (
         <div style={{ width: '100%', height: 300, textAlign: 'center', color: 'white' }}>
-            <h3 style={{ marginBottom: '5px' }}>Unique Objects Detected per Session</h3>
-            <p style={{ fontSize: '0.9em', marginBottom: '20px' }}>Distribution of the number of unique objects identified in each session.</p>
+            <h3 style={{ fontSize: '1.1em', marginBottom: '8px' }}>Unique Objects Detected per Session</h3>
+            <p style={{ fontSize: '0.8em', marginBottom: '25px', opacity: 0.8 }}>Distribution of the number of unique objects identified in each session.</p>
             <BarChart
                 xAxis={[{ scaleType: 'band', data: xAxisLabels,
                     sx: {

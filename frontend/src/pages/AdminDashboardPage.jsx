@@ -47,10 +47,18 @@ const AdminDashboardPage = () => {
 
             <div className={chartStyles.ChartsContainer}>
                 <h2 className={chartStyles.Title}>CHARTS</h2>
-                <ObjectDetectionChart sessions={sessions} />
-                <SessionDurationChart sessions={sessions} />
-                <UniqueObjectsDistributionChart sessions={sessions} />
-                <TotalDetectionsChart sessions={sessions} />
+                <div className={chartStyles.chartCard}>
+                    <ObjectDetectionChart sessions={sessions} />
+                </div>
+                <div className={chartStyles.chartCard}>
+                    <SessionDurationChart sessions={sessions} />
+                </div>
+                <div className={chartStyles.chartCard}>
+                    <UniqueObjectsDistributionChart sessions={sessions} />
+                </div>
+                <div className={chartStyles.chartCard}>
+                    <TotalDetectionsChart sessions={sessions} />
+                </div>
             </div>
         </div>
     );

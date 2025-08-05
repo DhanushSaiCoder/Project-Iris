@@ -4,6 +4,15 @@
     box-shadow: var(--box-shadow);
     margin-bottom: 20px;
     margin-top: 12px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .ChartsContainer {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 .ChartsContainer h2 {
@@ -11,4 +20,16 @@
     font-size: 18px;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
+    grid-column: 1 / -1; /* Make the title span all columns */
+}
+
+.chartCard {
+    background-color: var(--color-card); /* A slightly different background for distinction */
+    border-radius: 8px;
+    box-shadow: var(--box-shadow); /* Re-use existing shadow for consistency */
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

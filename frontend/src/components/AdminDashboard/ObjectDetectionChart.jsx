@@ -18,8 +18,8 @@ const ObjectDetectionChart = ({ sessions }) => {
 
     return (
         <div style={{ width: '100%', height: 300, textAlign: 'center', color: 'white' }}>
-            <h3 style={{ marginBottom: '5px' }}>Most Frequently Detected Objects</h3>
-            <p style={{ fontSize: '0.9em', marginBottom: '20px' }}>Distribution of object classes detected across all sessions.</p>
+            <h3 style={{ fontSize: '1.1em', marginBottom: '8px' }}>Most Frequently Detected Objects</h3>
+            <p style={{ fontSize: '0.8em', marginBottom: '25px', opacity: 0.8 }}>Distribution of object classes detected across all sessions.</p>
             <PieChart
                 series={[
                     {

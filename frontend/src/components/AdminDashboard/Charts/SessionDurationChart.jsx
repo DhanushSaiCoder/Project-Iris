@@ -32,8 +32,8 @@ const SessionDurationChart = ({ sessions }) => {
 
     return (
         <div style={{ width: '100%', height: 300, textAlign: 'center', color: 'white' }}>
-            <h3 style={{ marginBottom: '5px' }}>Session Duration Distribution</h3>
-            <p style={{ fontSize: '0.9em', marginBottom: '20px' }}>Shows how long user sessions typically last.</p>
+            <h3 style={{ fontSize: '1.1em', marginBottom: '8px' }}>Session Duration Distribution</h3>
+            <p style={{ fontSize: '0.8em', marginBottom: '25px', opacity: 0.8 }}>Shows how long user sessions typically last.</p>
             <BarChart
                 xAxis={[{ scaleType: 'band', data: xAxisLabels, 
                     // Change x-axis tick label styles

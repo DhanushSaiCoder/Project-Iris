@@ -17,8 +17,8 @@ const TotalDetectionsChart = ({ sessions }) => {
 
     return (
         <div style={{ width: '100%', height: 300, textAlign: 'center', color: 'white' }}>
-            <h3 style={{ marginBottom: '5px' }}>Total Detections per Session</h3>
-            <p style={{ fontSize: '0.9em', marginBottom: '20px' }}>Visualizes the total number of objects detected in each session.</p>
+            <h3 style={{ fontSize: '1.1em', marginBottom: '8px' }}>Total Detections per Session</h3>
+            <p style={{ fontSize: '0.8em', marginBottom: '25px', opacity: 0.8 }}>Visualizes the total number of objects detected in each session.</p>
             <BarChart
                 xAxis={[{ scaleType: 'band', data: xAxisLabels,
                     sx: {

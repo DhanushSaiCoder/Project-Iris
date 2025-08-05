@@ -8,6 +8,8 @@ const AllHistoryPage = () => {
     const [sessions, setSessions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [sessionsPerPage] = useState(10); // Number of sessions per page
 
     useEffect(() => {
         const fetchSessions = async () => {
@@ -29,6 +31,14 @@ const AllHistoryPage = () => {
         const seconds = ((ms % 60000) / 1000).toFixed(0);
         return `${minutes}m ${seconds}s`;
     };
+
+    // Get current sessions for pagination
+    const indexOfLastSession = currentPage * sessionsPerPage;
+    const indexOfFirstSession = indexOfLastSession - sessionsPerPage;
+    const currentSessions = sessions.slice(indexOfFirstSession, indexOfLastSession);
+
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     if (loading) {
         return <div className={styles.container}>Loading session history...</div>;
@@ -54,8 +64,8 @@ const AllHistoryPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {sessions.length > 0 ? (
-                            sessions.map((session) => (
+                        {currentSessions.length > 0 ? (
+                            currentSessions.map((session) => (
                                 <tr key={session._id}>
                                     <td onClick={() => navigate(`/sessionSummary?sessionId=${session._id}`)} style={{ cursor: 'pointer', color: 'var(--color-cta)' }}>{session._id}</td>
                                     <td>{session.userId}</td>
@@ -72,6 +82,25 @@ const AllHistoryPage = () => {
                         )}
                     </tbody>
                 </table>
+            </div>
+            <div className={styles.pagination}>
+                <button
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={styles.pageButton}
+                >
+                    Previous
+                </button>
+                <span className={styles.pageInfo}>
+                    Page {currentPage} of {Math.ceil(sessions.length / sessionsPerPage)}
+                </span>
+                <button
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentPage === Math.ceil(sessions.length / sessionsPerPage)}
+                    className={styles.pageButton}
+                >
+                    Next
+                </button>
             </div>
             <Link to="/admin" className={styles.backLink}>Back to Admin Dashboard</Link>
         </div>

@@ -27,7 +27,7 @@ const SessionSummarySkeleton = () => {
 
                 <div className={`${styles.skeletonLine} ${styles.chartTitle}`}></div>
                 <div className={styles.detectionList}>
-                    {[...Array(5)].map((_, i) => (
+                    {[...Array(3)].map((_, i) => ( // Reduced to 3 for typical display
                         <div key={i} className={styles.detectionItem}>
                             <div className={styles.itemInfo}>
                                 <div className={`${styles.skeletonLine} ${styles.itemName}`}></div>
@@ -45,7 +45,7 @@ const SessionSummarySkeleton = () => {
                 <div className={`${styles.skeletonLine} ${styles.detailsTitle}`}></div>
                 <div className={styles.objectListContainer}>
                     <div className={styles.objectList}>
-                        {[...Array(8)].map((_, i) => (
+                        {[...Array(6)].map((_, i) => ( // Reduced to 6 for typical display
                             <div key={i} className={styles.objectItem}>
                                 <div className={`${styles.skeletonLine} ${styles.objectName}`}></div>
                                 <div className={`${styles.skeletonLine} ${styles.objectScore}`}></div>

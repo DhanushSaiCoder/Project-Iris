@@ -1,17 +1,57 @@
 .container {
-    padding: 20px;
+    padding: 10px 20px;
     background-color: var(--color-background);
     min-height: 100vh;
     color: var(--color-text-primary);
 }
 
-.title {
-    font-size: 2.2em;
+.historyHeader {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* Add some space below the header */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    transition: background-color 0.2s;
     color: var(--color-primary);
-    margin-bottom: 40px;
+}
+.backButton:hover {
+    background-color: rgba(51, 51, 51, 0.2);
+}
+
+.icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-primary);
+}
+
+.backText {
+    font-size: 1rem;
+    color: var(--color-primary);
+}
+
+.historyTitle {
+    flex: 1;
     text-align: center;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-size: 1.125rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-primary);
+}
+
+.spacer {
+    width: 2.5rem; /* balances the back-button width */
 }
 
 .tableContainer {
@@ -65,26 +105,6 @@
 
 .HistoryTable tbody tr td{
     color: var(--color-text-primary);
-}
-
-.backLink {
-    display: block;
-    width: fit-content;
-    margin: 0 auto;
-    padding: 12px 25px;
-    background-color: var(--color-cta);
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    margin-top: 12px;
-}
-
-.backLink:hover {
-    background-color: #1a73e8; /* A slightly darker blue for hover */
-    transform: translateY(-2px);
 }
 
 .pagination {

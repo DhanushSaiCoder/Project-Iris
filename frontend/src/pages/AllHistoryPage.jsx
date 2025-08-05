@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './AllHistoryPage.module.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { ChevronLeft } from 'lucide-react';
 
 const AllHistoryPage = () => {
     const navigate = useNavigate();
@@ -50,7 +51,18 @@ const AllHistoryPage = () => {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>All Session History</h1>
+            <header className={styles.historyHeader}>
+                <button
+                    onClick={() => navigate(-1)}
+                    className={styles.backButton}
+                    aria-label="Go back"
+                >
+                    <ChevronLeft className={styles.icon} />
+                    <span className={styles.backText}>Back</span>
+                </button>
+                <h1 className={styles.historyTitle}>ALL SESSION HISTORY</h1>
+                <div className={styles.spacer} />
+            </header>
             <div className={styles.tableContainer}>
                 <table className={styles.HistoryTable}>
                     <thead>
@@ -102,7 +114,6 @@ const AllHistoryPage = () => {
                     Next
                 </button>
             </div>
-            <Link to="/admin" className={styles.backLink}>Back to Admin Dashboard</Link>
         </div>
     );
 };

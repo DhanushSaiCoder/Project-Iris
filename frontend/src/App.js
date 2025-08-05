@@ -44,6 +44,7 @@ const AppContent = () => {
                     <Route path="/admin" element={<AdminDashboardPage />} />
                     <Route path="/all-stats" element={<AllStatsPage />} />
                     <Route path="/all-active-users" element={<AllActiveUsersPage />} />
+                    <Route path="/all-history" element={<AllHistoryPage />} />
                     <Route element={<MobileLayout />} >
                         <Route path="/" element={<HomePage />} />
                         <Route path="/newSession" element={<NewSession />} />

@@ -88,7 +88,7 @@ const SessionAnalytics = ({ detectedObjects, colorMap, duration }) => {
                                     <span
                                         className={`${styles.percentageLabel} ${styles.outside}`}
                                         style={{
-                                            left: `calc(${percentage}% + 8px)`,
+                                            left: `${percentage}%`,
                                         }}
                                     >
                                         {percentage.toFixed(1)}%

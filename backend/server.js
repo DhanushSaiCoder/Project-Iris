@@ -3,8 +3,21 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import sessionsRoute from './routes/sessionsRoute.js'
+import path from "path"
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
+
+
+dotenv.config({
+    path: path.resolve(__dirname, envFile),
+});
 
 const mongodbURL = process.env.MONGODB_URL;
 const PORT = process.env.PORT || 5555;

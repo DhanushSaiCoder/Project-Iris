@@ -907,7 +907,8 @@
     "concurrently": "^9.2.0"
   },
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\""
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\"",
+    "start": "concurrently \"npm run start --prefix backend\" \"npm start --prefix frontend\""
   },
   "keywords": [],
   "author": "",

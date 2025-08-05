@@ -11,6 +11,7 @@
     background-size: 200% 100%;
     animation: loading 1.5s infinite;
     border-radius: 4px;
+    opacity: 0.7;
 }
 
 @keyframes loading {
@@ -28,14 +29,14 @@
 }
 
 .title {
-    height: 30px;
-    width: 60%;
-    margin: 0 auto 10px auto;
+    height: 36px; /* Adjusted to match h1 */
+    width: 70%;
+    margin: 0 auto 12px auto;
 }
 
 .subtitle {
-    height: 20px;
-    width: 80%;
+    height: 24px; /* Adjusted to match p */
+    width: 85%;
     margin: 0 auto;
 }
 
@@ -60,14 +61,14 @@
 }
 
 .metricValue {
-    height: 40px;
-    width: 80px;
-    margin-bottom: 8px;
+    height: 48px; /* Adjusted to match metricValue font size */
+    width: 90px;
+    margin-bottom: 10px;
 }
 
 .metricLabel {
-    height: 20px;
-    width: 100px;
+    height: 22px; /* Adjusted to match metricLabel font size */
+    width: 110px;
 }
 
 .fullWidth {
@@ -75,9 +76,9 @@
 }
 
 .chartTitle {
-    height: 25px;
-    width: 50%;
-    margin: 0 auto 20px auto;
+    height: 30px; /* Adjusted to match h3 */
+    width: 60%;
+    margin: 0 auto 25px auto;
 }
 
 .detectionList {
@@ -89,7 +90,7 @@
 .detectionItem {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
 }
 
 .itemInfo {
@@ -99,16 +100,16 @@
 
 .itemName {
     height: 20px;
-    width: 100px;
+    width: 120px;
 }
 
 .itemCount {
     height: 20px;
-    width: 80px;
+    width: 90px;
 }
 
 .progressBar {
-    height: 15px;
+    height: 18px; /* Adjusted to match actual progress bar height */
     background-color: #333;
     border-radius: 8px;
     overflow: hidden;
@@ -129,8 +130,8 @@
 }
 
 .detailsTitle {
-    height: 25px;
-    width: 70%;
+    height: 40px; /* Adjusted to match button height */
+    width: 80%;
     margin-bottom: 20px;
 }
 
@@ -156,13 +157,13 @@
 }
 
 .objectName {
-    height: 18px;
-    width: 60%;
+    height: 20px;
+    width: 65%;
 }
 
 .objectScore {
-    height: 18px;
-    width: 30%;
+    height: 20px;
+    width: 25%;
 }
 
 .actions {
@@ -171,6 +172,6 @@
 }
 
 .button {
-    height: 40px;
-    width: 200px;
+    height: 50px; /* Adjusted to match button height */
+    width: 220px;
 }

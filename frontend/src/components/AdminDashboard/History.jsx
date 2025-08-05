@@ -2,39 +2,12 @@ import React from "react";
 import styles from "./History.module.css";
 import { Link } from "react-router-dom";
 
-const History = () => {
-    const sessionHistory = [
-        {
-            sessionId: "SID12345",
-            startTime: "14:30",
-            duration: "25:30",
-            alerts: 3,
-        },
-        {
-            sessionId: "SID12346",
-            startTime: "15:10",
-            duration: "40:34",
-            alerts: 5,
-        },
-        {
-            sessionId: "SID12347",
-            startTime: "16:00",
-            duration: "30:45",
-            alerts: 2,
-        },
-        {
-            sessionId: "SID12346",
-            startTime: "15:10",
-            duration: "40:34",
-            alerts: 5,
-        },
-        {
-            sessionId: "SID12347",
-            startTime: "16:00",
-            duration: "30:45",
-            alerts: 2,
-        },
-    ];
+const History = ({ sessions }) => {
+    const formatDuration = (ms) => {
+        const minutes = Math.floor(ms / 60000);
+        const seconds = ((ms % 60000) / 1000).toFixed(0);
+        return `${minutes}m ${seconds}s`;
+    };
 
     return (
         <div className={styles.HistoryContainer}>
@@ -48,20 +21,24 @@ const History = () => {
                 <thead>
                     <tr>
                         <th>Session ID</th>
-                        <th>Start Time</th>
                         <th>Duration</th>
-                        <th>Alerts</th>
+                        <th>Total Detections</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {sessionHistory.map((session, index) => (
-                        <tr key={index}>
-                            <td>{session.sessionId}</td>
-                            <td>{session.startTime}</td>
-                            <td>{session.duration}</td>
-                            <td>{session.alerts}</td>
+                    {sessions.length > 0 ? (
+                        sessions.map((session) => (
+                            <tr key={session._id}>
+                                <td>{session._id}</td>
+                                <td>{formatDuration(session.duration)}</td>
+                                <td>{session.totalDetections}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="3">No session history available.</td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
         </div>

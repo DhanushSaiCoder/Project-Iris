@@ -1,19 +1,19 @@
 import React from 'react';
 import styles from './ActiveUsers.module.css';
-import TimeLogger from './TimeLogger';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const ActiveUsers = () => {
-    const navigate=useNavigate();
-    const ActiveUsers = [
-        { id: 2263519637 },
-        { id: 2263519638 },
-        { id: 2263519639 }
-    ];
-    const  handlemonitoruser  = () => {
-    navigate('./TimeLogger');
-  };
+const ActiveUsers = ({ sessions }) => {
+    const navigate = useNavigate();
+
+    // Get unique user IDs from sessions
+    const uniqueUserIds = [...new Set(sessions.map(session => session.userId))];
+
+    const handleMonitorUser = (userId) => {
+        // Navigate to a page where user-specific data can be displayed
+        // For now, let's just log it or navigate to a generic monitoring page
+        console.log(`Monitoring user: ${userId}`);
+        navigate(`/monitor-user/${userId}`); // Example: navigate to a user monitoring page
+    };
 
     return (
         <div className={styles.ActiveUsersContainer}>
@@ -22,14 +22,17 @@ const ActiveUsers = () => {
                 <Link to='/' className={styles.ViewMore}>View More</Link>
             </div>
             <div className={styles.ActiveUsersDetails}>
-                {ActiveUsers.map((user, index) => (
-                    <div key={user.id + index} className={styles.UserCard}>
-                        <p className={styles.SessionId}>SESSION ID: {"  "}<span>{user.id}</span></p>
-                        <p className={styles.Moniter} onClick={handlemonitoruser}>Moniter User</p>
-                    </div>
-                ))}
+                {uniqueUserIds.length > 0 ? (
+                    uniqueUserIds.map((userId, index) => (
+                        <div key={userId + index} className={styles.UserCard}>
+                            <p className={styles.SessionId}>USER ID: {"  "}<span>{userId}</span></p>
+                            <p className={styles.Moniter} onClick={() => handleMonitorUser(userId)}>Monitor User</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>No active users found.</p>
+                )}
             </div>
-           
         </div>
     );
 };

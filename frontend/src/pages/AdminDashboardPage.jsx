@@ -5,6 +5,9 @@ import Stats from '../components/AdminDashboard/Stats';
 import ActiveUsers from '../components/AdminDashboard/ActiveUsers';
 import History from '../components/AdminDashboard/History';
 import ObjectDetectionChart from '../components/AdminDashboard/ObjectDetectionChart';
+import SessionDurationChart from '../components/AdminDashboard/Charts/SessionDurationChart';
+import UniqueObjectsDistributionChart from '../components/AdminDashboard/Charts/UniqueObjectsDistributionChart';
+import TotalDetectionsChart from '../components/AdminDashboard/Charts/TotalDetectionsChart';
 import chartStyles from './Charts.module.css';
 
 const AdminDashboardPage = () => {
@@ -45,6 +48,9 @@ const AdminDashboardPage = () => {
             <div className={chartStyles.ChartsContainer}>
                 <h2 className={chartStyles.Title}>CHARTS</h2>
                 <ObjectDetectionChart sessions={sessions} />
+                <SessionDurationChart sessions={sessions} />
+                <UniqueObjectsDistributionChart sessions={sessions} />
+                <TotalDetectionsChart sessions={sessions} />
             </div>
         </div>
     );

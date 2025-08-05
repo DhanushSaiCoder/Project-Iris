@@ -20,7 +20,7 @@ const Stats = ({ sessions }) => {
         <div className={styles.StatsContainer}>
             <div className={styles.StatsTitleContainer}>
                 <h1 className={styles.statsTitle}>STATS</h1>
-                <Link to='/' className={styles.ViewMore}>View More</Link>
+                <Link to='/all-stats' className={styles.ViewMore}>View More</Link>
             </div>
             <div className={styles.StatsDetailsContainer}>
                 <div className={styles.StatsDetailsCard}>

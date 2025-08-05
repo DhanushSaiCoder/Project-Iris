@@ -1,0 +1,80 @@
+.container {
+    padding: 20px;
+    background-color: var(--color-background);
+    min-height: 100vh;
+    color: var(--color-text-primary);
+}
+
+.title {
+    font-size: 2.2em;
+    color: var(--color-primary);
+    margin-bottom: 40px;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 50px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.statsCard {
+    background-color: var(--color-card);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 160px;
+    border: 1px solid var(--color-borders);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.statsCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.cardTitle {
+    font-size: 1.1em;
+    color: var(--color-text-secondary);
+    margin-bottom: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cardValue {
+    font-size: 2.8em;
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1.2;
+}
+
+.backLink {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 12px 25px;
+    background-color: var(--color-cta);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.backLink:hover {
+    background-color: #1a73e8; /* A slightly darker blue for hover */
+    transform: translateY(-2px);
+}

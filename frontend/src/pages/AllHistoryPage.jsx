@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './AllHistoryPage.module.css';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, ArrowUp, ArrowDown } from 'lucide-react';
 
 const AllHistoryPage = () => {
     const navigate = useNavigate();
@@ -11,6 +11,8 @@ const AllHistoryPage = () => {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [sessionsPerPage] = useState(10); // Number of sessions per page
+    const [sortColumn, setSortColumn] = useState(null);
+    const [sortDirection, setSortDirection] = useState('asc');
 
     useEffect(() => {
         const fetchSessions = async () => {
@@ -41,6 +43,36 @@ const AllHistoryPage = () => {
     // Change page
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    const handleSort = (column) => {
+        let newSortDirection = 'asc';
+        if (sortColumn === column) {
+            newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        }
+
+        setSortDirection(newSortDirection);
+        setSortColumn(column);
+
+        const sortedSessions = [...sessions].sort((a, b) => {
+            let valA = a[column];
+            let valB = b[column];
+
+            // Handle date sorting
+            if (column === 'createdAt') {
+                valA = new Date(valA);
+                valB = new Date(valB);
+            }
+
+            if (valA < valB) {
+                return newSortDirection === 'asc' ? -1 : 1;
+            }
+            if (valA > valB) {
+                return newSortDirection === 'asc' ? 1 : -1;
+            }
+            return 0;
+        });
+        setSessions(sortedSessions);
+    };
+
     if (loading) {
         return <div className={styles.container}>Loading session history...</div>;
     }
@@ -67,12 +99,12 @@ const AllHistoryPage = () => {
                 <table className={styles.HistoryTable}>
                     <thead>
                         <tr>
-                            <th>Session ID</th>
-                            <th>User ID</th>
-                            <th>Duration</th>
-                            <th>Unique Objects</th>
-                            <th>Total Detections</th>
-                            <th>Timestamp</th>
+                            <th onClick={() => handleSort('_id')}><div className={styles.headerContent}>Session ID {sortColumn === '_id' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
+                            <th onClick={() => handleSort('userId')}><div className={styles.headerContent}>User ID {sortColumn === 'userId' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
+                            <th onClick={() => handleSort('duration')}><div className={styles.headerContent}>Duration {sortColumn === 'duration' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
+                            <th onClick={() => handleSort('uniqueObjects')}><div className={styles.headerContent}>Unique Objects {sortColumn === 'uniqueObjects' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
+                            <th onClick={() => handleSort('totalDetections')}><div className={styles.headerContent}>Total Detections {sortColumn === 'totalDetections' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
+                            <th onClick={() => handleSort('createdAt')}><div className={styles.headerContent}>Timestamp {sortColumn === 'createdAt' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
                         </tr>
                     </thead>
                     <tbody>

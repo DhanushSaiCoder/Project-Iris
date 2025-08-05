@@ -17,30 +17,36 @@ const History = ({ sessions }) => {
                     View More
                 </Link>
             </div>
-            <table className={styles.HistoryTable}>
-                <thead>
-                    <tr>
-                        <th>Session ID</th>
-                        <th>Duration</th>
-                        <th>Total Detections</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {sessions.length > 0 ? (
-                        sessions.map((session) => (
-                            <tr key={session._id}>
-                                <td>{session._id}</td>
-                                <td>{formatDuration(session.duration)}</td>
-                                <td>{session.totalDetections}</td>
-                            </tr>
-                        ))
-                    ) : (
+            <div className={styles.tableContainer}>
+                <table className={styles.HistoryTable}>
+                    <thead>
                         <tr>
-                            <td colSpan="3">No session history available.</td>
+                            <th>Session ID</th>
+                            <th>User ID</th>
+                            <th>Duration</th>
+                            <th>Unique Objects</th>
+                            <th>Total Detections</th>
                         </tr>
-                    )}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {sessions.length > 0 ? (
+                            sessions.map((session) => (
+                                <tr key={session._id}>
+                                    <td>{session._id}</td>
+                                    <td>{session.userId}</td>
+                                    <td>{formatDuration(session.duration)}</td>
+                                    <td>{session.uniqueObjects}</td>
+                                    <td>{session.totalDetections}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="5">No session history available.</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

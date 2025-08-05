@@ -13,6 +13,10 @@
     color: var(--text-secondary);
 }
 
+.tableContainer {
+    overflow-x: auto;
+}
+
 .HistoryTable {
     width: 100%;
     border-collapse: collapse;
@@ -23,6 +27,7 @@
     font-size: 12px;
     text-align: left;
     padding: 8px;
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
 .HistoryTable th {

@@ -7,6 +7,8 @@ const Stats = ({ sessions }) => {
     const totalDuration = sessions.reduce((acc, session) => acc + session.duration, 0);
     const totalUniqueObjects = sessions.reduce((acc, session) => acc + session.uniqueObjects, 0);
     const totalDetections = sessions.reduce((acc, session) => acc + session.totalDetections, 0);
+    const averageSessionDuration = totalSessions > 0 ? totalDuration / totalSessions : 0;
+    const uniqueUsers = [...new Set(sessions.map(session => session.userId))].length;
 
     const formatDuration = (ms) => {
         const minutes = Math.floor(ms / 60000);
@@ -32,6 +34,14 @@ const Stats = ({ sessions }) => {
                 <div className={styles.StatsDetailsCard}>
                     <h1 className={styles.statsData}>{totalDetections}</h1>
                     <p>Total Detections</p>
+                </div>
+                <div className={styles.StatsDetailsCard}>
+                    <h1 className={styles.statsData}>{formatDuration(averageSessionDuration)}</h1>
+                    <p>Avg. Session Duration</p>
+                </div>
+                <div className={styles.StatsDetailsCard}>
+                    <h1 className={styles.statsData}>{uniqueUsers}</h1>
+                    <p>Unique Users</p>
                 </div>
             </div>
         </div>

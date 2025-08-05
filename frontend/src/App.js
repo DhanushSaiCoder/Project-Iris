@@ -38,29 +38,30 @@ const AppContent = () => {
 
     return (
         <div className="App">
-            {showHeader && <Header />}
-            <Routes>
-                <Route path="/admin" element={<AdminDashboardPage />} />
-                <Route path="/all-stats" element={<AllStatsPage />} />
-                <Route path="/all-active-users" element={<AllActiveUsersPage />} />
-                <Route path="/all-history" element={<AllHistoryPage />} />
-                <Route element={<MobileLayout />} />
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/newSession" element={<NewSession />} />
-                    <Route path="/sessionSummary" element={<SessionSummaryPage />} />
-                    <Route path="/caliberation" element={<CaliberationPage />} />
-                    <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />
-                    <Route path="/developers" element={<DevelopersPage />} />
-                    <Route path="/help" element={<HelpPage />} />
-                    <Route path="/incompatible-browser" element={<IncompatibleBrowserPage />} />
-                    <Route path="/launch" element={<LaunchPage />} />
-                    <Route path="/privacy-notes" element={<PrivacyNotesPage />} />
-                    <Route path="/session-summary" element={<SessionSummaryPage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
-                    <Route path="/user-monitoring" element={<UserMonitoringPage />} />
-                    <Route path="/admin/TimeLogger" element={ < TimeLogger/>} />
-            
-            </Routes>
+                        {showHeader && <Header />}
+            <main className="main-content">
+                <Routes>
+                    <Route path="/admin" element={<AdminDashboardPage />} />
+                    <Route path="/all-stats" element={<AllStatsPage />} />
+                    <Route path="/all-active-users" element={<AllActiveUsersPage />} />
+                    <Route element={<MobileLayout />} >
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/newSession" element={<NewSession />} />
+                        <Route path="/sessionSummary" element={<SessionSummaryPage />} />
+                        <Route path="/caliberation" element={<CaliberationPage />} />
+                        <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />
+                        <Route path="/developers" element={<DevelopersPage />} />
+                        <Route path="/help" element={<HelpPage />} />
+                        <Route path="/incompatible-browser" element={<IncompatibleBrowserPage />} />
+                        <Route path="/launch" element={<LaunchPage />} />
+                        <Route path="/privacy-notes" element={<PrivacyNotesPage />} />
+                        <Route path="/session-summary" element={<SessionSummaryPage />} />
+                        <Route path="/settings" element={<SettingsPage />} />
+                        <Route path="/user-monitoring" element={<UserMonitoringPage />} />
+                        <Route path="/admin/TimeLogger" element={ < TimeLogger/>} />
+                    </Route>
+                </Routes>
+            </main>
             <Footer />
         </div>
     );

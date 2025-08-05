@@ -8,6 +8,7 @@ const Footer = () => {
 
         <div className={styles.Footer}>
             <p
+                className={styles.footerItem}
                 onClick={() => {
                     navigate("/help");
                 }}
@@ -15,6 +16,7 @@ const Footer = () => {
                 <span className={styles.helpIcon}>?</span> Help
             </p>
             <p
+                className={styles.footerItem}
                 onClick={() => {
                     navigate("/privacy-notes");
                 }}
@@ -22,6 +24,7 @@ const Footer = () => {
                 <span className={styles.privacyNotesIcon}>!</span> Privacy Notes
             </p>
             <p
+                className={styles.footerItem}
                 onClick={() => {
                     navigate("/developers");
                 }}

@@ -1,24 +1,42 @@
 .Footer{
-    width: 100vw;
-    height: 48px;
+    width: 100%;
+    padding: 20px 0; /* Vertical padding for breathing room */
     border-top: 1px solid var(--color-borders);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 30px; /* Increased gap between items */
+    background-color: var(--color-background-2); /* Consistent background color */
+    margin-top: auto; /* This is key for sticky footer with flexbox */
 }
+
+.footerItem {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+    text-decoration: none; /* Remove underline for links */
+}
+
+.footerItem:hover {
+    color: var(--color-primary); /* Brighter text on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.footerItem span {
+    font-size: 18px; /* Larger icons */
+    font-weight: bold;
+}
+
 .helpIcon{
     color: var(--color-danger);
-    font-weight: bold;
 }
 .privacyNotesIcon{
     color: var(--color-warning);
-    font-weight: bold;
 }
 .developersIcon{
     color: var(--color-cta);
-    font-weight: bold;
-}
-.Footer p{
-    color: var(--color-text-secondary);
 }

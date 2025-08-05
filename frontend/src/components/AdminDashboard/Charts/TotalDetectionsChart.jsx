@@ -6,7 +6,7 @@ const TotalDetectionsChart = ({ sessions }) => {
     const chartData = sessions.map((session, index) => ({
         id: session._id || index, // Use session ID or index as unique identifier
         value: session.totalDetections,
-        label: `Session ${index + 1}`,
+        label: `${index + 1}`,
     }));
 
     // Sort data by totalDetections for better visualization

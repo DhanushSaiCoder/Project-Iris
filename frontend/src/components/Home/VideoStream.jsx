@@ -101,9 +101,10 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         // Find min and max depth values for normalization
         let minDepth = Infinity;
         let maxDepth = -Infinity;
+        const actualDepthData = depthData[0]; // Access the actual 2D array
         for (let i = 0; i < depthMapHeight; i++) {
             for (let j = 0; j < depthMapWidth; j++) {
-                const depthValue = depthData[i][j];
+                const depthValue = actualDepthData[i][j];
                 if (depthValue !== undefined) {
                     minDepth = Math.min(minDepth, depthValue);
                     maxDepth = Math.max(maxDepth, depthValue);
@@ -117,7 +118,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
             for (let x = 0; x < canvasWidth; x++) {
                 const dx = Math.floor(x * (depthMapWidth / canvasWidth));
                 const dy = Math.floor(y * (depthMapHeight / canvasHeight));
-                const depthValue = depthData[dy] ? depthData[dy][dx] : undefined;
+                const depthValue = actualDepthData[dy][dx];
 
                 const i = (y * canvasWidth + x) * 4;
 
@@ -143,6 +144,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     };
 
     const processPredictionsWithDepth = (predictions, depthData, canvasWidth, canvasHeight, depthMapWidth, depthMapHeight) => {
+        const actualDepthData = depthData[0]; // Access the actual 2D array
         return predictions.map(prediction => {
             const [x, y, width, height] = prediction.bbox;
 
@@ -157,8 +159,8 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 
             for (let i = startY; i < endY; i++) {
                 for (let j = startX; j < endX; j++) {
-                    if (depthData[i] && depthData[i][j] !== undefined) {
-                        totalDepth += depthData[i][j];
+                    if (actualDepthData[i] && actualDepthData[i][j] !== undefined) {
+                        totalDepth += actualDepthData[i][j];
                         pixelCount++;
                     }
                 }

@@ -1,55 +1,61 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import sessionsRoute from './routes/sessionsRoute.js'
-import path from "path"
+import sessionsRoute from './routes/sessionsRoute.js';
+import authRoutes from './routes/Auth.route.js';
+import path from "path";
 import { fileURLToPath } from 'url';
 import cors from 'cors';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const envFile =
-  process.env.NODE_ENV === "production"
-    ? ".env.production"
-    : ".env.development";
-
+// Load appropriate .env file based on NODE_ENV
+const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
 
 dotenv.config({
-    path: path.resolve(__dirname, envFile),
+  path: path.resolve(__dirname, envFile),
 });
 
 const mongodbURL = process.env.MONGODB_URL;
 const PORT = process.env.PORT || 5555;
 
+if (!mongodbURL) {
+  console.error("MONGODB_URL is undefined. Check your environment file.");
+  process.exit(1);
+}
+
 const app = express();
 
+// Middleware
 app.use(express.json());
 app.use(cors());
 
+// Test route
 app.get("/", (req, res) => {
-    return res.status(200).send("Welcome to Project Iris");
+  res.status(200).send("Welcome to Project Iris");
 });
 
-app.use('/session', sessionsRoute)
+// Routes
+app.use('/auth', authRoutes);
+app.use('/session', sessionsRoute);
 
-
-// Database Connection and Server Start
+// Database connection and server start
 const connectDB = async () => {
-    try {
-        await mongoose.connect(mongodbURL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-        console.log("Database connected");
+  try {
+    await mongoose.connect(mongodbURL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Database connected successfully");
 
-        app.listen(PORT, () => {
-            console.log(`Server running at http://localhost:${PORT}`);
-        });
-    } catch (err) {
-        console.error("Database connection error:", err);
-        process.exit(1);
-    }
+    app.listen(PORT, () => {
+      console.log(`Server running at http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error("Database connection error:", err);
+    process.exit(1);
+  }
 };
 
 connectDB();

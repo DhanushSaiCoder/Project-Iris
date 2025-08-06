@@ -23,6 +23,8 @@ import "./styles/variables.css"
 import { MobileGuard } from './utils/MobileGuard';
 import Footer from './components/Footer/Footer.jsx';
 import NewSession from './pages/NewSession';
+import LoginPage from './pages/LoginPage.jsx';
+import Signup from './pages/Signup.jsx';
 
 const MobileLayout = () => (
     <MobileGuard>
@@ -32,15 +34,17 @@ const MobileLayout = () => (
 
 const AppContent = () => {
     const location = useLocation();
-    const hiddenPaths = ['/settings', '/help', '/privacy-notes', '/developers', '/launch'];
+    const hiddenPaths = ['/settings', '/help', '/privacy-notes', '/developers', '/launch', '/signup', '/login'];
     const showHeader = !hiddenPaths.includes(location.pathname);
 
 
     return (
         <div className="App">
-                        {showHeader && <Header />}
+            {showHeader && <Header />}
             <main className="main-content">
                 <Routes>
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<Signup />} />
                     <Route path="/admin" element={<AdminDashboardPage />} />
                     <Route path="/all-stats" element={<AllStatsPage />} />
                     <Route path="/all-active-users" element={<AllActiveUsersPage />} />
@@ -59,7 +63,7 @@ const AppContent = () => {
                         <Route path="/session-summary" element={<SessionSummaryPage />} />
                         <Route path="/settings" element={<SettingsPage />} />
                         <Route path="/user-monitoring" element={<UserMonitoringPage />} />
-                        <Route path="/admin/TimeLogger" element={ < TimeLogger/>} />
+                        <Route path="/admin/TimeLogger" element={< TimeLogger />} />
                     </Route>
                 </Routes>
             </main>

@@ -24,7 +24,7 @@ import { MobileGuard } from './utils/MobileGuard';
 import Footer from './components/Footer/Footer.jsx';
 import NewSession from './pages/NewSession';
 import LoginPage from './pages/LoginPage.jsx';
-import Signup from './pages/Signup.jsx';
+import SignupPage from './pages/SignupPage.jsx';
 
 const MobileLayout = () => (
     <MobileGuard>
@@ -44,7 +44,7 @@ const AppContent = () => {
             <main className="main-content">
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
-                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/signup" element={<SignupPage />} />
                     <Route path="/admin" element={<AdminDashboardPage />} />
                     <Route path="/all-stats" element={<AllStatsPage />} />
                     <Route path="/all-active-users" element={<AllActiveUsersPage />} />

@@ -14,7 +14,7 @@ export const signup = async (req, res) => {
         // Check if email already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: 'Email already exists' });
+            return res.status(400).json({ message: 'Email already exists Please LogIn' });
         }
 
         // Hash password and save user
@@ -22,7 +22,7 @@ export const signup = async (req, res) => {
         const user = new User({ fullName, email, password: hashedPassword, role });
         await user.save();
 
-        res.status(201).json({ message: 'User created successfully' });
+        res.status(201).json({ message: 'User created successfully', userId: user._id });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

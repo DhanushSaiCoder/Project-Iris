@@ -57,3 +57,16 @@
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
 }
+
+.signuptext {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.signuplink {
+  color: var(--color-cta);
+  text-decoration: none;
+  font-weight: bold;
+}

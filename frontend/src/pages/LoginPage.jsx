@@ -58,8 +58,10 @@ export default function Login() {
                 <button type="submit" className={styles.loginbutton}>
                     Log In
                 </button>
+                <div className={styles.signuptext}>
+                    Don't have an account? <a href="/signup" className={styles.signuplink}>Sign up</a>
+                </div>
             </form>
         </div>
-
     )
 }

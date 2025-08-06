@@ -10,7 +10,7 @@ export function useCamera() {
         async function start() {
             try {
                 stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: "environment" },
+                    video: { facingMode: "environment", torch: true },
                 });
                 videoRef.current.srcObject = stream;
                 await videoRef.current.play();

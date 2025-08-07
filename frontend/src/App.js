@@ -27,6 +27,7 @@ import NewSession from './pages/NewSession';
 import LoginPage from './pages/LoginPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
 import GuestLimitPage from './pages/GuestLimitPage.jsx';
+import { NotificationProvider } from './context/NotificationContext';
 
 const AppContent = () => {
     const location = useLocation();
@@ -75,7 +76,9 @@ const AppContent = () => {
 const App = () => {
     return (
         <Router>
-            <AppContent />
+            <NotificationProvider>
+                <AppContent />
+            </NotificationProvider>
         </Router>
     );
 }

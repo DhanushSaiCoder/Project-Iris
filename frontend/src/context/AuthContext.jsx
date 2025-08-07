@@ -12,8 +12,9 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         if (token) {
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            // You can add a request to get user data here if you want
-            // For now, we'll just assume the user is logged in if there's a token
+            // Assuming a user is logged in if a token exists. 
+            // A more robust solution would involve fetching user details from the backend.
+            setUser({}); 
             setLoading(false);
         } else {
             setLoading(false);

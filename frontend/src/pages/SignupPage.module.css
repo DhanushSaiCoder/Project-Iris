@@ -29,15 +29,26 @@
     letter-spacing: 1.5px;
 }
 
+.inputWrapper {
+    margin-bottom: 1.2rem;
+}
+
+.passwordInputContainer {
+    position: relative;
+    margin-bottom: 1.2rem; /* Apply margin to the container */
+}
+
 .signupInput {
     background-color: var(--color-background-2); /* Slightly darker background for inputs */
     color: var(--color-text-primary);
-    margin-bottom: 1.2rem;
+    width: 100%; /* Ensure input takes full width of its container */
     padding: 0.9rem 1.2rem;
     border-radius: 8px;
     border: 1px solid var(--color-borders); /* Consistent border */
     font-size: 1rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    padding-right: 40px; /* Make space for the icon */
+    margin-bottom: 0; /* Remove margin from the input itself */
 }
 
 .signupInput:focus {
@@ -47,6 +58,23 @@
 
 .signupInput::placeholder {
     color: var(--color-text-secondary); /* Lighter placeholder text */
+}
+
+.passwordToggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.passwordToggle:hover {
+    color: var(--color-primary);
 }
 
 .signupButton {

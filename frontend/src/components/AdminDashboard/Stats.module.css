@@ -39,9 +39,7 @@
     transition: transform 0.2s ease;
 }
 
-.StatsDetailsCard:hover {
-    transform: translateY(-4px);
-}
+
 
 .StatsDetailsCard h1 {
     font-size: 56px;

@@ -3,6 +3,45 @@ import { ChevronLeft, ChevronDown, ChevronRight } from "lucide-react";
 import styles from "./HelpPage.module.css";
 import { useNavigate } from "react-router-dom";
 
+const faqData = [
+    {
+        id: 1,
+        title: "How to calibrate device?",
+        content: [
+            "Align your phone in pocket or strap",
+            "Record distance using your hand",
+            "Verify alerts by walking to your hand",
+        ],
+    },
+    {
+        id: 2,
+        title: "Starting & Stopping Detection",
+        content: [
+            "Press ‘Start’ to begin detection",
+            "Move naturally to simulate real use",
+            "Press ‘Stop’ when finished recording",
+        ],
+    },
+    {
+        id: 3,
+        title: "Interpreting Alerts",
+        content: [
+            "Red flash means possible fall detected",
+            "Yellow flash = low battery warning",
+            "Green flash = all systems normal",
+        ],
+    },
+    {
+        id: 4,
+        title: "How to re-calibrate device?",
+        content: [
+            "Open settings > Calibration",
+            "Follow on‑screen guide step by step",
+            "Tap ‘Save’ when calibration is done",
+        ],
+    },
+];
+
 function AccordionItem({ number, title, content, isOpen, onToggle }) {
     return (
         <div className={styles.accordionItem}>
@@ -39,7 +78,16 @@ function AccordionItem({ number, title, content, isOpen, onToggle }) {
                         : styles.accordionBody
                 }
             >
-                <div className={styles.accordionContent}>{content}</div>
+                <div className={styles.accordionContent}>
+                    <ul className={styles.bulletList}>
+                        {content.map((text, i) => (
+                            <li key={i} className={styles.bulletItem}>
+                                <span className={styles.bullet} />
+                                <span>{text}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </div>
     );
@@ -59,68 +107,6 @@ export default function HelpPage() {
         navigate(-1);
     }
 
-    // --- CONTENT BLOCKS ---
-    const calibrationContent = (
-        <ul className={styles.bulletList}>
-            {[
-                "Align your phone in pocket or strap",
-                "Record distance using your hand",
-                "Verify alerts by walking to your hand",
-            ].map((text, i) => (
-                <li key={i} className={styles.bulletItem}>
-                    <span className={styles.bullet} />
-                    <span>{text}</span>
-                </li>
-            ))}
-        </ul>
-    );
-
-    const startingAndStoppingContent = (
-        <ul className={styles.bulletList}>
-            {[
-                "Press ‘Start’ to begin detection",
-                "Move naturally to simulate real use",
-                "Press ‘Stop’ when finished recording",
-            ].map((text, i) => (
-                <li key={i} className={styles.bulletItem}>
-                    <span className={styles.bullet} />
-                    <span>{text}</span>
-                </li>
-            ))}
-        </ul>
-    );
-
-    const interpretingAlertsContent = (
-        <ul className={styles.bulletList}>
-            {[
-                "Red flash means possible fall detected",
-                "Yellow flash = low battery warning",
-                "Green flash = all systems normal",
-            ].map((text, i) => (
-                <li key={i} className={styles.bulletItem}>
-                    <span className={styles.bullet} />
-                    <span>{text}</span>
-                </li>
-            ))}
-        </ul>
-    );
-
-    const howToCalibrateContent = (
-        <ul className={styles.bulletList}>
-            {[
-                "Open settings > Calibration",
-                "Follow on‑screen guide step by step",
-                "Tap ‘Save’ when calibration is done",
-            ].map((text, i) => (
-                <li key={i} className={styles.bulletItem}>
-                    <span className={styles.bullet} />
-                    <span>{text}</span>
-                </li>
-            ))}
-        </ul>
-    );
-
-    // --- RENDER ---
     return (
         <div className={styles.helpScreen}>
             <header className={styles.helpHeader}>
@@ -138,30 +124,14 @@ export default function HelpPage() {
 
             <main className={styles.helpMain}>
                 <div className={styles.accordionContainer}>
-                    {[1, 2, 3, 4].map((num) => (
+                    {faqData.map((item) => (
                         <AccordionItem
-                            key={num}
-                            number={num}
-                            title={
-                                num === 1
-                                    ? "How to calibrate device?"
-                                    : num === 2
-                                    ? "Starting & Stopping Detection"
-                                    : num === 3
-                                    ? "Interpreting Alerts"
-                                    : "How to calibrate device?"
-                            }
-                            content={
-                                num === 1
-                                    ? calibrationContent
-                                    : num === 2
-                                    ? startingAndStoppingContent
-                                    : num === 3
-                                    ? interpretingAlertsContent
-                                    : howToCalibrateContent
-                            }
-                            isOpen={openItems.has(num)}
-                            onToggle={() => toggleItem(num)}
+                            key={item.id}
+                            number={item.id}
+                            title={item.title}
+                            content={item.content}
+                            isOpen={openItems.has(item.id)}
+                            onToggle={() => toggleItem(item.id)}
                         />
                     ))}
                 </div>

@@ -4,6 +4,7 @@
     color: var(--color-primary);
     display: flex;
     flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .DevelopersHeader {
@@ -12,6 +13,7 @@
     align-items: center;
     padding: 0 20px;
     border-bottom: 1px solid var(--color-borders);
+    flex-shrink: 0;
 }
 
 .backButton {
@@ -21,10 +23,11 @@
     border: none;
     cursor: pointer;
     padding: 0.5rem;
+    border-radius: 5px;
     transition: background-color 0.2s;
 }
 .backButton:hover {
-    background-color: rgba(51, 51, 51, 0.2);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .icon {
@@ -35,113 +38,118 @@
 
 .backText {
     font-size: 1rem;
+    margin-left: 8px;
 }
 
 .privacyTitle {
     flex: 1;
     text-align: center;
-    font-size: 1.125rem;
-    font-weight: 500;
+    font-size: 1.25rem;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
 .spacer {
-    width: 2.5rem; /* balances the back‐button width */
+    width: 56px; /* balances the back‐button width */
 }
 
 .privacyMain {
     flex: 1;
-    padding: 12px;
+    padding: 24px;
     overflow-y: auto;
 }
 
 .developersGrid {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
 }
 
 .developerCard {
+    background-color: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--color-borders);
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding: 8px 12px;
-    gap: 12px;
-    border-radius: 10px;
-    transition: background-color 0.2s;
+    padding: 20px;
+    gap: 20px;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .developerCard:hover {
     background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .ImgDiv {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-borders);
+    border: 2px solid var(--color-cta);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .profileImage {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 50%;
 }
 
 .DetailsDiv {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     flex: 1;
 }
 
 .developerName {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 700;
     color: var(--color-primary);
     margin: 0;
 }
 
 .developerRole {
-    font-size: 0.5rem;
+    font-size: 0.9rem;
     color: var(--color-cta);
     margin: 0;
+    font-weight: 500;
 }
 
 .socialLinks {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 4px;
+    gap: 12px;
+    margin-top: 12px;
 }
 
 .socialLinks a {
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--color-primary);
     background: transparent;
     border: 1px solid var(--color-borders);
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    transition: background-color 0.2s, transform 0.2s;
+    width: 38px;
+    height: 38px;
+    transition: background-color 0.2s, transform 0.2s, border-color 0.2s;
 }
 
 .socialLinks a:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    transform: scale(1.05);
+    background-color: var(--color-cta);
+    border-color: var(--color-cta);
+    color: var(--color-background);
+    transform: scale(1.1);
 }
 
-.IconsDiv {
-    border-radius: 50%;
-    border: 2px solid var(--color-borders);
-    padding: 6px;
+.SocialIcons {
+    transition: transform 0.2s;
+}
+
+.socialLinks a:hover .SocialIcons {
+    transform: scale(0.9);
 }

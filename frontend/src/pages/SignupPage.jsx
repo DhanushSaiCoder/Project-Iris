@@ -55,12 +55,7 @@ export default function Signup() {
             return;
         }
 
-        // Password special character
-        const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
-        if (!specialCharRegex.test(password)) {
-            showNotification('Password must contain at least one special character.', 'warning');
-            return;
-        }
+        
 
         // Passwords match
         if (password !== confirmPassword) {

@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Outlet, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AdminDashboardPage from './pages/AdminDashboardPage.jsx';
 import CaliberationPage from './pages/CaliberationPage.jsx';
 import CameraAccessDeniedPage from './pages/CameraAccessDeniedPage.jsx';
@@ -31,6 +31,16 @@ import { NotificationProvider } from './context/NotificationContext';
 
 const AppContent = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const hasVisited = localStorage.getItem('hasVisited');
+        if (!hasVisited && location.pathname !== '/launch') {
+            navigate('/launch');
+            localStorage.setItem('hasVisited', 'true');
+        }
+    }, [location.pathname, navigate]);
+
     const hiddenPaths = ['/settings', '/help', '/privacy-notes', '/developers', '/launch', '/login', '/signup', '/guest-limit'];
     const showHeader = !hiddenPaths.includes(location.pathname);
     const hiddenFooterPaths = ['/login', '/signup', '/guest-limit'];
@@ -44,6 +54,7 @@ const AppContent = () => {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
                     <Route path="/guest-limit" element={<GuestLimitPage />} />
+                    <Route path="/launch" element={<LaunchPage />} /> {/* Ensure LaunchPage is routed */}
                     <Route path="/" element={<MobileGuard><HomePage /></MobileGuard>} />
                     {/* Protected Routes */}
                     <Route path="/sessionSummary" element={<SessionSummaryPage />} />
@@ -60,7 +71,6 @@ const AppContent = () => {
                         <Route path="/developers" element={<DevelopersPage />} />
                         <Route path="/help" element={<HelpPage />} />
                         <Route path="/incompatible-browser" element={<IncompatibleBrowserPage />} />
-                        <Route path="/launch" element={<LaunchPage />} />
                         <Route path="/privacy-notes" element={<PrivacyNotesPage />} />
                         <Route path="/settings" element={<SettingsPage />} />
                         <Route path="/user-monitoring" element={<UserMonitoringPage />} />

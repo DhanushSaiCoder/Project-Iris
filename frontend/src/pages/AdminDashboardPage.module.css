@@ -7,6 +7,169 @@
     box-sizing: border-box;
 }
 
+/* Skeleton Loading Styles */
+.skeletonLine,
+.skeletonRect {
+    background: linear-gradient(90deg, var(--color-borders) 25%, var(--color-card) 50%, var(--color-borders) 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: shine 1.5s infinite ease-in-out;
+}
+
+.skeletonRect {
+    border-radius: 8px;
+}
+
+@keyframes shine {
+    0% {
+        background-position: -100% 0;
+    }
+    100% {
+        background-position: 100% 0;
+    }
+}
+
+/* Inlined Stats Component Styles */
+.StatsTitleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 10px;
+}
+.statsTitle{
+    font-size: 18px;
+}
+
+.ViewMore{
+    font-size: 12px;
+    text-decoration: none;
+    color: var(--text-secondary);
+}
+
+.StatsDetailsContainer {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 12px;
+    scroll-snap-type: x mandatory;
+}
+
+.StatsDetailsContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.StatsDetailsCard {
+    min-width: 150px;
+    background-color: var(--color-card);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    text-align: center;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    transition: transform 0.2s ease;
+}
+
+.StatsDetailsCard h1 {
+    font-size: 56px;
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.StatsDetailsCard p {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+}
+
+/* Inlined Active Users Component Styles */
+.ActiveUsersTitleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.ActiveUsersTitleContainer h1 {
+    font-size: 18px;
+}
+
+.ActiveUsersDetails {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.UserCard {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: var(--color-card);
+    margin-top: 8px;
+    border-radius: 3px;
+    padding: 32px 18px;
+}
+
+.SessionId {
+    font-weight: bold;
+}
+
+.SessionId span {
+    font-weight: lighter;
+}
+
+.Moniter {
+    font-size: 12px;
+    color: var(--color-cta);
+}
+
+/* Inlined History Component Styles */
+.HistoryContainer {
+    margin-top: 16px;
+}
+
+.HistoryTitleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 16px;
+}
+
+.HistoryTitleContainer h1 {
+    font-size: 18px;
+}
+
+.tableContainer {
+    overflow-x: auto;
+}
+
+.HistoryTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.HistoryTable th,
+.HistoryTable td {
+    font-size: 12px;
+    text-align: left;
+    padding: 8px;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.HistoryTable th {
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 1px solid var(--color-borders);
+}
+.HistoryTable tbody tr td{
+    color: var(--text-secondary);
+}
+
 @media (min-width: 1024px) {
     .AdminDashboardPage {
         max-width: 70%; /* Adjust as needed, 60-70% */

@@ -1,10 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./LaunchPage.module.css";
 import Logo from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
 
 const LaunchPage = () => {
     const navigate = useNavigate();
+    const [deferredPrompt, setDeferredPrompt] = useState(null);
+    const [isAppInstalled, setIsAppInstalled] = useState(false);
+
+    useEffect(() => {
+        const handleBeforeInstallPrompt = (e) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+        };
+
+        const handleAppInstalled = () => {
+            setIsAppInstalled(true);
+            setDeferredPrompt(null); // Clear the prompt once installed
+        };
+
+        window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+        window.addEventListener('appinstalled', handleAppInstalled);
+
+        // Check if the app is already installed (for subsequent visits)
+        if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+            setIsAppInstalled(true);
+        }
+
+        return () => {
+            window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+            window.removeEventListener('appinstalled', handleAppInstalled);
+        };
+    }, []);
+
+    const handleInstallClick = async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('User accepted the A2HS prompt');
+                navigate('/'); // Redirect to home page after successful installation
+            } else {
+                console.log('User dismissed the A2HS prompt');
+            }
+            setDeferredPrompt(null);
+        }
+    };
+
+    const handleContinueInBrowser = () => {
+        navigate("/");
+    };
 
     return (
         <div className={styles.container}>
@@ -21,14 +66,14 @@ const LaunchPage = () => {
                     Please install for best experience.
                 </p>
 
-                <button
-                    onClick={() => {
-                        navigate("/");
-                    }}
-                    className={styles.installButton}
-                >
-                    Install App
-                </button>
+                {!isAppInstalled && deferredPrompt && (
+                    <button
+                        onClick={handleInstallClick}
+                        className={styles.installButton}
+                    >
+                        Install App
+                    </button>
+                )}
 
                 <ul className={styles.benefitsList}>
                     <li className={styles.positive}>
@@ -39,9 +84,7 @@ const LaunchPage = () => {
                 </ul>
 
                 <button
-                    onClick={() => {
-                        window.location.href = "/";
-                    }}
+                    onClick={handleContinueInBrowser}
                     className={styles.continueButton}
                 >
                     Continue in Browser

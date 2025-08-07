@@ -35,6 +35,26 @@ export const AuthProvider = ({ children }) => {
         setUser(res.data.user);
         localStorage.setItem('token', res.data.token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+
+        // After successful signup and login, check for guest session data
+        const guestSessionData = localStorage.getItem('guestSessionData');
+        if (guestSessionData) {
+            try {
+                const parsedGuestSessions = JSON.parse(guestSessionData);
+                if (parsedGuestSessions.length > 0) {
+                    await axios.post(`${process.env.REACT_APP_BACKEND_URL}/session/guest-import`, {
+                        userId: res.data.user.id,
+                        guestSessions: parsedGuestSessions,
+                    });
+                    localStorage.removeItem('guestSessionData');
+                    localStorage.removeItem('guestSessionsCount');
+                    localStorage.removeItem('guestLimitReached');
+                    console.log("Guest sessions imported successfully.");
+                }
+            } catch (error) {
+                console.error("Error importing guest sessions:", error);
+            }
+        }
     };
 
     const logout = () => {

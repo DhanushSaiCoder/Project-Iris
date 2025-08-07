@@ -27,7 +27,8 @@ const HomePage = () => {
     } else if (user && guestLimitReached === "true") {
       // If user logs in, reset the guest limit flag
       localStorage.removeItem("guestLimitReached");
-      localStorage.removeItem("guestSessions");
+      localStorage.removeItem("guestSessionsCount");
+      localStorage.removeItem("guestSessionData"); // Also clear stored guest session data
     }
   }, [user, navigate]);
   
@@ -42,28 +43,9 @@ const HomePage = () => {
     const duration = sessionEndTime - sessionStartTime;
     setIsDetecting(false);
 
-    let currentUserId = "guest"; // Default to guest
-    let shouldPostSession = false;
-    let shouldNavigateToSummary = false;
-
-    if (user && user.id) {
-      currentUserId = user.id; // Use actual user ID if logged in
-      shouldPostSession = true;
-      shouldNavigateToSummary = true;
-    } else {
-      // Handle guest sessions
-      let guestSessions = parseInt(localStorage.getItem("guestSessions") || "0");
-      console.log("Guest sessions before increment:", guestSessions);
-      guestSessions++;
-      console.log("Guest sessions after increment:", guestSessions);
-      localStorage.setItem("guestSessions", guestSessions.toString());
-
-      if (guestSessions >= 3) {
-        localStorage.setItem("guestLimitReached", "true");
-      }
-      shouldNavigateToSummary = true; // Always navigate to summary for guest sessions
-      shouldPostSession = false; // Never post guest sessions to backend
-    }
+    const currentUserId = user ? user.id : "guest"; // Set currentUserId based on login status
+    let shouldPostSession = !!user; // Post session if user is logged in
+    let shouldNavigateToSummary = true; // Always navigate to summary
 
     const uniqueClasses = [...new Set(detectedObjects.map((obj) => obj.class))];
     const uniqueDetectionsCount = uniqueClasses.length;
@@ -76,6 +58,22 @@ const HomePage = () => {
       totalDetections,
       allDetections: detectedObjects,
     };
+
+    if (!user) {
+      // For guest users, store session data locally
+      const storedGuestSessions = JSON.parse(localStorage.getItem("guestSessionData") || "[]");
+      storedGuestSessions.push(payload);
+      localStorage.setItem("guestSessionData", JSON.stringify(storedGuestSessions));
+
+      let guestSessionsCount = parseInt(localStorage.getItem("guestSessionsCount") || "0");
+      guestSessionsCount++;
+      localStorage.setItem("guestSessionsCount", guestSessionsCount.toString());
+
+      if (guestSessionsCount >= 3) {
+        localStorage.setItem("guestLimitReached", "true");
+      }
+      shouldPostSession = false; // Ensure guest sessions are not posted to backend here
+    }
 
     if (shouldPostSession) {
       axios

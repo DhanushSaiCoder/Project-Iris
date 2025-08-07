@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { BarChart } from '@mui/x-charts/BarChart';
 
@@ -269,6 +270,23 @@ const AdminDashboardPage = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
+    const getUserRoleFromToken = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                return decodedToken.role;
+            } catch (error) {
+                console.error("Error decoding token:", error);
+                return null;
+            }
+        }
+        return null;
+    };
+
+    const userRole = getUserRoleFromToken();
+    const isAdmin = userRole === 'admin';
+
     // Effects
     useEffect(() => {
         const fetchSessions = async () => {
@@ -397,18 +415,19 @@ const AdminDashboardPage = () => {
         <div className={styles.AdminDashboardPage}>
             <h1 className={styles.Title}>DASHBOARD</h1>
 
-            {/* Admin Tools Section */}
-            <div className={styles.AdminToolsContainer}>
-                <div className={styles.AdminToolsTitleContainer}>
-                    <h1 className={styles.adminToolsTitle}>ADMIN TOOLS</h1>
+            {isAdmin && (
+                <div className={styles.AdminToolsContainer}>
+                    <div className={styles.AdminToolsTitleContainer}>
+                        <h1 className={styles.adminToolsTitle}>ADMIN TOOLS</h1>
+                    </div>
+                    <div className={styles.AdminToolsDetailsContainer}>
+                        <Link to='/user-management' className={styles.AdminToolCard}>
+                            <h2>Manage Users</h2>
+                            <p>View and modify user roles.</p>
+                        </Link>
+                    </div>
                 </div>
-                <div className={styles.AdminToolsDetailsContainer}>
-                    <Link to='/user-management' className={styles.AdminToolCard}>
-                        <h2>Manage Users</h2>
-                        <p>View and modify user roles.</p>
-                    </Link>
-                </div>
-            </div>
+            )}
 
             {/* Stats Component Inlined */}
             <div className={styles.StatsContainer}>

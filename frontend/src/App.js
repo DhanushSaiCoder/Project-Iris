@@ -30,9 +30,10 @@ import GuestLimitPage from './pages/GuestLimitPage.jsx';
 
 const AppContent = () => {
     const location = useLocation();
-    const hiddenPaths = ['/settings', '/help', '/privacy-notes', '/developers', '/launch', '/signup', '/login', '/guest-limit'];
+    const hiddenPaths = ['/settings', '/help', '/privacy-notes', '/developers', '/launch', '/login', '/signup', '/guest-limit'];
     const showHeader = !hiddenPaths.includes(location.pathname);
-
+    const hiddenFooterPaths = ['/login', '/signup', '/guest-limit'];
+    const showFooter = !hiddenFooterPaths.includes(location.pathname);
 
     return (
         <div className="App">
@@ -66,7 +67,7 @@ const AppContent = () => {
                     </Route>
                 </Routes>
             </main>
-            <Footer />
+            {showFooter && <Footer />}
         </div>
     );
 }

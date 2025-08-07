@@ -35,9 +35,7 @@ const Header = () => {
                 </h2>
             </div>
             <div className={styles.headerRight}>
-                {user ? (
-                    <button onClick={handleLogout} className={styles.logoutBtn}>Logout</button>
-                ) : (
+                {!user && (
                     <>
                         <button onClick={() => navigate("/login")} className={styles.loginBtn}>Login</button>
                         <button onClick={() => navigate("/signup")} className={styles.signupBtn}>Sign Up</button>

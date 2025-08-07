@@ -10,6 +10,7 @@ import ReCaliberateDevice from "./../components/SettingsPage/ReCaliberateDeviceB
 import AdminDashboardBtn from "../components/SettingsPage/AdminDashboard/AdminDashboardBtn";
 import DeveloperMode from "../components/SettingsPage/DeveloperMode/DeveloperMode";
 import AudioAnnouncements from "../components/SettingsPage/AudioAnnouncements/AudioAnnouncements";
+import LogoutButton from "../components/SettingsPage/LogoutButton/LogoutButton";
 
 const SettingsPage = () => {
     const navigate = useNavigate();
@@ -38,6 +39,7 @@ const SettingsPage = () => {
                     <ReCaliberateDevice />
                     <AdminDashboardBtn />
                 </div>
+                <LogoutButton />
             </div>
         </div>
     );

@@ -60,13 +60,48 @@ export default function Signup() {
                 email,
                 password
             });
-            alert('Sign Up Completed');
-            const userId = res.data.user?._id || res.data._id;
-            localStorage.setItem('userId', userId);
+
+            const userId = res.data.userId;
+            if (!userId) {
+                alert("Signup successful, but user ID missing.");
+                return;
+            }
+
+            // ✅ Save userId in localStorage
+            localStorage.setItem("userId", userId);
+
+            // ✅ Check if trial sessions exist
+            const trialSessions = JSON.parse(localStorage.getItem("trialSessions") || "[]");
+
+            if (trialSessions.length > 0) {
+                // Add userId to each trial session
+                const updatedSessions = trialSessions.map((session) => ({
+                    ...session,
+                    userId
+                }));
+
+                try {
+                    // Send each session to backend
+                    for (const session of updatedSessions) {
+                        await axios.post('http://localhost:5555/session', session);
+                    }
+
+                    console.log("Trial sessions uploaded successfully.");
+
+                    // ✅ Clear trial data from localStorage
+                    localStorage.removeItem("trialSessions");
+                    localStorage.removeItem("trialCount");
+                } catch (uploadErr) {
+                    console.error("Failed to upload trial sessions:", uploadErr);
+                }
+            }
+
+            alert("Sign Up Completed");
             navigate('/');
         } catch (err) {
-            alert(err.response?.data?.message || 'Signup failed');
+            alert(err.response?.data?.message || "Signup failed");
         }
+
     };
 
     return (

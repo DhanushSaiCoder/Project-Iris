@@ -30,7 +30,11 @@ export const AuthProvider = ({ children }) => {
     };
 
     const signup = async (fullName, email, password) => {
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/signup`, { fullName, email, password });
+        const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/signup`, { fullName, email, password });
+        setToken(res.data.token);
+        setUser(res.data.user);
+        localStorage.setItem('token', res.data.token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
     };
 
     const logout = () => {

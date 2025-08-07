@@ -67,7 +67,7 @@ export default function Signup() {
         try {
             await signup(fullName, email, password);
             showNotification('Sign Up Completed', 'success');
-            navigate('/login'); // Navigate to login after successful signup
+            navigate('/'); // Navigate to home after successful signup
         } catch (err) {
             showNotification(err.response?.data?.message || 'Signup failed', 'error');
         }

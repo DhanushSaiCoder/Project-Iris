@@ -2,12 +2,11 @@ import React from 'react';
 import styles from './GuestSessionLimitModal.module.css';
 import { useNavigate } from 'react-router-dom';
 
-const GuestSessionLimitModal = ({ onClose }) => {
+const GuestSessionLimitModal = () => {
     const navigate = useNavigate();
 
     const handleSignupClick = () => {
         navigate('/signup');
-        onClose();
     };
 
     return (
@@ -20,8 +19,8 @@ const GuestSessionLimitModal = ({ onClose }) => {
                 <button onClick={handleSignupClick} className={styles.signupButton}>
                     Sign Up Now
                 </button>
-                <button onClick={onClose} className={styles.closeButton}>
-                    Close
+                <button onClick={() => navigate('/login')} className={styles.loginButton}>
+                    Login
                 </button>
             </div>
         </div>

@@ -15,11 +15,21 @@ const HomePage = () => {
   const [modelsAreLoading, setModelsAreLoading] = useState(false);
   const [detectedObjects, setDetectedObjects] = useState([]);
   const [sessionStartTime, setSessionStartTime] = useState(null);
-  const [showGuestLimitModal, setShowGuestLimitModal] = useState(false);
-  const [showGuestLimitContent, setShowGuestLimitContent] = useState(false);
+  
   const navigate = useNavigate();
   const { developerMode } = useContext(SettingsContext);
   const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    const guestLimitReached = localStorage.getItem("guestLimitReached");
+    if (guestLimitReached === "true" && !user) {
+      navigate("/guest-limit");
+    } else if (user && guestLimitReached === "true") {
+      // If user logs in, reset the guest limit flag
+      localStorage.removeItem("guestLimitReached");
+      localStorage.removeItem("guestSessions");
+    }
+  }, [user, navigate]);
   
   const handleStartDetection = () => {
     setSessionStartTime(Date.now());
@@ -87,20 +97,6 @@ const HomePage = () => {
     }
   };
 
-  useEffect(() => {
-    const guestLimitReached = localStorage.getItem("guestLimitReached");
-    if (guestLimitReached === "true" && !user) {
-      setShowGuestLimitContent(true);
-    } else {
-      setShowGuestLimitContent(false);
-      // If user logs in, reset the guest limit flag
-      if (user && guestLimitReached === "true") {
-        localStorage.removeItem("guestLimitReached");
-        localStorage.removeItem("guestSessions");
-      }
-    }
-  }, [user]);
-  
   const handleLoadingChange = (loading) => {
     setModelsAreLoading(loading);
   };
@@ -114,9 +110,6 @@ const HomePage = () => {
   
   return (
     <div className={styles.homePage}>
-      {showGuestLimitContent ? (
-        <GuestSessionLimitModal onClose={() => setShowGuestLimitContent(false)} />
-      ) : (
         <>
             <div
                 className={`${styles.mainContentWrapper} ${
@@ -159,7 +152,6 @@ const HomePage = () => {
                 </button>
             </div>
         </>
-      )}
     </div>
   );
 };

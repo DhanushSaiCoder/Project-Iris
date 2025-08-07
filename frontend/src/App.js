@@ -26,10 +26,11 @@ import Footer from './components/Footer/Footer.jsx';
 import NewSession from './pages/NewSession';
 import LoginPage from './pages/LoginPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
+import GuestLimitPage from './pages/GuestLimitPage.jsx';
 
 const AppContent = () => {
     const location = useLocation();
-    const hiddenPaths = ['/settings', '/help', '/privacy-notes', '/developers', '/launch', '/signup', '/login'];
+    const hiddenPaths = ['/settings', '/help', '/privacy-notes', '/developers', '/launch', '/signup', '/login', '/guest-limit'];
     const showHeader = !hiddenPaths.includes(location.pathname);
 
 
@@ -40,6 +41,7 @@ const AppContent = () => {
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
+                    <Route path="/guest-limit" element={<GuestLimitPage />} />
                     <Route path="/" element={<MobileGuard><HomePage /></MobileGuard>} />
                     {/* Protected Routes */}
                     <Route path="/sessionSummary" element={<SessionSummaryPage />} />

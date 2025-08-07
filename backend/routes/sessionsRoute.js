@@ -1,18 +1,18 @@
 import express from "express";
-import { createSession, getAllSessions, getSessionById, importGuestSessions } from "../controllers/sessionController.js";
+import * as sessionController from '../Controllers/sessionController.js';
 
 const router = express.Router();
 
 // POST: Create a new summary
-router.post("/", createSession);
+router.post("/", sessionController.createSession);
 
 // POST: Import guest sessions
-router.post("/guest-import", importGuestSessions);
+router.post("/guest-import", sessionController.importGuestSessions);
 
 // GET: Fetch all summaries
-router.get("/", getAllSessions);
+router.get("/", sessionController.getAllSessions);
 
 // GET: Fetch summary by ID
-router.get("/:id", getSessionById);
+router.get("/:id", sessionController.getSessionById);
 
 export default router;

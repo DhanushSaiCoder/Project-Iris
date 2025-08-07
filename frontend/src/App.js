@@ -11,6 +11,7 @@ import LaunchPage from './pages/LaunchPage.jsx';
 import PrivacyNotesPage from './pages/PrivacyNotesPage.jsx';
 import SessionSummaryPage from './pages/SessionSummaryPage.jsx';
 import SettingsPage from './pages/SettingsPage.jsx';
+import UserManagementPage from './pages/UserManagementPage.jsx';
 import UserMonitoringPage from './pages/UserMonitoringPage.jsx';
 import Header from './components/Header/Header';
 import TimeLogger from './components/AdminDashboard/TimeLogger.jsx';
@@ -62,6 +63,7 @@ const AppContent = () => {
                     {/* Protected Routes */}
                     <Route element={<ProtectedRoute />}>
                         <Route path="/admin" element={<AdminDashboardPage />} />
+                        <Route path="/user-management" element={<UserManagementPage />} />
                         <Route path="/all-stats" element={<AllStatsPage />} />
                         <Route path="/all-active-users" element={<AllActiveUsersPage />} />
                         <Route path="/all-history" element={<AllHistoryPage />} />

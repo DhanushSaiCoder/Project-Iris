@@ -170,9 +170,94 @@
     color: var(--text-secondary);
 }
 
+.userManagementLinkContainer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.userManagementLink {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--color-cta);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.userManagementLink:hover {
+    background-color: #1a73e8; /* A slightly darker shade of --color-cta */
+}
+
 @media (min-width: 1024px) {
     .AdminDashboardPage {
         max-width: 70%; /* Adjust as needed, 60-70% */
         margin: 0 auto;
+    }
+}
+
+/* Admin Tools Section Styles */
+.AdminToolsContainer {
+    margin-top: 20px;
+}
+
+.AdminToolsTitleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.adminToolsTitle {
+    font-size: 18px;
+}
+
+.AdminToolsDetailsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 12px;
+}
+
+.AdminToolCard {
+    flex: 1 1 calc(33% - 32px); /* Adjust for 3 cards per row with gap */
+    min-width: 200px;
+    background-color: var(--color-card);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.AdminToolCard:hover {
+    transform: translateY(-5px);
+    background-color: var(--color-background-2);
+}
+
+.AdminToolCard h2 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: var(--color-primary);
+}
+
+.AdminToolCard p {
+    font-size: 0.9em;
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+    .AdminToolCard {
+        flex: 1 1 calc(50% - 32px); /* 2 cards per row on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .AdminToolCard {
+        flex: 1 1 100%; /* 1 card per row on extra small screens */
     }
 }

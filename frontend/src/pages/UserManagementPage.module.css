@@ -1,0 +1,102 @@
+.UserManagementPage {
+    padding: 20px;
+    color: var(--color-text-primary);
+    background-color: var(--color-background);
+    min-height: calc(100vh - var(--header-height) - var(--footer-height)); /* Adjust based on header/footer height */
+}
+
+.Title {
+    font-size: 2.5em;
+    color: var(--color-primary);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.TableContainer {
+    background-color: var(--color-card);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-x: auto;
+}
+
+.UserTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.UserTable th,
+.UserTable td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-borders);
+}
+
+.UserTable th {
+    background-color: var(--color-background-2);
+    color: var(--color-primary-dark);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.UserTable tr:hover {
+    background-color: var(--color-background-2);
+}
+
+.UserTable td {
+    color: var(--color-text-secondary);
+}
+
+.UserTable select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid var(--color-borders);
+    background-color: var(--color-background-2);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    -webkit-appearance: none; /* Remove default arrow for Chrome/Safari */
+    -moz-appearance: none;    /* Remove default arrow for Firefox */
+    appearance: none;         /* Remove default arrow */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%20viewBox%3D%220%200%20292.4%20292.4%22%3E%3Cpath%20fill%3D%22%23ebf4ff%22%20d%3D%22M287%2C197.9l-131.3-131.3c-4.1-4.1-10.8-4.1-14.9%2C0L5.4%2C197.9c-4.1%2C4.1-4.1%2C10.8%2C0%2C14.9c4.1%2C4.1%2C10.8%2C4.1%2C14.9%2C0l123.9-123.9l123.9%2C123.9c4.1%2C4.1%2C10.8%2C4.1%2C14.9%2C0C291.1%2C208.7%2C291.1%2C202%2C287%2C197.9z%22%2F%3E%3C%2Fsvg%3E'); /* Custom arrow */
+    background-repeat: no-repeat;
+    background-position: right 8px top 50%;
+    background-size: 12px auto;
+}
+
+.UserTable select:focus {
+    outline: none;
+    border-color: var(--color-cta);
+    box-shadow: 0 0 0 2px var(--color-cta-20);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .UserTable th,
+    .UserTable td {
+        padding: 8px 10px;
+        font-size: 0.85em;
+    }
+
+    .UserTable select {
+        padding: 6px;
+        font-size: 0.85em;
+    }
+}
+
+@media (max-width: 480px) {
+    .Title {
+        font-size: 2em;
+    }
+
+    .UserTable {
+        font-size: 0.8em;
+    }
+
+    .UserTable th,
+    .UserTable td {
+        padding: 6px 8px;
+    }
+}

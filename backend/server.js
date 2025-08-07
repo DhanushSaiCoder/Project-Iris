@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import sessionsRoute from './routes/sessionsRoute.js';
 import authRoutes from './routes/Auth.route.js';
+import userRoutes from './routes/user.route.js';
 import path from "path";
 import { fileURLToPath } from 'url';
 import cors from 'cors';
@@ -39,6 +40,7 @@ app.get("/", (req, res) => {
 // Routes
 app.use('/auth', authRoutes);
 app.use('/session', sessionsRoute);
+app.use('/api/users', userRoutes);
 
 // Database connection and server start
 const connectDB = async () => {

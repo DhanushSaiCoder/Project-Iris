@@ -397,6 +397,19 @@ const AdminDashboardPage = () => {
         <div className={styles.AdminDashboardPage}>
             <h1 className={styles.Title}>DASHBOARD</h1>
 
+            {/* Admin Tools Section */}
+            <div className={styles.AdminToolsContainer}>
+                <div className={styles.AdminToolsTitleContainer}>
+                    <h1 className={styles.adminToolsTitle}>ADMIN TOOLS</h1>
+                </div>
+                <div className={styles.AdminToolsDetailsContainer}>
+                    <Link to='/user-management' className={styles.AdminToolCard}>
+                        <h2>Manage Users</h2>
+                        <p>View and modify user roles.</p>
+                    </Link>
+                </div>
+            </div>
+
             {/* Stats Component Inlined */}
             <div className={styles.StatsContainer}>
                 <div className={styles.StatsTitleContainer}>

@@ -22,10 +22,43 @@
 }
 .settingsIcon{
     color: var(--color-text-primary);
-    margin-left: auto;
     /* height: 100%;
     padding: 0 20px; */
 }
 .settingsIcon:hover{
     cursor: pointer;
+}
+
+.headerRight {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.loginBtn,
+.signupBtn,
+.logoutBtn {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.loginBtn:hover,
+.signupBtn:hover,
+.logoutBtn:hover {
+    background-color: var(--color-primary-dark);
+}
+
+.logoutBtn {
+    background-color: var(--color-danger);
+}
+
+.logoutBtn:hover {
+    background-color: var(--color-danger-dark);
 }

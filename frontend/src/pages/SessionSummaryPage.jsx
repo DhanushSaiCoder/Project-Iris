@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import SessionAnalytics from "../components/SessionSummary/SessionAnalytics";
 import NoDataState from "../components/SessionSummary/NoDataState";
@@ -23,6 +23,7 @@ const GRADIENT_PAIRS = [
 
 const SessionSummaryPage = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [detectedObjects, setDetectedObjects] = useState(location.state?.detectedObjects || []);
     const [duration, setDuration] = useState(location.state?.duration || 0);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -124,7 +125,7 @@ const SessionSummaryPage = () => {
             <div className={styles.actions}>
                 <button
                     className={`${styles.button} ${styles.primary}`}
-                    onClick={() => window.location.href = "/"}
+                    onClick={() => navigate("/")}
                 >
                     <PlayCircle />
                     Start New Session

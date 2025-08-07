@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import styles from './LoginPage.module.css'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
 
 export default function Login() {
     const [formData, setFormData] = useState({ email: '', password: '' })
     const navigate = useNavigate()
+    const { login } = useContext(AuthContext)
 
     const handleChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -22,8 +23,7 @@ export default function Login() {
         }
 
         try {
-            const res = await axios.post('http://localhost:5555/auth/login', formData)
-            localStorage.setItem('token', res.data.token)
+            await login(email, password)
             navigate('/');
         } catch (err) {
             alert(err.response?.data?.message || 'Login failed')

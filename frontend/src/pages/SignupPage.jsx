@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import styles from './SignupPage.module.css';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 export default function Signup() {
     const [formData, setFormData] = useState({
@@ -12,6 +12,7 @@ export default function Signup() {
     });
 
     const navigate = useNavigate();
+    const { signup } = useContext(AuthContext);
 
     const handleChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -55,15 +56,9 @@ export default function Signup() {
 
         // Submit signup
         try {
-            const res = await axios.post('http://localhost:5555/auth/signup', {
-                fullName,
-                email,
-                password
-            });
+            await signup(fullName, email, password);
             alert('Sign Up Completed');
-            const userId = res.data.user?._id || res.data._id;
-            localStorage.setItem('userId', userId);
-            navigate('/');
+            navigate('/login'); // Navigate to login after successful signup
         } catch (err) {
             alert(err.response?.data?.message || 'Signup failed');
         }

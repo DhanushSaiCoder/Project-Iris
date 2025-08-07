@@ -13,8 +13,14 @@ export function useCamera() {
                     video: { facingMode: "environment", torch: true },
                 });
                 videoRef.current.srcObject = stream;
-                await videoRef.current.play();
-                setReady(true);
+                videoRef.current.onloadedmetadata = () => {
+                    videoRef.current.play()
+                        .then(() => setReady(true))
+                        .catch(e => {
+                            console.error("Video play failed", e);
+                            setReady(false);
+                        });
+                };
             } catch (e) {
                 console.error("Camera start failed", e);
                 setReady(false);

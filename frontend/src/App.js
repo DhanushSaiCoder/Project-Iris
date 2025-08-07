@@ -21,16 +21,11 @@ import './App.css';
 import "./styles/variables.css"
 
 import { MobileGuard } from './utils/MobileGuard';
+import ProtectedRoute from './context/ProtectedRoute';
 import Footer from './components/Footer/Footer.jsx';
 import NewSession from './pages/NewSession';
 import LoginPage from './pages/LoginPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
-
-const MobileLayout = () => (
-    <MobileGuard>
-        <Outlet />
-    </MobileGuard>
-);
 
 const AppContent = () => {
     const location = useLocation();
@@ -45,14 +40,17 @@ const AppContent = () => {
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
-                    <Route path="/admin" element={<AdminDashboardPage />} />
-                    <Route path="/all-stats" element={<AllStatsPage />} />
-                    <Route path="/all-active-users" element={<AllActiveUsersPage />} />
-                    <Route path="/all-history" element={<AllHistoryPage />} />
-                    <Route element={<MobileLayout />} >
-                        <Route path="/" element={<HomePage />} />
+                    <Route path="/" element={<MobileGuard><HomePage /></MobileGuard>} />
+                    {/* Protected Routes */}
+                    <Route path="/sessionSummary" element={<SessionSummaryPage />} />
+                    <Route path="/session-summary" element={<SessionSummaryPage />} />
+                    {/* Protected Routes */}
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="/admin" element={<AdminDashboardPage />} />
+                        <Route path="/all-stats" element={<AllStatsPage />} />
+                        <Route path="/all-active-users" element={<AllActiveUsersPage />} />
+                        <Route path="/all-history" element={<AllHistoryPage />} />
                         <Route path="/newSession" element={<NewSession />} />
-                        <Route path="/sessionSummary" element={<SessionSummaryPage />} />
                         <Route path="/caliberation" element={<CaliberationPage />} />
                         <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />
                         <Route path="/developers" element={<DevelopersPage />} />
@@ -60,7 +58,6 @@ const AppContent = () => {
                         <Route path="/incompatible-browser" element={<IncompatibleBrowserPage />} />
                         <Route path="/launch" element={<LaunchPage />} />
                         <Route path="/privacy-notes" element={<PrivacyNotesPage />} />
-                        <Route path="/session-summary" element={<SessionSummaryPage />} />
                         <Route path="/settings" element={<SettingsPage />} />
                         <Route path="/user-monitoring" element={<UserMonitoringPage />} />
                         <Route path="/admin/TimeLogger" element={< TimeLogger />} />

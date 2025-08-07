@@ -18,7 +18,6 @@ const DevelopersPage = () => {
             role: "Frontend Developer",
             socialMedia: {
                 github: "https://github.com/ravikumar",
-                instagram: "https://instagram.com/ravi.codes",
                 gmail: "ravikumar@gmail.com",
                 linkedin: "https://linkedin.com/in/ravikumar"
             }
@@ -29,8 +28,6 @@ const DevelopersPage = () => {
             role: "UI/UX Designer",
             socialMedia: {
                 github: "https://github.com/priyadesigns",
-                instagram: "https://instagram.com/priya.ui",
-                gmail: "priyasharma@gmail.com",
                 linkedin: "https://linkedin.com/in/priyasharma"
             }
         },
@@ -150,7 +147,7 @@ const DevelopersPage = () => {
                             <div className={styles.ImgDiv}>
                                 <img
                                     src={developer.profileImg}
-                                    alt={developer.name}
+                                    alt={`${developer.name}'s profile`}
                                     className={styles.profileImage}
                                 />
                             </div>
@@ -158,18 +155,26 @@ const DevelopersPage = () => {
                                 <h2 className={styles.developerName}>{developer.name}</h2>
                                 <p className={styles.developerRole}>{developer.role}</p>
                                 <div className={styles.socialLinks}>
-                                    <a href={developer.socialMedia.github} target="_blank" rel="noopener noreferrer" className={styles.IconsDiv}>
-                                        <Github size={18} className={styles.SocialIcons} />
-                                    </a>
-                                    <a href={developer.socialMedia.instagram} target="_blank" rel="noopener noreferrer" className={styles.IconsDiv}>
-                                        <Instagram size={18} className={styles.SocialIcons} />
-                                    </a>
-                                    <a href={`mailto:${developer.socialMedia.gmail}`} className={styles.IconsDiv}>
-                                        <Mail size={18} className={styles.SocialIcons} />
-                                    </a>
-                                    <a href={developer.socialMedia.linkedin} target="_blank" rel="noopener noreferrer" className={styles.IconsDiv}>
-                                        <Linkedin size={18} className={styles.SocialIcons} />
-                                    </a>
+                                    {developer.socialMedia.github && (
+                                        <a href={developer.socialMedia.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                                            <Github size={20} className={styles.SocialIcons} />
+                                        </a>
+                                    )}
+                                    {developer.socialMedia.instagram && (
+                                        <a href={developer.socialMedia.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                                            <Instagram size={20} className={styles.SocialIcons} />
+                                        </a>
+                                    )}
+                                    {developer.socialMedia.gmail && (
+                                        <a href={`mailto:${developer.socialMedia.gmail}`} aria-label="Gmail">
+                                            <Mail size={20} className={styles.SocialIcons} />
+                                        </a>
+                                    )}
+                                    {developer.socialMedia.linkedin && (
+                                        <a href={developer.socialMedia.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                                            <Linkedin size={20} className={styles.SocialIcons} />
+                                        </a>
+                                    )}
                                 </div>
                             </div>
                         </div>

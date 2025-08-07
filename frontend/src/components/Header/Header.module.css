@@ -1,64 +1,126 @@
-.Header{
+.header {
     background-color: var(--color-background);
-    height: 56px;
-    width: 100vw;
+    height: 64px; /* Slightly increased height for better visual balance */
+    width: 100%; /* Use 100% instead of 100vw for better responsiveness */
     border-bottom: 1px solid var(--color-borders);
+    padding: 0 20px; /* Adjusted padding */
 
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between; /* Space out logo and right section */
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
     gap: 10px;
-    padding: 0 30px;
-}
-.logoImg{
-    width: 32px;
-    height: auto;
-}
-.headerTxt{
-    color: var(--color-text-primary);
-    font-family: "Oswald", sans-serif;
-    font-weight: 600;
-    font-size: 24px;
-}
-.settingsIcon{
-    color: var(--color-text-primary);
-    /* height: 100%;
-    padding: 0 20px; */
-}
-.settingsIcon:hover{
     cursor: pointer;
 }
 
+.logoImg {
+    width: 36px; /* Slightly larger logo */
+    height: auto;
+}
+
+.headerTxt {
+    color: var(--color-text-primary);
+    font-family: "Oswald", sans-serif;
+    font-weight: 600;
+    font-size: 26px; /* Slightly larger font size */
+    letter-spacing: 0.5px; /* Added letter spacing for better readability */
+}
+
 .headerRight {
-    margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px; /* Increased gap between items */
+}
+
+.settingsIcon {
+    color: var(--color-text-primary);
+    width: 24px; /* Standardized icon size */
+    height: 24px;
+    cursor: pointer;
+    transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.settingsIcon:hover {
+    color: var(--color-primary); /* Highlight on hover */
 }
 
 .loginBtn,
 .signupBtn,
 .logoutBtn {
-    background-color: var(--color-primary);
-    color: white;
+    background-color: var(--color-primary); /* Using primary color for buttons */
+    color: var(--color-background); /* Text color contrasting with primary */
     border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
+    padding: 10px 18px; /* Adjusted padding for a more substantial button */
+    border-radius: 8px; /* More rounded corners */
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+    font-size: 15px; /* Slightly adjusted font size */
+    font-weight: 500; /* Added font weight */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform for subtle click effect */
 }
 
 .loginBtn:hover,
-.signupBtn:hover,
-.logoutBtn:hover {
+.signupBtn:hover {
     background-color: var(--color-primary-dark);
+    transform: translateY(-1px); /* Subtle lift on hover */
 }
 
 .logoutBtn {
-    background-color: var(--color-danger);
+    background-color: var(--color-danger); /* Danger color for logout */
 }
 
 .logoutBtn:hover {
     background-color: var(--color-danger-dark);
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header {
+        padding: 0 15px;
+    }
+
+    .headerTxt {
+        font-size: 22px;
+    }
+
+    .logoImg {
+        width: 30px;
+    }
+
+    .headerRight {
+        gap: 15px;
+    }
+
+    .loginBtn,
+    .signupBtn,
+    .logoutBtn {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .headerTxt {
+        display: none; /* Hide text on very small screens to save space */
+    }
+
+    .headerRight {
+        gap: 10px;
+    }
+
+    .loginBtn,
+    .signupBtn,
+    .logoutBtn {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    .settingsIcon {
+        width: 20px;
+        height: 20px;
+    }
 }

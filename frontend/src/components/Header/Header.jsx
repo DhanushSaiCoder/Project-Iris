@@ -23,16 +23,17 @@ const Header = () => {
     };
 
     return (
-        <div className={styles.Header}>
-            <img
-                onClick={handleLogoClick}
-                className={styles.logoImg}
-                src="/logo.png"
-                alt="My Brand Logo"
-            />
-            <h2 onClick={handleLogoClick} className={styles.headerTxt}>
-                PROJECT IRIS
-            </h2>
+        <nav className={styles.header}>
+            <div className={styles.logoContainer} onClick={handleLogoClick}>
+                <img
+                    className={styles.logoImg}
+                    src="/logo.png"
+                    alt="My Brand Logo"
+                />
+                <h2 className={styles.headerTxt}>
+                    PROJECT IRIS
+                </h2>
+            </div>
             <div className={styles.headerRight}>
                 {user ? (
                     <button onClick={handleLogout} className={styles.logoutBtn}>Logout</button>
@@ -47,7 +48,7 @@ const Header = () => {
                     onClick={handleSettingsClick}
                 />
             </div>
-        </div>
+        </nav>
     );
 };
 

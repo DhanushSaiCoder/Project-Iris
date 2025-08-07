@@ -23,7 +23,7 @@
     border: none;
     cursor: pointer;
     padding: 0.5rem;
-    border-radius: 50%;
+    border-radius: 5px;
     transition: background-color 0.2s;
 }
 .backButton:hover {
@@ -79,7 +79,6 @@
 
 .developerCard:hover {
     background-color: rgba(255, 255, 255, 0.05);
-    transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 

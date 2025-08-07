@@ -1,4 +1,5 @@
 import User from '../models/User.model.js';
+import mongoose from 'mongoose';
 
 export const getUsers = async (req, res) => {
     try {
@@ -20,6 +21,20 @@ export const updateUserRole = async (req, res) => {
         }
         res.status(200).json(user);
     } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const getUsersByIds = async (req, res) => {
+    try {
+        const { userIds } = req.body;
+        if (!Array.isArray(userIds) || userIds.length === 0) {
+            return res.status(400).json({ message: 'Invalid or empty userIds array.' });
+        }
+        const users = await User.find({ _id: { $in: userIds.map(id => new mongoose.Types.ObjectId(id)) } }, 'fullName email');
+        res.status(200).json(users);
+    } catch (err) {
+        console.error("Error in getUsersByIds:", err); // More detailed logging
         res.status(500).json({ message: err.message });
     }
 };

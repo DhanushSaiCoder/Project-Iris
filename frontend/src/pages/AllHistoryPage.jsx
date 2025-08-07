@@ -7,6 +7,7 @@ import { ChevronLeft, ArrowUp, ArrowDown } from 'lucide-react';
 const AllHistoryPage = () => {
     const navigate = useNavigate();
     const [sessions, setSessions] = useState([]);
+    const [userNames, setUserNames] = useState({}); // New state for usernames
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +19,22 @@ const AllHistoryPage = () => {
         const fetchSessions = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/session`);
-                setSessions(response.data.data);
+                const fetchedSessions = response.data.data;
+                setSessions(fetchedSessions);
+
+                // Extract unique user IDs from sessions
+                const uniqueUserIds = [...new Set(fetchedSessions.map(session => session.userId))].filter(id => id !== 'guest' && /^[0-9a-fA-F]{24}$/.test(id));
+                console.log("Unique User IDs sent to backend:", uniqueUserIds); // Add this line
+
+                if (uniqueUserIds.length > 0) {
+                    const usersResponse = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/by-ids`, { userIds: uniqueUserIds });
+                    const usersMap = {};
+                    usersResponse.data.forEach(user => {
+                        usersMap[user._id] = user.fullName;
+                    });
+                    setUserNames(usersMap);
+                }
+
             } catch (err) {
                 setError(err);
             } finally {
@@ -60,6 +76,9 @@ const AllHistoryPage = () => {
             if (column === 'createdAt') {
                 valA = new Date(valA);
                 valB = new Date(valB);
+            } else if (column === 'userName') {
+                valA = userNames[a.userId] || '';
+                valB = userNames[b.userId] || '';
             }
 
             if (valA < valB) {
@@ -101,6 +120,7 @@ const AllHistoryPage = () => {
                         <tr>
                             <th onClick={() => handleSort('_id')}><div className={styles.headerContent}>Session ID {sortColumn === '_id' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
                             <th onClick={() => handleSort('userId')}><div className={styles.headerContent}>User ID {sortColumn === 'userId' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
+                            <th onClick={() => handleSort('userName')}><div className={styles.headerContent}>Username {sortColumn === 'userName' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
                             <th onClick={() => handleSort('duration')}><div className={styles.headerContent}>Duration {sortColumn === 'duration' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
                             <th onClick={() => handleSort('uniqueObjects')}><div className={styles.headerContent}>Unique Objects {sortColumn === 'uniqueObjects' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
                             <th onClick={() => handleSort('totalDetections')}><div className={styles.headerContent}>Total Detections {sortColumn === 'totalDetections' && (sortDirection === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />)}</div></th>
@@ -113,6 +133,7 @@ const AllHistoryPage = () => {
                                 <tr key={session._id}>
                                     <td onClick={() => navigate(`/sessionSummary?sessionId=${session._id}`)} style={{ cursor: 'pointer', color: 'var(--color-cta)' }}>{session._id}</td>
                                     <td>{session.userId}</td>
+                                    <td>{userNames[session.userId] || 'Guest'}</td>
                                     <td>{formatDuration(session.duration)}</td>
                                     <td>{session.uniqueObjects}</td>
                                     <td>{session.totalDetections}</td>

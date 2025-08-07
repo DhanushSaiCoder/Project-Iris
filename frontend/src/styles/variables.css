@@ -3,15 +3,19 @@
     --color-background-2: #1a1a1a; 
     /* Primary brand colors */
     --color-primary: #ebf4ff;
+    --color-primary-dark: #d0e0f0;
 
     /* Semantic colors */
     --color-success: #2ecc71;
     --color-warning: #ffc107;
     --color-danger: #f55b5b;
+    --color-danger-20: #f55b5b40;
+    --color-danger-dark: #cc4a4a;
     --color-card: #202020;
 
     --color-cta: #1e90ff;
     --color-secondaryCta: #3a3a3a;
+    --color-secondaryCta-dark: #2a2a2a;
 
     --color-borders: #ebf4ff20;
 

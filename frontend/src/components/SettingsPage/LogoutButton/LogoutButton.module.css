@@ -1,0 +1,28 @@
+.logoutBtn {
+    width: 100%; /* Ensure it takes full width of its container */
+    background-color: var(--color-danger-20); /* Keep danger color */
+    color: var(--color-danger); /* Text color contrasting with danger */
+    border: none;
+    padding: 20px; /* Consistent padding with AdminDashboardBtn */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    font-size: large; /* Consistent font size */
+    font-weight: 500; /* Consistent font weight */
+
+    border-bottom: 1px solid var(--color-danger-20); /* Consistent border */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logoutBtn:hover {
+    background-color: var(--color-danger-dark); /* Darker danger on hover */
+    transform: translateY(-2px);
+}
+
+.logoutBtn:active {
+    transform: translateY(0);
+}

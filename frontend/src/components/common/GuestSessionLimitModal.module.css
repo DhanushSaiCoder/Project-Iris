@@ -1,0 +1,77 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modalTitle {
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: var(--color-primary);
+}
+
+.modalMessage {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+    flood-color: var(--text-secondary);
+}
+
+.signupButton {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.signupButton:hover {
+    background-color: var(--color-primary-dark);
+}
+
+.loginButton {
+    background-color: var(--color-secondaryCta);
+    color: var(--color-text-primary);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.loginButton:hover {
+    background-color: var(--color-secondaryCta-dark);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

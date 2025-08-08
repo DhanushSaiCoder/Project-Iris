@@ -1,3 +1,14 @@
-ERROR
-onChange is not a function
-TypeError: onChange is not a function
+const loadingMessages = [
+  "Tensors waking up — give them a minute.",
+  "GPU on a chai break, gently nudging it back.",
+  "Grabbing model weights from the cupboard.",
+  "TFJS kernels cooking — smells promising.",
+  "Cleaning duplicate boxes — NMS doing the sweep.",
+  "Squishing weights — same brain, less luggage.",
+  "Figuring how far that wall really is.",
+  "Quick practice run — models doing warm-ups.",
+  "Stashing tensors in memory — neat and tidy.",
+  "Priming the narrator — you'll hear us soon."
+];
+
+export default loadingMessages;

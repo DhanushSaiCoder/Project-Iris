@@ -11,16 +11,16 @@ import SessionSummary from "./SessionSummary";
 import { SettingsContext } from "../context/SettingsContext";
 
 const loadingMessages = [
-    "Waking up the AI... It's not a morning person.",
-    "Teaching the model the difference between a cat and a croissant.",
-    "Calibrating the photon cannons...",
-    "Reticulating splines... whatever that means.",
-    "Loading the object-o-matic 9000.",
-    "Don't worry, the hamsters powering the server are getting a water break.",
-    "Compiling the 1s and 0s. Mostly 0s.",
-    "Polishing the pixels for a premium experience.",
-    "Negotiating with the electrons to move faster.",
-    "The AI is checking itself out in the mirror... vanity."
+  "Tensors waking up — give them a minute.",
+  "GPU on a chai break, gently nudging it back.",
+  "Grabbing model weights from the cupboard.",
+  "TFJS kernels cooking — smells promising.",
+  "Cleaning duplicate boxes — NMS doing the sweep.",
+  "Squishing weights — same brain, less luggage.",
+  "Figuring how far that wall really is.",
+  "Quick practice run — models doing warm-ups.",
+  "Stashing tensors in memory — neat and tidy.",
+  "Priming the narrator — you'll hear us soon."
 ];
 
 const HomePage = () => {

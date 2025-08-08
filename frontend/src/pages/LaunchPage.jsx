@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PageLoading from "../components/common/PageLoading";
 import styles from "./LaunchPage.module.css";
 import Logo from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
@@ -64,6 +65,10 @@ const LaunchPage = () => {
         navigate("/");
     };
 
+    if (loading) {
+        return <PageLoading />;
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.card}>
@@ -86,7 +91,7 @@ const LaunchPage = () => {
                             className={styles.installButton}
                             disabled={loading}
                         >
-                            {loading ? <LoadingSpinner /> : "Install App"}
+                            { "Install App"}
                         </button>
 
                         <ul className={styles.benefitsList}>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import PageLoading from "../components/common/PageLoading";
 import axios from 'axios';
 import Fuse from 'fuse.js';
 import styles from './UserManagementPage.module.css';
@@ -78,7 +79,7 @@ const UserManagementPage = () => {
         }
     };
 
-    if (loading) return <div className={styles.UserManagementPage}>Loading...</div>;
+    if (loading) return <PageLoading />;
     if (error) return <div className={styles.UserManagementPage}>Error: {error.message}</div>;
 
     return (

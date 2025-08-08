@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PageLoading from "../components/common/PageLoading";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import SessionAnalytics from "../components/SessionSummary/SessionAnalytics";
@@ -53,7 +54,7 @@ const SessionSummaryPage = () => {
     }, [location.search, detectedObjects.length, duration]);
 
     if (loading) {
-        return <SessionSummarySkeleton />;
+        return <PageLoading />;
     }
 
     if (error) {

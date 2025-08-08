@@ -5,6 +5,7 @@
     margin: 0 auto;
     color: var(--color-text-primary);
     box-sizing: border-box;
+    position: relative;
 }
 
 .header {

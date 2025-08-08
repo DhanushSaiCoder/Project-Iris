@@ -5,6 +5,7 @@
 .AdminDashboardPage{
     padding: 8px 24px;
     box-sizing: border-box;
+    position: relative;
 }
 
 /* Skeleton Loading Styles */

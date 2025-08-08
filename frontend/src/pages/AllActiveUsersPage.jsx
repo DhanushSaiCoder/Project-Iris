@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PageLoading from "../components/common/PageLoading";
 import axios from 'axios';
 import styles from './AllActiveUsersPage.module.css';
 import { Link, useNavigate } from 'react-router-dom';
@@ -27,7 +28,7 @@ const AllActiveUsersPage = () => {
     const uniqueUsers = [...new Set(sessions.map(session => session.userId))];
 
     if (loading) {
-        return <div className={styles.container}>Loading active users...</div>;
+        return <PageLoading />;
     }
 
     if (error) {

@@ -3,6 +3,7 @@
     background-color: var(--color-background);
     min-height: 100vh;
     color: var(--color-text-primary);
+    position: relative;
 }
 
 .title {

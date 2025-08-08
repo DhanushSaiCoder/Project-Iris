@@ -3,6 +3,7 @@
     color: var(--color-text-primary);
     background-color: var(--color-background);
     min-height: calc(100vh - var(--header-height) - var(--footer-height)); /* Adjust based on header/footer height */
+    position: relative;
 }
 
 .Title {

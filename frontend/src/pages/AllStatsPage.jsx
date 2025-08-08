@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PageLoading from "../components/common/PageLoading";
 import axios from 'axios';
 import styles from './AllStatsPage.module.css';
 import { Link } from 'react-router-dom';
@@ -37,7 +38,7 @@ const AllStatsPage = () => {
     };
 
     if (loading) {
-        return <div className={styles.container}>Loading statistics...</div>;
+        return <PageLoading />;
     }
 
     if (error) {

@@ -1,5 +1,6 @@
 // src/pages/CalibrationPage.jsx
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import PageLoading from "../components/common/PageLoading";
 import styles from "./CaliberationPage.module.css";
 import { SkipForward } from "lucide-react";
 import { useCamera } from "../hooks/useCamera";
@@ -205,10 +206,8 @@ export default function CaliberationPage() {
                 }}
             />
 
-            {!cameraReady ? (
-                <div className={styles.loadingContainer}><p>Starting camera…</p></div>
-            ) : depthLoading ? (
-                <div className={styles.depthLoader}><p>Loading depth model…</p></div>
+            {!cameraReady || depthLoading ? (
+                <PageLoading />
             ) : (
                 renderStepContent()
             )}

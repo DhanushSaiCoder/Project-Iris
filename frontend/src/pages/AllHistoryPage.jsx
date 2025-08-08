@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PageLoading from "../components/common/PageLoading";
 import axios from 'axios';
 import styles from './AllHistoryPage.module.css';
 import { useNavigate } from 'react-router-dom';
@@ -93,7 +94,7 @@ const AllHistoryPage = () => {
     };
 
     if (loading) {
-        return <div className={styles.container}>Loading session history...</div>;
+        return <PageLoading />;
     }
 
     if (error) {

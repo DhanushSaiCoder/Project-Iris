@@ -43,6 +43,8 @@
   gap: 12px;
   max-width: 700px;
   margin: 0 auto; /* Center the list row */
+  margin-top: 24px;
+
 }
 
 /* Left spinner similar to screenshot */
@@ -78,6 +80,7 @@
   width: 100%;
   box-sizing: border-box;
   display: block;
+
 }
 
 /* Inner stack — all messages stacked vertically, we move this with translateY */
@@ -93,7 +96,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-size: 0.95rem;
+  font-size: 0.75rem;
   color: var(--muted);
   text-align: left;
   white-space: nowrap;
@@ -108,6 +111,7 @@
 .currentLine {
   color: var(--text-primary);
   font-weight: 600;
+  font-size: 0.95rem;
   letter-spacing: 0.1px;
 }
 

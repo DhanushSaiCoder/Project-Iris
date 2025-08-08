@@ -20,6 +20,7 @@
 
 .logoutBtn:hover {
     background-color: var(--color-danger-dark); /* Darker danger on hover */
+    color: var(--color-text-primary);
     transform: translateY(-2px);
 }
 

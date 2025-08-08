@@ -1,39 +1,131 @@
+:root {
+  --msg-h: 24px; /* must match MESSAGE_HEIGHT_PX in the component */
+  --bg: var(--color-background, #0b0f14);
+  --text-primary: var(--color-text-primary, #e6eef8);
+  --muted: rgba(230, 238, 248, 0.45);
+  --muted-2: rgba(230, 238, 248, 0.28);
+}
+
+/* Fullscreen wrapper */
 .fullScreenContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: var(--color-background);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999; /* Ensure it's on top of everything */
-    color: var(--color-text-primary); /* Use primary text color */
-    gap: 30px; /* Increased gap for better spacing */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Common sans-serif font */
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* messages align to left group */
+  justify-content: center;
+  gap: 18px;
+  padding-left: 48px; /* space for left edge to match screenshot */
+  z-index: 9999;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Small logo at top-left (subtle fade) */
 .logo {
-    width: 180px; /* Slightly larger logo */
-    height: auto;
-    margin-bottom: 30px; /* More space below logo */
-    animation: fadeIn 1s ease-out; /* Add a subtle fade-in animation */
+  width: 140px;
+  height: auto;
+  margin-bottom: 6px;
+  margin-left: -48px; /* visually anchor toward left edge if desired */
+  animation: fadeIn 600ms ease-out both;
+  user-select: none;
 }
 
-.loadingMessage {
-    font-size: 1.4rem; /* Larger font size for readability */
-    font-weight: 500; /* Slightly bolder */
-    text-align: center;
-    max-width: 70%; /* Slightly narrower for better line length */
-    opacity: 0.9; /* Slightly more opaque */
-    line-height: 1.5; /* Improved line spacing */
-    animation: fadeIn 1.5s ease-out; /* Add a subtle fade-in animation */
+/* Row that contains spinner + message list */
+.listRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  max-width: 700px;
 }
 
-/* Keyframe for fade-in animation */
+/* Left spinner similar to screenshot */
+.leftSpinner {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 2px; /* nudge vertically like screenshot */
+}
+
+/* SVG spinner styling */
+.spinnerSvg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+.spinnerSvg .path {
+  stroke: rgba(255,255,255,0.08);
+  stroke-linecap: round;
+  stroke-dasharray: 90;
+  stroke-dashoffset: 25;
+  stroke-width: 3.2;
+  stroke: rgba(255,255,255,0.15);
+  transform-origin: 50% 50%;
+  animation: spinner-rotate 900ms linear infinite;
+}
+
+/* Viewport that shows a fixed number of messages */
+.messagesViewport {
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+}
+
+/* Inner stack — all messages stacked vertically, we move this with translateY */
+.messagesInner {
+  display: block;
+  width: 100%;
+  will-change: transform;
+}
+
+/* Each message row */
+.messageLine {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  color: var(--muted);
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Current line styling — bolder and brighter like screenshot */
+.currentLine {
+  color: var(--text-primary);
+  font-weight: 600;
+  letter-spacing: 0.1px;
+}
+
+/* small animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spinner-rotate {
+  to { transform: rotate(360deg); }
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .messagesInner,
+  .spinnerSvg,
+  .logo {
+    animation: none !important;
+    transition: none !important;
+  }
 }

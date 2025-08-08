@@ -11,25 +11,11 @@ import SessionSummary from "./SessionSummary";
 import { SettingsContext } from "../context/SettingsContext";
 import FullScreenLoading from "../components/common/FullScreenLoading"; // Import the new component
 
-const loadingMessages = [
-  "Tensors waking up — give them a minute.",
-  "GPU on a chai break, gently nudging it back.",
-  "Grabbing model weights from the cupboard.",
-  "TFJS kernels cooking — smells promising.",
-  "Cleaning duplicate boxes — NMS doing the sweep.",
-  "Squishing weights — same brain, less luggage.",
-  "Figuring how far that wall really is.",
-  "Quick practice run — models doing warm-ups.",
-  "Stashing tensors in memory — neat and tidy.",
-  "Priming the narrator — you'll hear us soon."
-];
-
 const HomePage = () => {
   const [isDetecting, setIsDetecting] = useState(false);
   const [modelsAreLoading, setModelsAreLoading] = useState(true);
   const [detectedObjects, setDetectedObjects] = useState([]);
   const [sessionStartTime, setSessionStartTime] = useState(null);
-  const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0]);
   
   const navigate = useNavigate();
   const { developerMode } = useContext(SettingsContext);
@@ -46,20 +32,6 @@ const HomePage = () => {
       localStorage.removeItem("guestSessionData"); // Also clear stored guest session data
     }
   }, [user, navigate]);
-
-  useEffect(() => {
-    let interval;
-    if (modelsAreLoading) {
-      interval = setInterval(() => {
-        setLoadingMessage(prevMessage => {
-          const currentIndex = loadingMessages.indexOf(prevMessage);
-          const nextIndex = (currentIndex + 1) % loadingMessages.length;
-          return loadingMessages[nextIndex];
-        });
-      }, 3000); // Change message every 3 seconds
-    }
-    return () => clearInterval(interval);
-  }, [modelsAreLoading]);
   
   const handleStartDetection = () => {
     setSessionStartTime(Date.now());
@@ -137,7 +109,7 @@ const HomePage = () => {
   
   return (
     <div className={styles.homePage}>
-        {modelsAreLoading && <FullScreenLoading message={loadingMessage} />}
+        {modelsAreLoading && <FullScreenLoading />}
         <>
             <div
                 className={`${styles.mainContentWrapper} ${

@@ -19,17 +19,26 @@ const LaunchPage = () => {
             setDeferredPrompt(null); // Clear the prompt once installed
         };
 
-        window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-        window.addEventListener('appinstalled', handleAppInstalled);
+        window.addEventListener(
+            "beforeinstallprompt",
+            handleBeforeInstallPrompt
+        );
+        window.addEventListener("appinstalled", handleAppInstalled);
 
         // Check if the app is already installed (for subsequent visits)
-        if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+        if (
+            window.matchMedia("(display-mode: standalone)").matches ||
+            navigator.standalone
+        ) {
             setIsAppInstalled(true);
         }
 
         return () => {
-            window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-            window.removeEventListener('appinstalled', handleAppInstalled);
+            window.removeEventListener(
+                "beforeinstallprompt",
+                handleBeforeInstallPrompt
+            );
+            window.removeEventListener("appinstalled", handleAppInstalled);
         };
     }, []);
 
@@ -37,11 +46,11 @@ const LaunchPage = () => {
         if (deferredPrompt) {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-                console.log('User accepted the A2HS prompt');
-                navigate('/'); // Redirect to home page after successful installation
+            if (outcome === "accepted") {
+                console.log("User accepted the A2HS prompt");
+                navigate("/"); // Redirect to home page after successful installation
             } else {
-                console.log('User dismissed the A2HS prompt');
+                console.log("User dismissed the A2HS prompt");
             }
             setDeferredPrompt(null);
         }
@@ -67,21 +76,25 @@ const LaunchPage = () => {
                 </p>
 
                 {!isAppInstalled && deferredPrompt && (
-                    <button
-                        onClick={handleInstallClick}
-                        className={styles.installButton}
-                    >
-                        Install App
-                    </button>
-                )}
+                    <>
+                        <button
+                            onClick={handleInstallClick}
+                            className={styles.installButton}
+                        >
+                            Install App
+                        </button>
 
-                <ul className={styles.benefitsList}>
-                    <li className={styles.positive}>
-                        Works offline once installed.
-                    </li>
-                    <li className={styles.positive}>Get audio cues.</li>
-                    <li className={styles.positive}>Smoother experience.</li>
-                </ul>
+                        <ul className={styles.benefitsList}>
+                            <li className={styles.positive}>
+                                Works offline once installed.
+                            </li>
+                            <li className={styles.positive}>Get audio cues.</li>
+                            <li className={styles.positive}>
+                                Smoother experience.
+                            </li>
+                        </ul>
+                    </>
+                )}
 
                 <button
                     onClick={handleContinueInBrowser}

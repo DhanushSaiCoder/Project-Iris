@@ -30,18 +30,19 @@ export default function PrivacyNotesPage() {
 
           <h2 className={styles.notesSubtitle}>1. Data Collection and Use</h2>
           <p className={styles.notesTxt}>
-            Project Iris is designed to provide real-time environmental awareness. To achieve this, the application processes video feeds from your device's camera for object and depth detection.
-            <br /><br />
-            <strong>Important:</strong> All video processing for object and depth detection occurs locally on your device. We do not store, transmit, or have access to your live video feeds or any personal visual data.
-            <br /><br />
-            We collect anonymized session data to help you track your usage and to improve the application. This includes:
-            <ul>
-              <li>Session duration</li>
-              <li>Number of unique objects detected</li>
-              <li>Total detections made during a session</li>
-              <li>Aggregated, non-identifiable statistics for the Admin Dashboard</li>
-            </ul>
-            This data is used solely to provide you with session summaries, analytics, and to enhance the overall performance and features of Project Iris.
+            Project Iris processes video feeds from your device's camera for real-time object and depth detection. <strong>All video processing occurs locally on your device. We do not store, transmit, or access your live video feeds or personal visual data.</strong>
+          </p>
+          <p className={styles.notesTxt}>
+            We collect anonymized session data to track your usage and improve the application. This includes:
+          </p>
+          <ul>
+            <li>Session duration</li>
+            <li>Number of unique objects detected</li>
+            <li>Total detections made during a session</li>
+            <li>Aggregated, non-identifiable statistics for the Admin Dashboard</li>
+          </ul>
+          <p className={styles.notesTxt}>
+            This data is used solely for session summaries, analytics, and to enhance Project Iris's performance and features.
           </p>
 
           <h2 className={styles.notesSubtitle}>2. Data Storage and Security</h2>

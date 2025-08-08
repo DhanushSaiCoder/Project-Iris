@@ -1,8 +1,8 @@
 import React from "react";
-import IrisSpinner from "./IrisSpinner";
+import IrisSpinnerSecondary from './IrisSpinnerSecondary';
 
 const LoadingSpinner = () => {
-    return <IrisSpinner />;
+    return <IrisSpinnerSecondary />;
 };
 
 export default LoadingSpinner;

@@ -1,6 +1,6 @@
-import IrisSpinnerSecondary from "./IrisSpinnerSecondary";
+import IrisSpinner from "./IrisSpinner";
 const LoadingSpinnerSecondary = () => {
-    return <IrisSpinnerSecondary />;
+    return <IrisSpinner />;
 };
 
 export default LoadingSpinnerSecondary;

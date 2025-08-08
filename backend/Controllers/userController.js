@@ -31,7 +31,11 @@ export const getUsersByIds = async (req, res) => {
         if (!Array.isArray(userIds) || userIds.length === 0) {
             return res.status(400).json({ message: 'Invalid or empty userIds array.' });
         }
-        const users = await User.find({ _id: { $in: userIds.map(id => new mongoose.Types.ObjectId(id)) } }, 'fullName email');
+        const validUserIds = userIds.filter(id => mongoose.Types.ObjectId.isValid(id));
+        if (validUserIds.length === 0) {
+            return res.status(200).json([]); // No valid user IDs to search for
+        }
+        const users = await User.find({ _id: { $in: validUserIds.map(id => new mongoose.Types.ObjectId(id)) } }, 'fullName email');
         res.status(200).json(users);
     } catch (err) {
         console.error("Error in getUsersByIds:", err); // More detailed logging

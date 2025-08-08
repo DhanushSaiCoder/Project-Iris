@@ -266,6 +266,7 @@ const TotalDetectionsChartInlined = ({ sessions }) => {
 const AdminDashboardPage = () => {
     // State Management
     const [sessions, setSessions] = useState([]);
+    const [activeUsersDetails, setActiveUsersDetails] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -303,6 +304,29 @@ const AdminDashboardPage = () => {
         fetchSessions();
     }, []);
 
+    const uniqueUserIds = [...new Set(sessions.map(session => session.userId))];
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            if (uniqueUserIds.length > 0) {
+                try {
+                    const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/by-ids`, { userIds: uniqueUserIds });
+                    setActiveUsersDetails(response.data);
+                } catch (err) {
+                    console.error("Error fetching user details:", err);
+                }
+            } else {
+                setActiveUsersDetails([]); // Clear if no unique users
+            }
+        };
+
+        if (!loading && sessions.length > 0) {
+            fetchUserDetails();
+        } else if (!loading && sessions.length === 0) {
+            setActiveUsersDetails([]); // No sessions, no active users
+        }
+    }, [loading, sessions, uniqueUserIds]);
+
     // Event Handlers
     const handleMonitorUser = (userId) => {
         console.log(`Monitoring user: ${userId}`);
@@ -315,9 +339,7 @@ const AdminDashboardPage = () => {
     const totalUniqueObjects = sessions.reduce((acc, session) => acc + session.uniqueObjects, 0);
     const totalDetections = sessions.reduce((acc, session) => acc + session.totalDetections, 0);
     const averageSessionDuration = totalSessions > 0 ? totalDuration / totalSessions : 0;
-    const uniqueUsers = [...new Set(sessions.map(session => session.userId))].length;
-
-    const uniqueUserIds = [...new Set(sessions.map(session => session.userId))];
+    const uniqueUsers = uniqueUserIds.length;
 
     const MAX_ROWS = 5; // Set your desired limit here
     const sortedSessions = [...sessions].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -466,11 +488,12 @@ const AdminDashboardPage = () => {
                     <Link to='/all-active-users' className={styles.ViewMore}>View More</Link>
                 </div>
                 <div className={styles.ActiveUsersDetails}>
-                    {uniqueUserIds.length > 0 ? (
-                        uniqueUserIds.map((userId, index) => (
-                            <div key={userId + index} className={styles.UserCard}>
-                                <p className={styles.SessionId}>USER ID: {"  "}<span>{userId}</span></p>
-                                <p className={styles.Moniter} onClick={() => handleMonitorUser(userId)}>Monitor User</p>
+                    {activeUsersDetails.length > 0 ? (
+                        activeUsersDetails.map((user) => (
+                            <div key={user._id} className={styles.UserCard}>
+                                <p className={styles.userFullName}><span className={styles.fullName}>{user.fullName}</span></p>
+                                <p className={styles.SessionId}><span>{user._id}</span></p>
+                                <p className={styles.Moniter} onClick={() => handleMonitorUser(user._id)}>Monitor User</p>
                             </div>
                         ))
                     ) : (

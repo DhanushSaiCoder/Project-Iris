@@ -14,6 +14,7 @@ import AdminDashboardBtn from "../components/SettingsPage/AdminDashboard/AdminDa
 import DeveloperMode from "../components/SettingsPage/DeveloperMode/DeveloperMode";
 import AudioAnnouncements from "../components/SettingsPage/AudioAnnouncements/AudioAnnouncements";
 import LogoutButton from "../components/SettingsPage/LogoutButton/LogoutButton";
+import Torch from "../components/SettingsPage/Torch/Torch";
 
 const SettingsPage = () => {
     const navigate = useNavigate();
@@ -55,6 +56,7 @@ const SettingsPage = () => {
                 <AudioAnnouncements />
                 <AutoCaliberateOnLaunch />
                 <DeveloperMode />
+                <Torch />
                 <div className={styles.buttonsDiv}>
                     <ReCaliberateDevice />
                     {isAdminOrDeveloper && <AdminDashboardBtn />}

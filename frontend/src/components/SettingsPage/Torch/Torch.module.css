@@ -1,0 +1,23 @@
+.settingItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.settingItem:last-child {
+    border-bottom: none;
+}
+
+.settingText h3 {
+    margin: 0;
+    font-size: 1.1em;
+    color: var(--text-color-primary);
+}
+
+.settingText p {
+    margin: 5px 0 0;
+    font-size: 0.9em;
+    color: var(--text-color-secondary);
+}

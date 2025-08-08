@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
+import { SettingsContext } from "../context/SettingsContext";
 
 export function useCamera() {
     const videoRef = useRef(null);
@@ -9,8 +10,15 @@ export function useCamera() {
 
         async function start() {
             try {
+                const { torch } = useContext(SettingsContext);
+
+    useEffect(() => {
+        let stream;
+
+        async function start() {
+            try {
                 stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: "environment", torch: true },
+                    video: { facingMode: "environment", torch: torch },
                 });
                 videoRef.current.srcObject = stream;
                 videoRef.current.onloadedmetadata = () => {

@@ -9,6 +9,7 @@ const defaultSettings = {
     alertDistance: 2, // Default alert distance in meters
     developerMode: false,
     autoCaliberateOnLaunch: false,
+    torch: false,
 };
 
 // 2. Create Context
@@ -20,6 +21,7 @@ export const SettingsContext = createContext({
     setAlertDistance: () => {},
     setDeveloperMode: () => {},
     setAutoCaliberateOnLaunch: () => {},
+    setTorch: () => {},
 });
 
 // 3. Create Provider component
@@ -56,6 +58,12 @@ export function SettingsProvider({ children }) {
             ? JSON.parse(saved)
             : defaultSettings.autoCaliberateOnLaunch;
     });
+    const [torch, setTorch] = useState(() => {
+        const saved = localStorage.getItem("bw-torch");
+        return saved !== null
+            ? JSON.parse(saved)
+            : defaultSettings.torch;
+    });
 
     // Persist to localStorage on changes
     useEffect(() => {
@@ -73,6 +81,9 @@ export function SettingsProvider({ children }) {
     useEffect(() => {
         localStorage.setItem("bw-auto-calibrate", JSON.stringify(autoCaliberateOnLaunch));
     }, [autoCaliberateOnLaunch]);
+    useEffect(() => {
+        localStorage.setItem("bw-torch", JSON.stringify(torch));
+    }, [torch]);
 
     // 4. Provide state + setters
     const value = useMemo(
@@ -89,8 +100,10 @@ export function SettingsProvider({ children }) {
             setDeveloperMode,
             autoCaliberateOnLaunch,
             setAutoCaliberateOnLaunch,
+            torch,
+            setTorch,
         }),
-        [audioAnnouncements, hapticFeedback, sessionId, alertDistance, developerMode, autoCaliberateOnLaunch]
+        [audioAnnouncements, hapticFeedback, sessionId, alertDistance, developerMode, autoCaliberateOnLaunch, torch]
     );
 
     return (

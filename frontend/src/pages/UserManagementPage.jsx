@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
+import Fuse from 'fuse.js';
 import styles from './UserManagementPage.module.css';
 
 const UserManagementPage = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -31,12 +33,36 @@ const UserManagementPage = () => {
         }
     };
 
+    const fuseOptions = {
+        keys: [
+            "fullName",
+            "email"
+        ],
+        threshold: 0.3, // Adjust as needed for fuzziness
+    };
+
+    const fuse = useMemo(() => new Fuse(users, fuseOptions), [users, fuseOptions]);
+
+    const filteredUsers = useMemo(() => {
+        if (!searchTerm) {
+            return users;
+        }
+        return fuse.search(searchTerm).map(result => result.item);
+    }, [searchTerm, users, fuse]);
+
     if (loading) return <div className={styles.UserManagementPage}>Loading...</div>;
     if (error) return <div className={styles.UserManagementPage}>Error: {error.message}</div>;
 
     return (
         <div className={styles.UserManagementPage}>
             <h1 className={styles.Title}>User Management</h1>
+            <input
+                type="text"
+                placeholder="Search by name or email..."
+                className={styles.SearchBar}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <div className={styles.TableContainer}>
                 <table className={styles.UserTable}>
                     <thead>
@@ -48,7 +74,7 @@ const UserManagementPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map(user => (
+                        {filteredUsers.map(user => (
                             <tr key={user._id}>
                                 <td>{user.fullName}</td>
                                 <td>{user.email}</td>

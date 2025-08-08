@@ -9,6 +9,7 @@ import LoadingSpinner from "../components/common/LoadingSpinner";
 import styles from "./HomePage.module.css";
 import SessionSummary from "./SessionSummary";
 import { SettingsContext } from "../context/SettingsContext";
+import FullScreenLoading from "../components/common/FullScreenLoading"; // Import the new component
 
 const loadingMessages = [
   "Tensors waking up — give them a minute.",
@@ -136,6 +137,7 @@ const HomePage = () => {
   
   return (
     <div className={styles.homePage}>
+        {modelsAreLoading && <FullScreenLoading message={loadingMessage} />}
         <>
             <div
                 className={`${styles.mainContentWrapper} ${
@@ -176,11 +178,7 @@ const HomePage = () => {
                         "Start Detection"
                     )}
                 </button>
-                {modelsAreLoading && (
-                    <div className={styles.loadingMessage}>
-                        <p>{loadingMessage}</p>
-                    </div>
-                )}
+                {/* The loading message is now handled by FullScreenLoading */}
             </div>
         </>
     </div>

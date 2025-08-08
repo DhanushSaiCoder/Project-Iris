@@ -8,6 +8,8 @@ const UserManagementPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10); // You can adjust this value
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -50,6 +52,27 @@ const UserManagementPage = () => {
         return fuse.search(searchTerm).map(result => result.item);
     }, [searchTerm, users, fuse]);
 
+    // Pagination logic
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const nextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const prevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
     if (loading) return <div className={styles.UserManagementPage}>Loading...</div>;
     if (error) return <div className={styles.UserManagementPage}>Error: {error.message}</div>;
 
@@ -74,7 +97,7 @@ const UserManagementPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredUsers.map(user => (
+                        {currentItems.map(user => (
                             <tr key={user._id}>
                                 <td>{user.fullName}</td>
                                 <td>{user.email}</td>
@@ -90,6 +113,19 @@ const UserManagementPage = () => {
                         ))}
                     </tbody>
                 </table>
+            </div>
+            <div className={styles.Pagination}>
+                <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
+                {[...Array(totalPages)].map((_, index) => (
+                    <button
+                        key={index + 1}
+                        onClick={() => paginate(index + 1)}
+                        className={currentPage === index + 1 ? styles.ActivePage : ''}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+                <button onClick={nextPage} disabled={currentPage === totalPages}>Next</button>
             </div>
         </div>
     );

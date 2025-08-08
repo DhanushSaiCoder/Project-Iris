@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
@@ -304,7 +304,7 @@ const AdminDashboardPage = () => {
         fetchSessions();
     }, []);
 
-    const uniqueUserIds = [...new Set(sessions.map(session => session.userId))];
+    const uniqueUserIds = useMemo(() => [...new Set(sessions.map(session => session.userId))], [sessions]);
 
     useEffect(() => {
         const fetchUserDetails = async () => {

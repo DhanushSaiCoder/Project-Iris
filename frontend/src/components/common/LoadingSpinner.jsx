@@ -1,14 +1,8 @@
-import React from 'react';
-import styles from './LoadingSpinner.module.css';
+import React from "react";
+import IrisSpinner from "./IrisSpinner";
 
 const LoadingSpinner = () => {
-  return (
-    <div className={styles.spinnerContainer}>
-      <div className={styles.spinnerDot}></div>
-      <div className={styles.spinnerDot}></div>
-      <div className={styles.spinnerDot}></div>
-    </div>
-  );
+    return <IrisSpinner />;
 };
 
 export default LoadingSpinner;

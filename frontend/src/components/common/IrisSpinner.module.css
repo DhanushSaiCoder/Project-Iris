@@ -1,0 +1,116 @@
+/* IrisSpinner.module.css */
+.wrap {
+  --iris-c1: #3a3a3a; /* primary stroke */
+  --iris-c2: #2a2a2a; /* secondary stroke/fill */
+  --iris-c3: #121212; /* subtle accent/shadow */
+  --iris-outer-dur: 1200ms;
+  --iris-middle-dur: 1600ms;
+  --iris-inner-dur: 1100ms;
+  --iris-breathe-dur: 1800ms;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+
+  /* ensure no layout shift */
+  line-height: 0;
+  pointer-events: none;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Colors */
+.strokePrimary {
+  stroke: var(--iris-c1);
+}
+.strokeSecondary {
+  stroke: var(--iris-c2);
+}
+.strokeAccent {
+  stroke: var(--iris-c3);
+}
+.fillSecondary {
+  fill: var(--iris-c2);
+}
+
+/* Transform origins for SVG groups */
+.ringOuter,
+.ringMiddle,
+.ringInner,
+.reticleTicks,
+.centerPulse {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Motions */
+@keyframes iris-rotate-cw {
+  to { transform: rotate(360deg); }
+}
+@keyframes iris-rotate-ccw {
+  to { transform: rotate(-360deg); }
+}
+@keyframes iris-dash {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -100; } /* pathLength=100 for perfect loop */
+}
+@keyframes iris-breathe {
+  0%, 100% { transform: scale(0.92); opacity: 0.65; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+/* Apply animations */
+.ringOuter {
+  animation: iris-rotate-cw var(--iris-outer-dur) linear infinite;
+}
+.ringMiddle {
+  animation: iris-rotate-ccw var(--iris-middle-dur) linear infinite;
+}
+.ringInner > circle {
+  animation: iris-dash var(--iris-inner-dur) ease-in-out infinite;
+}
+.reticleTicks {
+  animation: iris-breathe var(--iris-breathe-dur) ease-in-out infinite;
+}
+.centerPulse {
+  animation: iris-breathe var(--iris-breathe-dur) ease-in-out infinite;
+}
+
+/* Paused state */
+.wrap[data-paused="true"] .ringOuter,
+.wrap[data-paused="true"] .ringMiddle,
+.wrap[data-paused="true"] .ringInner > circle,
+.wrap[data-paused="true"] .reticleTicks,
+.wrap[data-paused="true"] .centerPulse {
+  animation-play-state: paused;
+}
+
+/* Accessibility helper */
+.srOnly {
+  position: absolute;
+  width: 2.4px; height: 2.4px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 1px, 1px);
+  white-space: nowrap; border: 0;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .ringOuter,
+  .ringMiddle,
+  .ringInner > circle,
+  .reticleTicks,
+  .centerPulse {
+    animation: none;
+  }
+
+  /* Show a simple static indicator with slight contrast */
+  .strokePrimary { stroke: var(--iris-c1); }
+  .strokeSecondary { stroke: var(--iris-c2); }
+  .strokeAccent { stroke: var(--iris-c1); }
+}

@@ -86,18 +86,25 @@
     font-weight: 600;
 }
 
-.notesTxt ul {
+.privacyContainer ul {
     list-style: disc;
     margin-left: 1.5rem;
-    padding-left: 0;
+    padding-left: 1rem;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+    color: var(--color-text-secondary);
 }
 
-.notesTxt li {
+.privacyContainer li {
     margin-bottom: 0.4rem;
+    line-height: 1.4;
+    padding-left: 0.5rem;
 }
 
-.notesTxt li:last-child {
+.privacyContainer li:last-child {
     margin-bottom: 0;
+}
+
+.listContent{
+    color: var(--text-secondary);
 }

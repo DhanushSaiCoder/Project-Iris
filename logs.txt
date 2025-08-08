@@ -1,14 +1,27 @@
-AdminDashboardPage.jsx:313 
- POST http://localhost:5000/users/by-ids 404 (Not Found)
-fetchUserDetails	@	AdminDashboardPage.jsx:313
-(anonymous)	@	AdminDashboardPage.jsx:324
-<AdminDashboardPage>		
-AppContent	@	App.js:65
-<AppContent>		
-App	@	App.js:91
-<App>		
-./src/index.js	@	index.js:14
-(anonymous)	@	react refresh:37
-__webpack_require__	@	bootstrap:22
-(anonymous)	@	startup:7
-(anonymous)	@	startup:7
+PrivacyNotesPage.jsx:36 In HTML, <ul> cannot be a descendant of <p>.
+This will cause a hydration error.
+
+  ...
+    <AppContent>
+      <div className="App">
+        <main className="main-content">
+          <Routes>
+            <RenderedRoute match={{params:{}, ...}} routeContext={{...}}>
+              <ProtectedRoute>
+                <Outlet>
+                  <RenderedRoute match={{params:{}, ...}} routeContext={{outlet:null, ...}}>
+                    <PrivacyNotesPage>
+                      <div className="PrivacyNot...">
+                        <header>
+                        <main className="PrivacyNot...">
+                          <div className="PrivacyNot...">
+                            <p>
+                            <h2>
+>                           <p className="PrivacyNotesPage_notesTxt__U7ava">
+                              <br>
+                              <br>
+                              <strong>
+                              <br>
+                              <br>
+>                             <ul>
+                              ...

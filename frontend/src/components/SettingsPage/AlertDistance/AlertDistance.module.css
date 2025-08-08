@@ -1,21 +1,14 @@
-.AlertDistance{
-    border-bottom: 1px solid var(--color-borders);
-    background-color: var(--color-background-2);
-    padding: 20px;
-
+.labelContainer {
     display: flex;
     align-items: center;
-    justify-content: center;
-
-    gap: 20px;
-
-    flex-direction: column;
+    gap: 10px; /* Space between label and value */
 }
 
-.labelAndValue{
-    width: 100%;
+.settingLabel {
+    margin: 0; /* Remove default paragraph margin */
+}
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.settingValue {
+    margin: 0; /* Remove default paragraph margin */
+    font-weight: bold; /* Make the value stand out */
 }

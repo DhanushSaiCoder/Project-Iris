@@ -51,16 +51,39 @@ const SettingsPage = () => {
             </div>
 
             <div className={styles.settingsContentDiv}>
-                <AlertDistance />
-                <HepticFeedback />
-                <AudioAnnouncements />
-                <AutoCaliberateOnLaunch />
-                {isAdminOrDeveloper && <DeveloperMode />}
-                <Torch />
+                                <h3 className={styles.sectionTitle}>General</h3>
+                <div className={styles.settingItem}>
+                    <AlertDistance />
+                </div>
+                <div className={styles.settingItem}>
+                    <HepticFeedback />
+                </div>
+                <div className={styles.settingItem}>
+                    <AudioAnnouncements />
+                </div>
+
+                <h3 className={styles.sectionTitle}>Device</h3>
+                <div className={styles.settingItem}>
+                    <AutoCaliberateOnLaunch />
+                </div>
+                <div className={styles.settingItem}>
+                    <Torch />
+                </div>
                 <div className={styles.buttonsDiv}>
                     <ReCaliberateDevice />
-                    {isAdminOrDeveloper && <AdminDashboardBtn />}
                 </div>
+
+                {isAdminOrDeveloper && (
+                    <>
+                        <h3 className={styles.sectionTitle}>Admin & Developer</h3>
+                        <div className={styles.settingItem}>
+                            <DeveloperMode />
+                        </div>
+                        <div className={styles.buttonsDiv}>
+                            <AdminDashboardBtn />
+                        </div>
+                    </>
+                )}
                 <LogoutButton />
             </div>
         </div>

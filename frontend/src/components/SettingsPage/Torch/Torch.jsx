@@ -11,11 +11,11 @@ const Torch = () => {
     };
 
     return (
-        <div className={styles.container}>
-            <label className={styles.label}>Torch</label>
+        <>
+            <p className={styles.settingLabel}>Torch</p>
 
             <ToggleSwitch checked={torch} onChange={handleToggle} />
-        </div>
+        </>
     );
 };
 

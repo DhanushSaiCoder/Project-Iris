@@ -7,13 +7,13 @@ const AudioAnnouncements = () => {
     const { audioAnnouncements, setAudioAnnouncements } = useContext(SettingsContext);
 
     return (
-        <div className={styles.container}>
-            <label className={styles.label}>Audio Announcements</label>
+        <>
+            <p className={styles.settingLabel}>Audio Announcements</p>
             <ToggleSwitch
                 checked={audioAnnouncements}
                 onChange={setAudioAnnouncements}
             />
-        </div>
+        </>
     );
 };
 

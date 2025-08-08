@@ -7,14 +7,14 @@ const HepticFeedback = () => {
     const { hapticFeedback, setHapticFeedback } = useContext(SettingsContext);
 
     return (
-        <div className={styles.hepticFeedback}>
-            <p>Heptic Feedback</p>
+        <>
+            <p className={styles.settingLabel}>Heptic Feedback</p>
             <ToggleSwitch
                 checked={hapticFeedback}
                 onChange={setHapticFeedback}
                 label={hapticFeedback ? "On" : "Off"}
             />
-        </div>
+        </>
     );
 };
 

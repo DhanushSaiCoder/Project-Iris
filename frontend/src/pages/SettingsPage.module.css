@@ -14,7 +14,7 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
-    padding: 10px 20px;
+    padding: 15px 20px; /* Adjusted padding */
     border-bottom: 1px solid var(--color-borders);
 
     position: relative;
@@ -25,8 +25,58 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-style: larger;
+    font-size: 1em; /* Adjusted font size */
     
     position: absolute;
     left: 20px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.settingsBackDiv:hover {
+    opacity: 0.7;
+}
+
+.sectionTitle {
+    font-size: 1.3em; /* Slightly larger */
+    font-weight: 600; /* Bolder */
+    margin-top: 24px; /* More space above */
+    margin-bottom: 15px; /* More space below */
+    color: var(--color-primary);
+    border-bottom: 1px solid var(--color-borders);
+    padding-bottom: 8px; /* More padding below border */
+}
+
+.settingsContentDiv .sectionTitle:first-of-type {
+    margin-top: 0;
+}
+
+.settingsContentDiv {
+    padding: 24px 20px; /* Added padding */
+    background-color: var(--color-background-2); /* Subtle background */
+}
+
+.settingItem {
+    background-color: var(--color-card);
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Added transition for hover */
+}
+
+.settingItem:hover {
+    transform: translateY(-2px); /* Lift effect on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enhanced shadow on hover */
+}
+
+.buttonsDiv {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 32px;
 }

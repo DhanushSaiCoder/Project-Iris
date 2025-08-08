@@ -7,13 +7,13 @@ const DeveloperMode = () => {
     const { developerMode, setDeveloperMode } = useContext(SettingsContext);
 
     return (
-        <div className={styles.container}>
-            <label className={styles.label}>Developer Mode</label>
+        <>
+            <p className={styles.settingLabel}>Developer Mode</p>
             <ToggleSwitch
                 checked={developerMode}
                 onChange={setDeveloperMode}
             />
-        </div>
+        </>
     );
 };
 

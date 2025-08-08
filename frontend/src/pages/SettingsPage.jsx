@@ -55,7 +55,7 @@ const SettingsPage = () => {
                 <HepticFeedback />
                 <AudioAnnouncements />
                 <AutoCaliberateOnLaunch />
-                <DeveloperMode />
+                {isAdminOrDeveloper && <DeveloperMode />}
                 <Torch />
                 <div className={styles.buttonsDiv}>
                     <ReCaliberateDevice />

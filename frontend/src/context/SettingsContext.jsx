@@ -6,7 +6,7 @@ const defaultSettings = {
     audioAnnouncements: true,
     hapticFeedback: true,
     sessionId: null,
-    alertDistance: 2, // Default alert distance in meters
+    alertDistance: 4, // Default alert distance in meters
     developerMode: false,
     autoCaliberateOnLaunch: false,
     torch: false,

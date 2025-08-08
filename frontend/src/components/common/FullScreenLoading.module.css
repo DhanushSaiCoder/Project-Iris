@@ -44,6 +44,7 @@
   max-width: 700px;
   margin: 0 auto; /* Center the list row */
   margin-top: 24px;
+  animation: fadeIn 600ms ease-out both;
 
 }
 

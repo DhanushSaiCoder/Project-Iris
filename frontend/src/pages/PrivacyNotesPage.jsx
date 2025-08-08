@@ -36,10 +36,8 @@ export default function PrivacyNotesPage() {
             We collect anonymized session data to track your usage and improve the application. This includes:
           </p>
           <ul>
-            <li>Session duration</li>
-            <li>Number of unique objects detected</li>
-            <li>Total detections made during a session</li>
-            <li>Aggregated, non-identifiable statistics for the Admin Dashboard</li>
+            <li><strong>Session Metrics:</strong> Duration, number of unique objects, and total detections per session.</li>
+            <li><strong>Aggregated Statistics:</strong> Non-identifiable data used for the Admin Dashboard to show overall trends.</li>
           </ul>
           <p className={styles.notesTxt}>
             This data is used solely for session summaries, analytics, and to enhance Project Iris's performance and features.

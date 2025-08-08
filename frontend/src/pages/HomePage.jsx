@@ -10,11 +10,25 @@ import styles from "./HomePage.module.css";
 import SessionSummary from "./SessionSummary";
 import { SettingsContext } from "../context/SettingsContext";
 
+const loadingMessages = [
+    "Waking up the AI... It's not a morning person.",
+    "Teaching the model the difference between a cat and a croissant.",
+    "Calibrating the photon cannons...",
+    "Reticulating splines... whatever that means.",
+    "Loading the object-o-matic 9000.",
+    "Don't worry, the hamsters powering the server are getting a water break.",
+    "Compiling the 1s and 0s. Mostly 0s.",
+    "Polishing the pixels for a premium experience.",
+    "Negotiating with the electrons to move faster.",
+    "The AI is checking itself out in the mirror... vanity."
+];
+
 const HomePage = () => {
   const [isDetecting, setIsDetecting] = useState(false);
-  const [modelsAreLoading, setModelsAreLoading] = useState(false);
+  const [modelsAreLoading, setModelsAreLoading] = useState(true);
   const [detectedObjects, setDetectedObjects] = useState([]);
   const [sessionStartTime, setSessionStartTime] = useState(null);
+  const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0]);
   
   const navigate = useNavigate();
   const { developerMode } = useContext(SettingsContext);
@@ -31,6 +45,20 @@ const HomePage = () => {
       localStorage.removeItem("guestSessionData"); // Also clear stored guest session data
     }
   }, [user, navigate]);
+
+  useEffect(() => {
+    let interval;
+    if (modelsAreLoading) {
+      interval = setInterval(() => {
+        setLoadingMessage(prevMessage => {
+          const currentIndex = loadingMessages.indexOf(prevMessage);
+          const nextIndex = (currentIndex + 1) % loadingMessages.length;
+          return loadingMessages[nextIndex];
+        });
+      }, 3000); // Change message every 3 seconds
+    }
+    return () => clearInterval(interval);
+  }, [modelsAreLoading]);
   
   const handleStartDetection = () => {
     setSessionStartTime(Date.now());
@@ -148,6 +176,11 @@ const HomePage = () => {
                         "Start Detection"
                     )}
                 </button>
+                {modelsAreLoading && (
+                    <div className={styles.loadingMessage}>
+                        <p>{loadingMessage}</p>
+                    </div>
+                )}
             </div>
         </>
     </div>

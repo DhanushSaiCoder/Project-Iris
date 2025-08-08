@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter as Router, Route, Routes, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AdminDashboardPage from './pages/AdminDashboardPage.jsx';
 import CaliberationPage from './pages/CaliberationPage.jsx';
@@ -88,6 +89,7 @@ const AppContent = () => {
 const App = () => {
     return (
         <Router>
+            <Analytics />
             <NotificationProvider>
                 <AppContent />
             </NotificationProvider>

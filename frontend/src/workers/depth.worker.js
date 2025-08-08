@@ -5,12 +5,42 @@ import "@tensorflow/tfjs-backend-webgl";
 
 let model;
 
+// Warms up the model by running a dummy prediction
+async function warmUpModel() {
+    if (!model) {
+        return;
+    }
+    try {
+        // Create a dummy tensor that matches the model's expected input shape
+        const dummyInput = tf.zeros([1, 3, 224, 224]);
+        
+        // Run a dummy prediction
+        const dummyOutput = await model.executeAsync(dummyInput);
+
+        // Dispose tensors to free up memory
+        dummyInput.dispose();
+        if (Array.isArray(dummyOutput)) {
+            dummyOutput.forEach(t => t.dispose());
+        } else {
+            dummyOutput.dispose();
+        }
+        console.log("Depth model warmed up.");
+    } catch (e) {
+        console.error("Error during model warm-up:", e);
+        // Proceed even if warm-up fails; it will just be slow on the first real run.
+    }
+}
+
 async function loadModel() {
     try {
         await tf.ready();
         await tf.setBackend("webgl");
         const modelPath = `${self.location.origin}/tfjs_models/fastdepth/model.json`;
         model = await tf.loadGraphModel(modelPath);
+        
+        // Warm up the model after loading it
+        await warmUpModel();
+
         self.postMessage({ type: "model_loaded" });
     } catch (e) {
         self.postMessage({ type: "error", error: e.message || "Unknown error during model loading." });

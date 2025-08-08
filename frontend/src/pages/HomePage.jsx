@@ -9,10 +9,11 @@ import LoadingSpinner from "../components/common/LoadingSpinner";
 import styles from "./HomePage.module.css";
 import SessionSummary from "./SessionSummary";
 import { SettingsContext } from "../context/SettingsContext";
+import FullScreenLoading from "../components/common/FullScreenLoading"; // Import the new component
 
 const HomePage = () => {
   const [isDetecting, setIsDetecting] = useState(false);
-  const [modelsAreLoading, setModelsAreLoading] = useState(false);
+  const [modelsAreLoading, setModelsAreLoading] = useState(true);
   const [detectedObjects, setDetectedObjects] = useState([]);
   const [sessionStartTime, setSessionStartTime] = useState(null);
   
@@ -108,6 +109,7 @@ const HomePage = () => {
   
   return (
     <div className={styles.homePage}>
+        {modelsAreLoading && <FullScreenLoading />}
         <>
             <div
                 className={`${styles.mainContentWrapper} ${
@@ -148,6 +150,7 @@ const HomePage = () => {
                         "Start Detection"
                     )}
                 </button>
+                {/* The loading message is now handled by FullScreenLoading */}
             </div>
         </>
     </div>

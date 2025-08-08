@@ -48,8 +48,11 @@
 
 .controlsDiv {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     width: 100%;
+    gap: 15px; /* Adds space between the button and the message */
 }
 
 .controlBtn {

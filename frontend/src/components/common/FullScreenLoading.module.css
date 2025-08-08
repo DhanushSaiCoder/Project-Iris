@@ -1,0 +1,172 @@
+
+:root {
+  --msg-h: 24px; /* must match MESSAGE_HEIGHT_PX in the component */
+  --bg: var(--color-background, #0b0f14);
+  --text-primary: var(--color-text-primary, #e6eef8);
+  --muted: rgba(230, 238, 248, 0.45);
+  --muted-2: rgba(230, 238, 248, 0.28);
+}
+
+/* Fullscreen wrapper */
+.fullScreenContainer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column; /* Default for small screens */
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 0 24px; /* Adds horizontal padding */
+  z-index: 9999;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Logo centered */
+.logo {
+  width: 140px;
+  height: auto;
+  margin-bottom: 6px; /* Default for column layout */
+  margin-left: 0; /* Ensures no extra spacing */
+  animation: fadeIn 600ms ease-out both;
+  user-select: none;
+}
+
+/* Row that contains spinner + message list */
+.listRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 700px;
+  margin: 0 auto; /* Center the list row */
+  margin-top: 24px;
+
+}
+
+/* Left spinner similar to screenshot */
+.leftSpinner {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 2px; /* nudge vertically like screenshot */
+}
+
+/* SVG spinner styling */
+.spinnerSvg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+.spinnerSvg .path {
+  stroke: rgba(255,255,255,0.08);
+  stroke-linecap: round;
+  stroke-dasharray: 90;
+  stroke-dashoffset: 25;
+  stroke-width: 3.2;
+  stroke: rgba(255,255,255,0.15);
+  transform-origin: 50% 50%;
+  animation: spinner-rotate 900ms linear infinite;
+}
+
+/* Viewport that shows a fixed number of messages */
+.messagesViewport {
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+
+}
+
+/* Inner stack — all messages stacked vertically, we move this with translateY */
+.messagesInner {
+  display: block;
+  width: 100%;
+  will-change: transform;
+}
+
+/* Each message row */
+.messageLine {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Current line styling — bolder and brighter like screenshot */
+.currentLine {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.1px;
+}
+
+/* small animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spinner-rotate {
+  to { transform: rotate(360deg); }
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .messagesInner,
+  .spinnerSvg,
+  .logo {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .fullScreenContainer {
+    padding: 0 24px;
+  }
+  .logo {
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .fullScreenContainer {
+    flex-direction: row; /* Side-by-side for wide screens */
+    gap: 40px; /* Adjust horizontal gap between logo and messages */
+  }
+
+  .logo {
+    margin-bottom: 0; /* Remove vertical margin when side-by-side */
+  }
+
+  .listRow {
+    margin: 0; /* Remove auto margins when parent is handling centering */
+    align-items: center; /* Align spinner and messages vertically in the middle */
+  }
+}
+
+@media (max-width: 480px) {
+  .fullScreenContainer {
+    padding: 0 16px;
+  }
+  .logo {
+    margin-left: 0;
+  }
+}

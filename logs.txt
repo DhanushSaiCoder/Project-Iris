@@ -1,3 +1,40 @@
-ERROR
-onChange is not a function
-TypeError: onChange is not a function
+## Prompt for a More Capable LLM: Advanced Loading Message Scroll Animation
+
+**Context:**
+We are developing "Project Iris," a web-based smart assistant for the visually impaired. The frontend is built with React, and it uses TensorFlow.js for real-time object detection and depth estimation. During the initial loading and model warm-up phase, we display a full-screen loading screen.
+
+**Current Implementation:**
+We have a `FullScreenLoading.jsx` component that displays a logo and cycles through a list of sarcastic/technical loading messages (`loadingMessages.js`). The goal is to have a smooth, vertical scrolling effect for these messages, where:
+1.  The **current message** is fully visible (opacity 1).
+2.  The **immediately preceding message** is visible above the current message with reduced opacity (e.g., 0.4-0.7).
+3.  The **immediately succeeding message** is visible below the current message with reduced opacity (e.g., 0.4-0.7).
+4.  When the message changes, there should be a **smooth scroll-like transition** (e.g., 0.5s ease-in-out) where the messages appear to move up or down.
+
+**Files Involved:**
+-   `frontend/src/components/common/FullScreenLoading.jsx` (React component)
+-   `frontend/src/components/common/FullScreenLoading.module.css` (CSS module for styling)
+-   `frontend/src/utils/loadingMessages.js` (Array of strings for messages)
+
+**Current State & Problem:**
+My previous attempts to implement this scroll animation have not worked as expected. The messages are not consistently positioned, the scroll effect is not smooth, and the preceding/succeeding messages are often not visible or correctly faded. The current `FullScreenLoading.jsx` attempts to dynamically set `top` and `opacity` via inline styles, and `FullScreenLoading.module.css` defines basic styles for the messages and container.
+
+**Goal for the LLM:**
+Refactor the `FullScreenLoading.jsx` and `FullScreenLoading.module.css` files to achieve the described smooth, vertical, three-message (previous, current, next) scrolling animation with appropriate opacity changes. The solution should be robust, visually appealing, and performant.
+
+**Specific Requirements for the Solution:**
+-   Ensure the `messageContainer` acts as a clear viewport for the scrolling messages.
+-   Implement a reliable mechanism for the vertical scrolling animation (e.g., using CSS `transform: translateY` on a wrapper, or precise `top` positioning with `transition` on individual messages).
+-   Correctly manage the opacity of the previous, current, and next messages.
+-   The animation should be smooth and visually pleasing.
+-   The `LoadingSpinner` should remain present below the message display.
+-   The logo should remain at the top with its `fadeIn` animation, but without the `spin` animation.
+
+**Provide the complete, updated code for:**
+-   `frontend/src/components/common/FullScreenLoading.jsx`
+-   `frontend/src/components/common/FullScreenLoading.module.css`
+
+**Do NOT modify:**
+-   `frontend/src/utils/loadingMessages.js` (assume it's correctly imported)
+-   Any other files not explicitly mentioned.
+
+Thank you for your expertise in creating advanced UI animations!

@@ -1,7 +1,15 @@
+.AlertDistanceContent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 .labelContainer {
     display: flex;
     align-items: center;
-    gap: 10px; /* Space between label and value */
+    justify-content: space-between; /* To keep label and value on opposite ends */
+    width: 100%;
+    margin-bottom: 10px; /* Space between label/value and slider */
 }
 
 .settingLabel {
@@ -11,4 +19,8 @@
 .settingValue {
     margin: 0; /* Remove default paragraph margin */
     font-weight: bold; /* Make the value stand out */
+}
+
+.sliderContainer {
+    width: 100%; /* Ensure slider takes full width of its container */
 }

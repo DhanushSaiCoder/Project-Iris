@@ -1,6 +1,7 @@
 
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 export const AuthContext = createContext();
 
@@ -12,9 +13,14 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         if (token) {
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            // Assuming a user is logged in if a token exists. 
-            // A more robust solution would involve fetching user details from the backend.
-            setUser({}); 
+            try {
+                const decodedToken = jwtDecode(token);
+                setUser({ id: decodedToken.id, role: decodedToken.role });
+            } catch (error) {
+                console.error("Error decoding token:", error);
+                setToken(null);
+                localStorage.removeItem('token');
+            }
             setLoading(false);
         } else {
             setLoading(false);

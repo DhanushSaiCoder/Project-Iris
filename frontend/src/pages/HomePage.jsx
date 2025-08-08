@@ -59,6 +59,8 @@ const HomePage = () => {
       allDetections: detectedObjects,
     };
 
+    console.log("Payload being sent:", payload);
+
     if (!user) {
       // For guest users, store session data locally
       const storedGuestSessions = JSON.parse(localStorage.getItem("guestSessionData") || "[]");
@@ -85,7 +87,7 @@ const HomePage = () => {
           }
         })
         .catch((error) => {
-          console.error("Error posting session:", error.message);
+          console.error("Error posting session:", error.response ? error.response.data : error.message);
           if (shouldNavigateToSummary) {
             navigate("/session-summary", { state: { detectedObjects, duration } });
           }

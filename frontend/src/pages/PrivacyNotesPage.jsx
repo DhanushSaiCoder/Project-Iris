@@ -25,38 +25,47 @@ export default function PrivacyNotesPage() {
       <main className={styles.privacyMain}>
         <div className={styles.privacyContainer}>
           <p className={styles.notesTxt}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Cras eget aliquam metus. Morbi sed nibh nec justo semper
-            fringilla id ac neque. Nullam eleifend dolor sit amet
-            lorem euismod aliquet sed sit amet nunc. Donec et massa ut
-            lacus iaculis euismod. Vivamus cursus nisi sit amet
-            convallis varius. Phasellus sit amet sagittis neque.
-            Curabitur convallis molestie mauris, id sodales turpis
-            suscipit eu. Sed fermentum placerat turpis, in sodales
-            felis vehicula eget. Aliquam a dictum orci. Nulla ut
-            suscipit augue.
+            At Project Iris, we are committed to protecting your privacy. This page outlines our practices regarding the collection, use, and protection of your information when you use our web-based smart assistant.
           </p>
 
+          <h2 className={styles.notesSubtitle}>1. Data Collection and Use</h2>
           <p className={styles.notesTxt}>
-            In aliquam lorem a euismod vestibulum. Mauris malesuada
-            orci nec tellus rhoncus hendrerit at ac tellus. Nulla in
-            ligula vel magna fringilla malesuada a in ante. Nullam
-            eget suscipit leo, eget viverra eros. Ut facilisis erat
-            ipsum, sed malesuada quam semper id. Aliquam aliquam
-            mauris id molestie tempus. Aliquam a ipsum velit. Ut
-            volutpat dui justo. Pellentesque faucibus erat vitae
-            orci bibendum dapibus. In at vestibulum urna. Nam
-            hendrerit elementum libero in porta. Sed pulvinar, nunc
-            id sagittis finibus, orci arcu mattis justo, a rutrum
-            tortor neque nec mi. Nulla eu convallis velit.
+            Project Iris is designed to provide real-time environmental awareness. To achieve this, the application processes video feeds from your device's camera for object and depth detection.
+            <br /><br />
+            <strong>Important:</strong> All video processing for object and depth detection occurs locally on your device. We do not store, transmit, or have access to your live video feeds or any personal visual data.
+            <br /><br />
+            We collect anonymized session data to help you track your usage and to improve the application. This includes:
+            <ul>
+              <li>Session duration</li>
+              <li>Number of unique objects detected</li>
+              <li>Total detections made during a session</li>
+              <li>Aggregated, non-identifiable statistics for the Admin Dashboard</li>
+            </ul>
+            This data is used solely to provide you with session summaries, analytics, and to enhance the overall performance and features of Project Iris.
           </p>
 
+          <h2 className={styles.notesSubtitle}>2. Data Storage and Security</h2>
           <p className={styles.notesTxt}>
-            Pellentesque faucibus erat vitae orci bibendum dapibus.
-            In at vestibulum urna. Nam hendrerit elementum libero in
-            porta. Sed pulvinar, nunc id sagittis finibus, orci arcu
-            mattis justo, a rutrum tortor neque nec mi. Nulla eu
-            convallis velit.
+            Anonymized session data is stored securely in our MongoDB database. We implement industry-standard security measures to protect your data from unauthorized access, alteration, disclosure, or destruction.
+            <br /><br />
+            Your personal information, such as your user ID, is used to link session data to your account for personalized analytics. However, this data is kept separate from any visual information, which is never stored.
+          </p>
+
+          <h2 className={styles.notesSubtitle}>3. User Control and Preferences</h2>
+          <p className={styles.notesTxt}>
+            You have control over your experience with Project Iris. Our customizable settings allow you to adjust alert distances, feedback types (audio and haptic), and other preferences.
+            <br /><br />
+            You can review your session history and manage your account settings within the application.
+          </p>
+
+          <h2 className={styles.notesSubtitle}>4. Changes to This Privacy Policy</h2>
+          <p className={styles.notesTxt}>
+            We may update our Privacy Notes from time to time. We will notify you of any changes by posting the new Privacy Notes on this page. You are advised to review this Privacy Notes periodically for any changes.
+          </p>
+
+          <h2 className={styles.notesSubtitle}>5. Contact Us</h2>
+          <p className={styles.notesTxt}>
+            If you have any questions or concerns about these Privacy Notes, please contact us through the application's support channels or refer to the project's GitHub repository for contact information.
           </p>
         </div>
       </main>

@@ -45,10 +45,7 @@ app.use('/api/users', userRoutes);
 // Database connection and server start
 const connectDB = async () => {
   try {
-    await mongoose.connect(mongodbURL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    mongoose.connect(process.env.MONGODB_URL, {})
     console.log("Database connected successfully");
 
     app.listen(PORT, () => {

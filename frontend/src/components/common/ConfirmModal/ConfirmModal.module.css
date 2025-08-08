@@ -1,0 +1,107 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly lighter overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: var(--color-card); /* Use card background */
+    padding: 40px; /* More padding */
+    border-radius: 12px; /* Softer corners */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Deeper shadow */
+    text-align: center;
+    max-width: 450px; /* Slightly wider */
+    width: 90%;
+    transform: translateY(-20px); /* Initial slight lift for animation */
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+}
+
+.fadeOut {
+    animation: fadeOut 0.3s ease-out forwards;
+}
+
+.modalContent p {
+    font-size: 1.2em; /* Larger font */
+    margin-bottom: 30px; /* More space below message */
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* More space between buttons */
+    flex-direction: row; /* Keep primary on right, so no reverse */
+}
+
+.confirmButton,
+.cancelButton {
+    padding: 12px 25px; /* More padding */
+    border: 1px solid transparent; /* Consistent border */
+    border-radius: 8px; /* Consistent with other buttons */
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.2s ease, border-color 0.2s ease,
+        transform 0.1s ease;
+}
+
+.confirmButton {
+    background-color: var(--color-danger);
+    color: var(--color-text-primary);
+}
+
+.confirmButton:hover {
+    background-color: #cc0000; /* Darker red */
+    border-color: #cc0000;
+    transform: translateY(-1px);
+}
+
+.confirmButton:active {
+    transform: translateY(0);
+}
+
+.cancelButton {
+    background-color: var(--color-secondaryCta); /* Neutral background */
+    color: var(--color-text-secondary);
+    border-color: var(--color-background-2);
+}
+
+.cancelButton:hover {
+    background-color: #555; /* Darker grey */
+    border-color: #555;
+    transform: translateY(-1px);
+}
+
+.cancelButton:active {
+    transform: translateY(0);
+}

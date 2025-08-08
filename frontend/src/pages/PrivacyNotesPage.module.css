@@ -64,7 +64,7 @@
 }
 
 .notesTxt {
-    color: var(--color-text-secondary);
+    color: var(--color-privacy-text-secondary);
     margin-bottom: 1.25rem;
     line-height: 1.6;
     font-size: 0.95rem;
@@ -82,7 +82,7 @@
 }
 
 .notesTxt strong {
-    color: var(--color-primary);
+    color: var(--color-privacy-text-other);
     font-weight: 600;
 }
 
@@ -106,5 +106,5 @@
 }
 
 .listContent{
-    color: var(--text-secondary);
+    color: var(--color-privacy-text-secondary);
 }

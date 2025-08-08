@@ -20,8 +20,11 @@
     --color-borders: #ebf4ff20;
 
     /* Typography */
-    --color-text-primary: #ebf4ff;
+        --color-text-primary: #ebf4ff;
     --color-text-secondary: #ebf4ff80;
-    --color-text-other: #ebf4ff40;
-    
+        --color-text-other: #ebf4ff40;
+
+    /* Privacy Notes Page specific colors */
+    --color-privacy-text-secondary: #b0b0b0;
+    --color-privacy-text-other: #808080;
 }

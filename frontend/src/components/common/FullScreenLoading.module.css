@@ -1,3 +1,4 @@
+
 :root {
   --msg-h: 24px; /* must match MESSAGE_HEIGHT_PX in the component */
   --bg: var(--color-background, #0b0f14);
@@ -15,22 +16,22 @@
   background-color: var(--bg);
   color: var(--text-primary);
   display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* messages align to left group */
+  flex-direction: column; /* Default for small screens */
+  align-items: center;
   justify-content: center;
   gap: 18px;
-  padding-left: 48px; /* space for left edge to match screenshot */
+  padding: 0 24px; /* Adds horizontal padding */
   z-index: 9999;
   box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Small logo at top-left (subtle fade) */
+/* Logo centered */
 .logo {
   width: 140px;
   height: auto;
-  margin-bottom: 6px;
-  margin-left: -48px; /* visually anchor toward left edge if desired */
+  margin-bottom: 6px; /* Default for column layout */
+  margin-left: 0; /* Ensures no extra spacing */
   animation: fadeIn 600ms ease-out both;
   user-select: none;
 }
@@ -40,8 +41,8 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  width: 100%;
   max-width: 700px;
+  margin: 0 auto; /* Center the list row */
 }
 
 /* Left spinner similar to screenshot */
@@ -127,5 +128,41 @@
   .logo {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .fullScreenContainer {
+    padding: 0 24px;
+  }
+  .logo {
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .fullScreenContainer {
+    flex-direction: row; /* Side-by-side for wide screens */
+    gap: 40px; /* Adjust horizontal gap between logo and messages */
+  }
+
+  .logo {
+    margin-bottom: 0; /* Remove vertical margin when side-by-side */
+  }
+
+  .listRow {
+    margin: 0; /* Remove auto margins when parent is handling centering */
+    align-items: center; /* Align spinner and messages vertically in the middle */
+  }
+}
+
+@media (max-width: 480px) {
+  .fullScreenContainer {
+    padding: 0 16px;
+  }
+  .logo {
+    margin-left: 0;
   }
 }

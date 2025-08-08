@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import ToggleSwitch from "../../common/ToggleSwitch";
+import ToggleSwitch from "../ToggleSwitch";
 import styles from "./Torch.module.css";
 import { SettingsContext } from "../../../context/SettingsContext";
 
@@ -11,12 +11,10 @@ const Torch = () => {
     };
 
     return (
-        <div className={styles.settingItem}>
-            <div className={styles.settingText}>
-                <h3>Torch</h3>
-                <p>Toggle camera torch (flashlight).</p>
-            </div>
-            <ToggleSwitch isOn={torch} handleToggle={handleToggle} />
+        <div className={styles.container}>
+            <label className={styles.label}>Torch</label>
+
+            <ToggleSwitch checked={torch} onChange={handleToggle} />
         </div>
     );
 };

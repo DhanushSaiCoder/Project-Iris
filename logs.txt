@@ -1,27 +1,3 @@
-PrivacyNotesPage.jsx:36 In HTML, <ul> cannot be a descendant of <p>.
-This will cause a hydration error.
-
-  ...
-    <AppContent>
-      <div className="App">
-        <main className="main-content">
-          <Routes>
-            <RenderedRoute match={{params:{}, ...}} routeContext={{...}}>
-              <ProtectedRoute>
-                <Outlet>
-                  <RenderedRoute match={{params:{}, ...}} routeContext={{outlet:null, ...}}>
-                    <PrivacyNotesPage>
-                      <div className="PrivacyNot...">
-                        <header>
-                        <main className="PrivacyNot...">
-                          <div className="PrivacyNot...">
-                            <p>
-                            <h2>
->                           <p className="PrivacyNotesPage_notesTxt__U7ava">
-                              <br>
-                              <br>
-                              <strong>
-                              <br>
-                              <br>
->                             <ul>
-                              ...
+ERROR
+onChange is not a function
+TypeError: onChange is not a function

@@ -4,13 +4,7 @@ import { SettingsContext } from "../context/SettingsContext";
 export function useCamera() {
     const videoRef = useRef(null);
     const [ready, setReady] = useState(false);
-
-    useEffect(() => {
-        let stream;
-
-        async function start() {
-            try {
-                const { torch } = useContext(SettingsContext);
+    const { torch } = useContext(SettingsContext);
 
     useEffect(() => {
         let stream;
@@ -42,7 +36,7 @@ export function useCamera() {
                 stream.getTracks().forEach(track => track.stop());
             }
         };
-    }, []);
+    }, [torch]);
 
     return { videoRef, ready };
 }

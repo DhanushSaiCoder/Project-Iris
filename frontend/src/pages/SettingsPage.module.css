@@ -1,6 +1,13 @@
 .Settings{
     min-height: calc(100vh - 140px);
 }
+
+@media (min-width: 1024px) {
+    .Settings {
+        max-width: 70%;
+        margin: 0 auto;
+    }
+}
 .settingsHeader{
     height: 56px;
     display: flex;

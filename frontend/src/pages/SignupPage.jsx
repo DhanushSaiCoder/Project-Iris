@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import { Eye, EyeOff } from 'lucide-react';
+import LoadingSpinnerSecondary from '../components/common/LoadingSpinnerSecondary';
 
 export default function Signup() {
     const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ export default function Signup() {
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
     const { signup } = useContext(AuthContext);
@@ -34,11 +36,13 @@ export default function Signup() {
 
     const handleSubmit = async e => {
         e.preventDefault();
+        setLoading(true);
         const { fullName, email, password, confirmPassword } = formData;
 
         // Check all fields filled
         if (!fullName || !email || !password || !confirmPassword) {
             showNotification('Please fill in all fields.', 'warning');
+            setLoading(false);
             return;
         }
 
@@ -46,12 +50,14 @@ export default function Signup() {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/;
         if (!emailRegex.test(email)) {
             showNotification('Please enter a valid email address ending with .mail, .email, or .yooha.', 'warning');
+            setLoading(false);
             return;
         }
 
         // Password length
         if (password.length < 7) {
             showNotification('Password must be at least 7 characters long.', 'warning');
+            setLoading(false);
             return;
         }
 
@@ -60,6 +66,7 @@ export default function Signup() {
         // Passwords match
         if (password !== confirmPassword) {
             showNotification('Passwords do not match.', 'warning');
+            setLoading(false);
             return;
         }
 
@@ -70,6 +77,8 @@ export default function Signup() {
             navigate('/'); // Navigate to home after successful signup
         } catch (err) {
             showNotification(err.response?.data?.message || 'Signup failed', 'error');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -133,7 +142,7 @@ export default function Signup() {
                         {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </span>
                 </div>
-                <button type="submit" className={styles.signupButton}>Sign Up</button>
+                <button type="submit" className={styles.signupButton} disabled={loading}>{loading ? <LoadingSpinnerSecondary /> : 'Sign Up'}</button>
                 <p className={styles.signupLoginText}>
                     Already have an account? <a href="/login" className={styles.signupLoginLink}>Login</a>
                 </p>

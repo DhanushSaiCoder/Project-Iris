@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import styles from "./LaunchPage.module.css";
 import Logo from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../components/common/LoadingSpinner";
 
 const LaunchPage = () => {
     const navigate = useNavigate();
     const [deferredPrompt, setDeferredPrompt] = useState(null);
     const [isAppInstalled, setIsAppInstalled] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const handleBeforeInstallPrompt = (e) => {
@@ -43,6 +45,7 @@ const LaunchPage = () => {
     }, []);
 
     const handleInstallClick = async () => {
+        setLoading(true);
         if (deferredPrompt) {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
@@ -54,6 +57,7 @@ const LaunchPage = () => {
             }
             setDeferredPrompt(null);
         }
+        setLoading(false);
     };
 
     const handleContinueInBrowser = () => {
@@ -80,8 +84,9 @@ const LaunchPage = () => {
                         <button
                             onClick={handleInstallClick}
                             className={styles.installButton}
+                            disabled={loading}
                         >
-                            Install App
+                            {loading ? <LoadingSpinner /> : "Install App"}
                         </button>
 
                         <ul className={styles.benefitsList}>

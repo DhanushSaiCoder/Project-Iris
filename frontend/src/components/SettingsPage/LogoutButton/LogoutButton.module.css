@@ -4,6 +4,10 @@
     color: var(--color-text-primary); /* White/light text for contrast */
     border: none; /* No border for a solid button */
     padding: 15px;
+    height: 3.1rem; /* Fixed height to prevent jumping */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 8px;
 
     display: flex;

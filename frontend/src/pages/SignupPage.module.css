@@ -81,6 +81,10 @@
     background: var(--color-primary); /* Primary button style */
     color: var(--color-background); /* Text color contrasting with primary */
     padding: 1rem;
+    height: 3.1rem; /* Fixed height to prevent jumping */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: none;
     border-radius: 8px;
     font-weight: 600;

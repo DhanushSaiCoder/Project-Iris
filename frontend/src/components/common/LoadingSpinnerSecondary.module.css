@@ -9,7 +9,7 @@
 .spinnerDot {
   width: 10px;
   height: 10px;
-  background-color: currentColor;
+  background-color: var(--color-secondaryCta);
   border-radius: 50%;
   margin: 0 4px;
   animation: bounce 1.4s infinite ease-in-out both;

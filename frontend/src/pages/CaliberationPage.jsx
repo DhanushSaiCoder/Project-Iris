@@ -6,7 +6,7 @@ import { useCamera } from "../hooks/useCamera";
 import { useDepthModel } from "../hooks/useDepthModel";
 import { triggerHapticFeedback } from "../utils/haptics";
 import AlertDistanceSlider from "../components/SettingsPage/AlertDistanceSlider/AlertDistanceSlider";
-
+import LoadingSpinner from "../components/common/LoadingSpinner";
 const STEPS = [
     {
         title: "Position Alignment",
@@ -163,7 +163,7 @@ export default function CaliberationPage() {
                 {step === 1 && (
                     <>
                         <button className={`${styles.button} ${styles.primary}`} onClick={startRecording} disabled={isRecording || !isVideoReady || depthLoading}>
-                            {isRecording ? `Recording... (${countdown})` : primaryLabel}
+                            {isRecording ? <LoadingSpinner /> : primaryLabel}
                         </button>
                         {depthError && <p style={{ color: "red" }}>{depthError.message}</p>}
                     </>

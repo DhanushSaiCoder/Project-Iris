@@ -2,11 +2,13 @@ import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import Fuse from 'fuse.js';
 import styles from './UserManagementPage.module.css';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const UserManagementPage = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [roleChangeLoading, setRoleChangeLoading] = useState({}); // New state for individual role change loading
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10); // You can adjust this value
@@ -27,11 +29,14 @@ const UserManagementPage = () => {
     }, []);
 
     const handleRoleChange = async (userId, newRole) => {
+        setRoleChangeLoading(prev => ({ ...prev, [userId]: true }));
         try {
             await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}/role`, { role: newRole });
             setUsers(users.map(user => (user._id === userId ? { ...user, role: newRole } : user)));
         } catch (err) {
             console.error("Failed to update user role", err);
+        } finally {
+            setRoleChangeLoading(prev => ({ ...prev, [userId]: false }));
         }
     };
 
@@ -103,11 +108,12 @@ const UserManagementPage = () => {
                                 <td>{user.email}</td>
                                 <td>{user.role}</td>
                                 <td>
-                                    <select value={user.role} onChange={(e) => handleRoleChange(user._id, e.target.value)}>
+                                    <select value={user.role} onChange={(e) => handleRoleChange(user._id, e.target.value)} disabled={roleChangeLoading[user._id]}>
                                         <option value="user">User</option>
                                         <option value="admin">Admin</option>
                                         <option value="developer">Developer</option>
                                     </select>
+                                    {roleChangeLoading[user._id] && <LoadingSpinner />}
                                 </td>
                             </tr>
                         ))}

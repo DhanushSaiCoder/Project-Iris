@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 import { useNotification } from '../context/NotificationContext'
 import { Eye, EyeOff } from 'lucide-react'
+import LoadingSpinnerSecondary from '../components/common/LoadingSpinnerSecondary'
 
 export default function Login() {
     const [formData, setFormData] = useState({ email: '', password: '' })
     const [showPassword, setShowPassword] = useState(false)
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const { login } = useContext(AuthContext)
     const { showNotification } = useNotification()
@@ -22,11 +24,13 @@ export default function Login() {
 
     const handleSubmit = async e => {
         e.preventDefault()
+        setLoading(true)
 
         const { email, password } = formData
 
         if (!email || !password) {
             showNotification('Please enter all details correctly', 'warning')
+            setLoading(false)
             return
         }
 
@@ -36,6 +40,8 @@ export default function Login() {
             navigate('/');
         } catch (err) {
             showNotification(err.response?.data?.message || 'Login failed', 'error')
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -74,8 +80,8 @@ export default function Login() {
                 <a href="/forgot" className={styles.forgotpasswordlink}>
                     Forgot Password?
                 </a>
-                <button type="submit" className={styles.loginbutton}>
-                    Log In
+                <button type="submit" className={styles.loginbutton} disabled={loading}>
+                    {loading ? <LoadingSpinnerSecondary /> : 'Log In'}
                 </button>
                 <div className={styles.signuptext}>
                     Don't have an account? <a href="/signup" className={styles.signuplink}>Sign up</a>

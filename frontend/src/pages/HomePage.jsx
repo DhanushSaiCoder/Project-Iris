@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import VideoStream from "../components/Home/VideoStream";
 import DetectedObjectsList from "../components/ObjectDetector/DetectedObjectsList";
 import LoadingSpinner from "../components/common/LoadingSpinner";
+import LoadingSpinnerSecondary from "../components/common/LoadingSpinnerSecondary";
 import styles from "./HomePage.module.css";
 import SessionSummary from "./SessionSummary";
 import { SettingsContext } from "../context/SettingsContext";
@@ -16,6 +17,7 @@ const HomePage = () => {
   const [modelsAreLoading, setModelsAreLoading] = useState(true);
   const [detectedObjects, setDetectedObjects] = useState([]);
   const [sessionStartTime, setSessionStartTime] = useState(null);
+  const [isPostingSession, setIsPostingSession] = useState(false);
   
   const navigate = useNavigate();
   const { developerMode } = useContext(SettingsContext);
@@ -77,6 +79,7 @@ const HomePage = () => {
     }
 
     if (shouldPostSession) {
+      setIsPostingSession(true);
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/session`, payload)
         .then((response) => {
@@ -90,6 +93,9 @@ const HomePage = () => {
           if (shouldNavigateToSummary) {
             navigate("/session-summary", { state: { detectedObjects, duration } });
           }
+        })
+        .finally(() => {
+          setIsPostingSession(false);
         });
     } else if (shouldNavigateToSummary) {
       navigate("/session-summary", { state: { detectedObjects, duration } });
@@ -136,13 +142,13 @@ const HomePage = () => {
                 <button
                     className={`${styles.controlBtn} ${
                         isDetecting ? styles.endBtn : styles.startBtn
-                    } ${modelsAreLoading ? styles.disabledBtn : ""}`}
+                    } ${modelsAreLoading || isPostingSession ? styles.disabledBtn : ""}`}
                     onClick={
                         isDetecting ? handleEndDetection : handleStartDetection
                     }
-                    disabled={modelsAreLoading}
+                    disabled={modelsAreLoading || isPostingSession}
                 >
-                    {modelsAreLoading ? (
+                    {modelsAreLoading || isPostingSession ? (
                         <LoadingSpinner />
                     ) : isDetecting ? (
                         "End Detection"

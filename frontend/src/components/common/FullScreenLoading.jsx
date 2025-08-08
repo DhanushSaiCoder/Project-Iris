@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styles from './FullScreenLoading.module.css';
 import logo from '../../assets/images/logo.png';
 import loadingMessages from '../../utils/loadingMessages';
+import IrisSpinnerSecondary from './IrisSpinnerSecondary';
 
 const MESSAGE_HEIGHT_PX = 24; // must match --msg-h in CSS
 const VISIBLE_COUNT = 4; // current + next 3 shown (matches screenshot feel)
@@ -44,9 +45,7 @@ const FullScreenLoading = () => {
       <div className={styles.listRow}>
         {/* Left spinner like in screenshot */}
         <div className={styles.leftSpinner} aria-hidden="true">
-          <svg viewBox="0 0 50 50" className={styles.spinnerSvg}>
-            <circle className={styles.path} cx="25" cy="25" r="20" fill="none" strokeWidth="4" />
-          </svg>
+          <IrisSpinnerSecondary />
         </div>
 
         {/* Messages column (viewport) */}

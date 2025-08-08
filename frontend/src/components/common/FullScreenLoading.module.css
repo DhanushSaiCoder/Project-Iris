@@ -58,22 +58,7 @@
   margin-top: 2px; /* nudge vertically like screenshot */
 }
 
-/* SVG spinner styling */
-.spinnerSvg {
-  width: 22px;
-  height: 22px;
-  display: block;
-}
-.spinnerSvg .path {
-  stroke: rgba(255,255,255,0.08);
-  stroke-linecap: round;
-  stroke-dasharray: 90;
-  stroke-dashoffset: 25;
-  stroke-width: 3.2;
-  stroke: rgba(255,255,255,0.15);
-  transform-origin: 50% 50%;
-  animation: spinner-rotate 900ms linear infinite;
-}
+
 
 /* Viewport that shows a fixed number of messages */
 .messagesViewport {
@@ -122,20 +107,16 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes spinner-rotate {
-  to { transform: rotate(360deg); }
-}
+
 
 /* Respect reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  .messagesInner,
-  .spinnerSvg,
+    .messagesInner,
   .logo {
     animation: none !important;
     transition: none !important;
   }
 }
-
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

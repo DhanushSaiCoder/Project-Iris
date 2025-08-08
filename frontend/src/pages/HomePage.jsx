@@ -59,8 +59,6 @@ const HomePage = () => {
       allDetections: detectedObjects,
     };
 
-    console.log("Payload being sent:", payload);
-
     if (!user) {
       // For guest users, store session data locally
       const storedGuestSessions = JSON.parse(localStorage.getItem("guestSessionData") || "[]");

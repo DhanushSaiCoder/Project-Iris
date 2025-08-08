@@ -1,10 +1,11 @@
-Uncaught ReferenceError: Cannot access 'payload' before initialization
-    at handleEndDetection (HomePage.jsx:53:1)
-    at executeDispatch (react-dom-client.development.js:16368:1)
-    at runWithFiberInDEV (react-dom-client.development.js:1518:1)
-    at processDispatchQueue (react-dom-client.development.js:16417:1)
-    at react-dom-client.development.js:17016:1
-    at batchedUpdates$1 (react-dom-client.development.js:3262:1)
-    at dispatchEventForPluginEventSystem (react-dom-client.development.js:16572:1)
-    at dispatchEvent (react-dom-client.development.js:20657:1)
-    at dispatchDiscreteEvent (react-dom-client.development.js:20625:1)
+UserManagementPage.jsx:47 React has detected a change in the order of Hooks called by UserManagementPage. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+1. useState                   useState
+2. useState                   useState
+3. useState                   useState
+4. useState                   useState
+5. useEffect                  useEffect
+6. undefined                  useMemo
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

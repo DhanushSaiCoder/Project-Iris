@@ -1,9 +1,8 @@
 /* src/pages/CalibrationPage.module.css */
 .container {
     display: flex;
-    flex-direction: column; /* Arrange children vertically */
+    flex-direction: column; /* Arrange children vertically by default (mobile-first) */
     align-items: center; /* Center horizontally */
-    /* Removed justify-content: center; as children will take explicit height */
     height: 100vh; /* Full viewport height */
     width: 100vw; /* Full viewport width */
     background-color: var(--color-background); /* Use CSS variable */
@@ -15,7 +14,7 @@
 .videoHalf {
     position: relative;
     width: 100%;
-    height: 50%; /* Occupy the top half */
+    height: 50%; /* Occupy the top half by default (mobile-first) */
     overflow: hidden;
 }
 
@@ -97,6 +96,12 @@
     z-index: 10;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    min-width: 200px; /* Added min-width */
+    display: flex; /* Added flex */
+    align-items: center; /* Added flex alignment */
+    justify-content: center; /* Added flex alignment */
+    gap: 8px; /* Added gap */
 }
 
 .button:hover {
@@ -183,13 +188,13 @@
     z-index: 1; /* Ensure it's on top of video/canvas */
     position: relative; /* Position relative to its normal flow */
     width: 100%;
-    height: 50%; /* Occupy the bottom half */
+    height: 50%; /* Occupy the bottom half by default (mobile-first) */
     max-width: 600px; /* Keep max-width for content */
     background-color: var(--color-card); /* Use CSS variable */
     border-radius: 10px;
 }
 
-/* Mobile responsiveness */
+/* Mobile responsiveness (default) */
 @media (max-width: 768px) {
     .container {
         padding: 0;
@@ -226,6 +231,9 @@
         padding: 6px 18px;
         font-size: 0.9rem;
         margin: 4px;
+
+        min-width: 150px; /* Adjusted min-width for mobile */
+        gap: 5px; /* Adjusted gap for mobile */
     }
 
     .visualFeedback {
@@ -247,5 +255,67 @@
         padding: 10px;
         max-width: 100%;
         border-radius: 0;
+    }
+}
+
+/* Desktop layout */
+@media (min-width: 769px) {
+    .container {
+        flex-direction: row; /* Arrange children horizontally */
+    }
+
+    .videoHalf {
+        width: 50%; /* Occupy left half */
+        height: 100%; /* Full height */
+    }
+
+    .contentWrapper {
+        width: 50%; /* Occupy right half */
+        height: 100%; /* Full height */
+        max-width: none; /* Remove max-width constraint */
+        border-radius: 0; /* Remove border-radius for full height */
+    }
+
+    /* Adjust font sizes and spacing for desktop */
+    .stepIndicator {
+        font-size: 1.4rem;
+        margin-bottom: 18px;
+    }
+
+    .stepTitle {
+        font-size: 2.8rem;
+        margin-bottom: 18px;
+    }
+
+    .subTitle {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+    }
+
+    .instruction {
+        font-size: 1.2rem;
+        margin-bottom: 45px;
+        max-width: 80%;
+    }
+
+    .button {
+        padding: 18px 40px;
+        font-size: 1.4rem;
+        margin: 12px;
+    }
+
+    .verification {
+        font-size: 1.2rem;
+    }
+
+    .countdown {
+        font-size: 3rem;
+        margin-top: 30px;
+    }
+
+    .errorMessage {
+        padding: 20px;
+        margin-top: 25px;
+        max-width: 500px;
     }
 }

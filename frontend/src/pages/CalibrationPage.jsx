@@ -241,9 +241,8 @@ export default function CalibrationPage() {
                 {step === 1 && (
                     <>
                         <button className={`${styles.button} ${styles.primary}`} onClick={startRecording} disabled={isRecording || !isVideoReady || depthLoading}>
-                            {isRecording ? <LoadingSpinner /> : primaryLabel}
+                            {isRecording ? (<><LoadingSpinner /> Recording: {countdown}s</>) : primaryLabel}
                         </button>
-                        {isRecording && <p className={styles.countdown}>Recording: {countdown}s</p>}
                         {depthError && (
                             <div className={styles.errorMessage}>
                                 <p>Error: {depthError.message}</p>

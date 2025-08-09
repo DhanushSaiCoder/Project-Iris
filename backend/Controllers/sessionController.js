@@ -27,7 +27,7 @@ export const createSession = async (req, res) => {
 
 export const getAllSessions = async (req, res) => {
     try {
-        const sessions = await Session.find({});
+        const sessions = await Session.find({}).populate('userId');
         return res.status(200).json({ Count: sessions.length, data: sessions });
     } catch (err) {
         console.error("Error retrieving sessions:", err.message);

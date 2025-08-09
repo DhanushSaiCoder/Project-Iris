@@ -25,7 +25,14 @@ const AllActiveUsersPage = () => {
         fetchSessions();
     }, []);
 
-    const uniqueUsers = [...new Set(sessions.map(session => session.userId))];
+    const uniqueUsers = sessions.reduce((acc, session) => {
+        if (session.userId && session.userId._id) {
+            acc[session.userId._id] = session.userId;
+        }
+        return acc;
+    }, {});
+
+    const uniqueUserList = Object.values(uniqueUsers);
 
     if (loading) {
         return <PageLoading />;
@@ -39,11 +46,12 @@ const AllActiveUsersPage = () => {
         <div className={styles.container}>
             <h1 className={styles.title}>All Active Users</h1>
             <div className={styles.userList}>
-                {uniqueUsers.length > 0 ? (
-                    uniqueUsers.map((userId, index) => (
-                        <div key={userId + index} className={styles.userCard}>
-                            <p className={styles.userId}>User ID: <span>{userId}</span></p>
-                            <button className={styles.monitorButton} onClick={() => navigate(`/monitor-user/${userId}`)}>Monitor User</button>
+                {uniqueUserList.length > 0 ? (
+                    uniqueUserList.map((user) => (
+                        <div key={user._id} className={styles.userCard}>
+                            <p className={styles.username}>Username: <span>{user.fullName}</span></p>
+                            <p className={styles.userId}>User ID: <span>{user._id}</span></p>
+                            <button className={styles.monitorButton} onClick={() => navigate(`/monitor-user/${user._id}`)}>Monitor User</button>
                         </div>
                     ))
                 ) : (

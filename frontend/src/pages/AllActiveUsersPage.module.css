@@ -30,41 +30,53 @@
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
-    text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100px;
+    justify-content: space-between;
     border: 1px solid var(--color-borders);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    gap: 15px;
 }
 
 .userCard:hover {
-    transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
-.userId {
-    font-size: 1.2em;
+.username {
+    font-size: 1.4em;
     color: var(--color-primary);
-    font-weight: 600;
+    font-weight: 700;
+}
+
+.username span {
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.userId {
+    font-size: 1em;
+    color: var(--color-text-secondary);
+    font-weight: 400;
 }
 
 .userId span {
     color: var(--color-text-secondary);
     font-weight: 400;
+    word-break: break-all;
 }
 
 .monitorButton {
-    color: var(--color-cta);
-    background: none;
+    background-color: var(--color-cta);
+    color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 12px 20px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 1em;
+    font-weight: 600;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .monitorButton:hover {

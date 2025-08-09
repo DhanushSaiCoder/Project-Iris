@@ -24,7 +24,7 @@ const AllHistoryPage = () => {
                 setSessions(fetchedSessions);
 
                 // Extract unique user IDs from sessions
-                const uniqueUserIds = [...new Set(fetchedSessions.map(session => session.userId))].filter(id => id !== 'guest' && /^[0-9a-fA-F]{24}$/.test(id));
+                const uniqueUserIds = [...new Set(fetchedSessions.map(session => session.userId?._id))].filter(id => id && id !== 'guest' && /^[0-9a-fA-F]{24}$/.test(id));
                 console.log("Unique User IDs sent to backend:", uniqueUserIds); // Add this line
 
                 if (uniqueUserIds.length > 0) {
@@ -78,8 +78,8 @@ const AllHistoryPage = () => {
                 valA = new Date(valA);
                 valB = new Date(valB);
             } else if (column === 'userName') {
-                valA = userNames[a.userId] || '';
-                valB = userNames[b.userId] || '';
+                valA = userNames[a.userId?._id] || '';
+                valB = userNames[b.userId?._id] || '';
             }
 
             if (valA < valB) {
@@ -133,8 +133,8 @@ const AllHistoryPage = () => {
                             currentSessions.map((session) => (
                                 <tr key={session._id}>
                                     <td onClick={() => navigate(`/sessionSummary?sessionId=${session._id}`)} style={{ cursor: 'pointer', color: 'var(--color-cta)' }}>{session._id}</td>
-                                    <td>{session.userId}</td>
-                                    <td>{userNames[session.userId] || 'Guest'}</td>
+                                    <td>{session.userId?._id}</td>
+                                    <td>{userNames[session.userId?._id] || 'Guest'}</td>
                                     <td>{formatDuration(session.duration)}</td>
                                     <td>{session.uniqueObjects}</td>
                                     <td>{session.totalDetections}</td>

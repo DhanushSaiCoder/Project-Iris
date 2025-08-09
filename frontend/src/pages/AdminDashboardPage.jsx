@@ -588,7 +588,7 @@ const AdminDashboardPage = () => {
                                     .map((session) => (
                                         <tr key={session._id}>
                                             <td>{session._id}</td>
-                                            <td>{session.userId}</td>
+                                                                                        <td>{session.userId?._id}</td>
                                             <td>
                                                 {formatDuration(
                                                     session.duration

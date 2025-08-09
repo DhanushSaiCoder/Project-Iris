@@ -1,12 +1,2 @@
-ERROR in ./src/components/common/FullScreenLoading.module.css (./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[6].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[6].use[2]!./node_modules/source-map-loader/dist/cjs.js!./src/components/common/FullScreenLoading.module.css)
-Module build failed (from ./node_modules/postcss-loader/dist/cjs.js):
-SyntaxError
-
-(114:5) C:\Users\dhanu\Documents\codes\RepoDestinations\Project-Iris\Project-Iris\frontend\src\components\common\FullScreenLoading.module.css Unclosed block
-
-  112 | /* Respect reduced-motion */
-  113 | @media (prefers-reduced-motion: reduce) {
-> 114 |     .messagesInner,
-      |     ^
-  115 |   .logo {
-  116 | 
+react-dom-client.development.js:7082 Uncaught Error: Objects are not valid as a React child (found: object with keys {_id, fullName, email, password, role, __v}). If you meant to render a collection of children, use an array instead.
+Locate the code in your AdminDashboardPage.jsx file around line 590, where the error's stack trace points, and identify where you are trying to render the object. Modify that part of your code to render specific properties of the object or to iterate over an array of objects to render a list of elements.

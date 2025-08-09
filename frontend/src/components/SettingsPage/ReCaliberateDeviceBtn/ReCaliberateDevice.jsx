@@ -7,7 +7,7 @@ const ReCaliberateDevice = () => {
     const navigate = useNavigate()
     return (
         <div className={styles.ReCaliberateDevice}>
-            <button onClick={() => { navigate('/caliberation') }}><RotateCcw />Recaliberate Device</button>
+            <button onClick={() => { navigate('/calibration') }}><RotateCcw />Recaliberate Device</button>
         </div>
     );
 }

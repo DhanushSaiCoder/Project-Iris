@@ -1,0 +1,251 @@
+/* src/pages/CalibrationPage.module.css */
+.container {
+    display: flex;
+    flex-direction: column; /* Arrange children vertically */
+    align-items: center; /* Center horizontally */
+    /* Removed justify-content: center; as children will take explicit height */
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    background-color: var(--color-background); /* Use CSS variable */
+    color: var(--color-text-primary); /* Use CSS variable */
+    text-align: center;
+    overflow: hidden; /* Hide overflow */
+}
+
+.videoHalf {
+    position: relative;
+    width: 100%;
+    height: 50%; /* Occupy the top half */
+    overflow: hidden;
+}
+
+.videoFeed, .depthOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.depthOverlay {
+    opacity: 0.6;
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.skipButton {
+    position: absolute;
+    top: 15px; /* Adjusted for smaller top half */
+    right: 15px; /* Adjusted for smaller top half */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: var(--color-text-secondary); /* Use CSS variable */
+    font-size: 0.9rem; /* Slightly smaller */
+    font-weight: 500;
+    z-index: 10; /* Ensure it's on top */
+    transition: color 0.3s ease;
+}
+
+.skipButton:hover {
+    color: var(--color-text-primary);
+}
+
+.stepIndicator {
+    font-size: 1.1rem; /* Increased */
+    color: var(--color-text-secondary); /* Use CSS variable */
+    margin-bottom: 12px; /* Adjusted margin */
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.stepTitle {
+    font-size: 2.2rem; /* Increased */
+    margin-bottom: 12px; /* Adjusted margin */
+    color: var(--color-text-primary);
+}
+
+.subTitle {
+    font-size: 1.4rem; /* Increased */
+    color: var(--color-text-secondary); /* Use CSS variable */
+    margin-bottom: 20px; /* Adjusted margin */
+}
+
+.instruction {
+    font-size: 1rem; /* Increased */
+    color: var(--color-text-primary); /* Use CSS variable */
+    margin-bottom: 25px; /* Adjusted margin */
+    max-width: 90%;
+    line-height: 1.6;
+}
+
+.button {
+    padding: 12px 30px; /* Increased padding */
+    font-size: 1.2rem; /* Increased */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px; /* Adjusted margin */
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.primary {
+    background-color: var(--color-cta); /* Use CSS variable */
+    color: var(--color-text-primary);
+}
+
+.done {
+    background-color: var(--color-success); /* Use CSS variable */
+    color: var(--color-text-primary);
+}
+
+.visualFeedback {
+    position: relative;
+    width: 320px;
+    height: 240px;
+    margin-bottom: 20px;
+    border: 2px solid var(--color-borders); /* Use CSS variable */
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.verification {
+    margin-bottom: 15px; /* Adjusted margin */
+    font-size: 1.1rem; /* Increased */
+    color: var(--color-text-primary);
+}
+
+.verification p {
+    margin: 4px 0; /* Adjusted margin */
+}
+
+.depthLoader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--color-text-primary);
+    z-index: 10;
+}
+
+.countdown {
+    font-size: 2.2rem; /* Increased */
+    font-weight: bold;
+    color: var(--color-cta); /* Use CSS variable */
+    margin-top: 20px; /* Adjusted margin */
+    text-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    text-align: center;
+}
+
+.errorMessage {
+    background-color: var(--color-danger-20); /* Light red background */
+    color: var(--color-danger); /* Red text */
+    border: 1px solid var(--color-danger); /* Red border */
+    border-radius: 8px;
+    padding: 12px; /* Increased padding */
+    margin-top: 18px; /* Adjusted margin */
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+}
+
+.errorMessage p {
+    margin: 4px 0; /* Adjusted margin */
+}
+
+.contentWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px; /* Adjusted padding */
+    z-index: 1; /* Ensure it's on top of video/canvas */
+    position: relative; /* Position relative to its normal flow */
+    width: 100%;
+    height: 50%; /* Occupy the bottom half */
+    max-width: 600px; /* Keep max-width for content */
+    background-color: var(--color-card); /* Use CSS variable */
+    border-radius: 10px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 0;
+    }
+
+    .skipButton {
+        top: 10px;
+        right: 10px;
+        font-size: 0.75rem;
+    }
+
+    .stepIndicator {
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+
+    .stepTitle {
+        font-size: 1.6rem;
+        margin-bottom: 8px;
+    }
+
+    .subTitle {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .instruction {
+        font-size: 0.8rem;
+        margin-bottom: 15px;
+        max-width: 95%;
+    }
+
+    .button {
+        padding: 6px 18px;
+        font-size: 0.9rem;
+        margin: 4px;
+    }
+
+    .visualFeedback {
+        width: 100%;
+        height: auto;
+        max-width: 250px;
+    }
+
+    .verification {
+        font-size: 0.85rem;
+    }
+
+    .countdown {
+        font-size: 1.6rem;
+        margin-top: 10px;
+    }
+
+    .contentWrapper {
+        padding: 10px;
+        max-width: 100%;
+        border-radius: 0;
+    }
+}

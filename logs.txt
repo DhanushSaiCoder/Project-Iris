@@ -1,2 +1,46 @@
-react-dom-client.development.js:7082 Uncaught Error: Objects are not valid as a React child (found: object with keys {_id, fullName, email, password, role, __v}). If you meant to render a collection of children, use an array instead.
-Locate the code in your AdminDashboardPage.jsx file around line 590, where the error's stack trace points, and identify where you are trying to render the object. Modify that part of your code to render specific properties of the object or to iterate over an array of objects to render a list of elements.
+depthMap is null or undefined
+CalibrationPage.jsx:116 depthMap is null or undefined
+depth.worker.js:27 Depth model warmed up.
+2CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:170 Current Depth: 0
+7CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:84 Starting recording...
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 1
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 2
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 3
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 4
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 5
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 6
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 7
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 8
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 9
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 10
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 11
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 12
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 13
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 14
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 15
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 16
+CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:174 Sample added. Total samples: 17
+CalibrationPage.jsx:94 Recording finished. Samples collected: 17
+CalibrationPage.jsx:99 Reference score calculated: 0
+10CalibrationPage.jsx:170 Current Depth: 0
+CalibrationPage.jsx:66 Calibration incomplete. refScore is null.
+13CalibrationPage.jsx:170 Current Depth: 0

@@ -23,7 +23,7 @@ const ActiveUsers = ({ sessions }) => {
             </div>
             <div className={styles.ActiveUsersDetails}>
                 {uniqueUserIds.length > 0 ? (
-                    uniqueUserIds.map((userId, index) => (
+                    uniqueUserIds.slice(0, 5).map((userId, index) => (
                         <div key={userId + index} className={styles.UserCard}>
                             <p className={styles.SessionId}>USER ID: {"  "}<span>{userId}</span></p>
                             <p className={styles.Moniter} onClick={() => handleMonitorUser(userId)}>Monitor User</p>

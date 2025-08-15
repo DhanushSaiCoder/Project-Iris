@@ -45,6 +45,21 @@
     overflow-y: auto;
 }
 
+.searchContainer {
+    padding: 1rem;
+    max-width: 24rem;
+    margin: 0 auto;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #333;
+    background-color: #111;
+    color: #fff;
+}
+
 .accordionContainer {
     max-width: 24rem;
     margin: 0 auto;
@@ -112,6 +127,11 @@
 
 .accordionContent {
     padding: 0 1rem 1rem 3rem;
+}
+
+.accordionImage {
+    width: 100%;
+    margin-bottom: 1rem;
 }
 
 .bulletList {

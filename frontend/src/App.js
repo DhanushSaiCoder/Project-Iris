@@ -1,3 +1,6 @@
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
 import React, { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter as Router, Route, Routes, Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -89,11 +92,20 @@ const AppContent = () => {
 }
 
 const App = () => {
+    const darkTheme = createTheme({
+        palette: {
+            mode: 'dark',
+        },
+    });
+
     return (
         <Router>
             <Analytics />
             <NotificationProvider>
-                <AppContent />
+                <ThemeProvider theme={darkTheme}>
+                    <CssBaseline />
+                    <AppContent />
+                </ThemeProvider>
             </NotificationProvider>
         </Router>
     );

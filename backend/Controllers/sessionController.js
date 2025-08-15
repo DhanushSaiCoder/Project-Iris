@@ -83,9 +83,14 @@ export const getUniqueObjects = async (req, res) => {
     try {
         const sessions = await Session.find({});
         const allDetections = sessions.flatMap(session => session.allDetections);
-        const uniqueObjectClasses = [...new Set(allDetections.map(d => d.class))];
+        const objectCounts = allDetections.reduce((acc, { class: cls }) => {
+            acc[cls] = (acc[cls] || 0) + 1;
+            return acc;
+        }, {});
+
+        const uniqueObjectsWithCounts = Object.entries(objectCounts).map(([name, count]) => ({ name, count }));
         
-        res.status(200).json({ uniqueObjects: uniqueObjectClasses });
+        res.status(200).json({ uniqueObjects: uniqueObjectsWithCounts });
     } catch (err) {
         console.error("Error retrieving unique objects:", err.message);
         res.status(500).json({ error: err.message });

@@ -1,46 +1,39 @@
-depthMap is null or undefined
-CalibrationPage.jsx:116 depthMap is null or undefined
-depth.worker.js:27 Depth model warmed up.
-2CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:170 Current Depth: 0
-7CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:84 Starting recording...
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 1
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 2
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 3
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 4
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 5
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 6
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 7
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 8
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 9
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 10
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 11
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 12
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 13
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 14
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 15
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 16
-CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:174 Sample added. Total samples: 17
-CalibrationPage.jsx:94 Recording finished. Samples collected: 17
-CalibrationPage.jsx:99 Reference score calculated: 0
-10CalibrationPage.jsx:170 Current Depth: 0
-CalibrationPage.jsx:66 Calibration incomplete. refScore is null.
-13CalibrationPage.jsx:170 Current Depth: 0
+You are a talented graphic designer tasked with createing a set of user-friendly illustrations for a new mobile application, 'Project Iris.' This application is a smart assistant for the visually impaired, and it uses the phone's camera to provide real-time information about the user's environment.
+
+Your current task is to create an illustration for the 'How to Calibrate Your Device' section of the help page. This image should be clear, simple, and informative, with a friendly and encouraging tone.
+
+**Image Concept:**
+
+A person is calibrating their smartphone. The person is holding the phone in one hand and has their other hand extended in front of them as a reference point. The phone is pointed towards the extended hand.
+
+**Key Elements to Include:**
+
+*   **The Person:** A stylized, abstract figure. The focus should be on the action, not the person's identity.
+*   **The Smartphone:** A modern smartphone, held in a way that clearly shows the camera pointing forward.
+*   **The Reference Hand:** The person's other hand, held at a fixed distance from the phone.
+*   **Visual Representation of Calibration:**
+    *   A cone or a beam of light emanating from the phone's camera, representing the field of view.
+    *   A subtle grid or a series of concentric circles between the phone and the hand, representing the depth measurement process.
+    *   A simple, friendly icon (like a checkmark or a smiley face) appearing on the phone's screen to indicate that the calibration is successful.
+*   **Style:**
+    *   **Flat Illustration:** Use simple shapes and bold colors.
+    *   **High Contrast:** Ensure the image is easy to see and understand, with a clear distinction between the different elements.
+    *   **Friendly and Approachable:** The overall style should be welcoming and non-intimidating.
+
+**Color Palette:**
+
+Use a simple and accessible color palette. Here are some suggestions:
+
+*   **Background:** A soft, neutral color (e.g., light gray, off-white).
+*   **Person and Phone:** A darker, contrasting color (e.g., dark blue, charcoal gray).
+*   **Calibration Elements (beam, grid, icon):** A bright, friendly color (e.g., a vibrant green, a warm orange).
+
+**Exclusions:**
+
+*   No text in the image.
+*   No realistic or overly detailed elements.
+*   No distracting background elements.
+
+**Final Output:**
+
+A high-resolution PNG image with a transparent background.

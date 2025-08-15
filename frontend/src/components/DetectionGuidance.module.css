@@ -49,11 +49,9 @@
 
 .pointsList li::before {
     content: '\2022'; /* Unicode for a bullet point */
-    color: var(--color-cta); /* Use CTA color for bullet */
     font-weight: bold;
     display: inline-block;
     width: 1em;
-    margin-left: -1em;
     position: absolute;
     left: 0;
     font-size: 1.5em; /* Larger bullet */
@@ -81,15 +79,15 @@
 /* Mobile responsiveness */
 @media (max-width: 768px) {
     .guidanceContainer {
-        padding: 25px; /* Adjusted padding */
+        padding: 30px; /* Adjusted padding */
         margin: 20px auto;
         border-radius: 10px;
-        max-width: 95%; /* Wider on mobile */
+        max-width: 90%; /* Wider on mobile */
         gap: 15px; /* Adjusted gap */
     }
 
     .title {
-        font-size: 2rem; /* Adjusted */
+        font-size: 1.8rem; /* Adjusted */
         margin-bottom: 15px;
     }
 
@@ -103,17 +101,40 @@
     }
 
     .pointsList li {
-        font-size: 0.95rem; /* Adjusted */
+        font-size: 0.9rem; /* Adjusted */
         margin-bottom: 10px;
-        padding-left: 20px; /* Adjusted space for bullet */
+        padding-left: 25px; /* Adjusted space for bullet */
     }
 
     .pointsList li::before {
-        font-size: 1.2em; /* Adjusted bullet size */
+        font-size: 1.1em; /* Adjusted bullet size */
     }
 
     .startButton {
-        padding: 15px 40px; /* Adjusted */
-        font-size: 1.2rem; /* Adjusted */
+        padding: 12px 30px; /* Adjusted */
+        font-size: 1.1rem; /* Adjusted */
+    }
+}
+
+@media (max-width: 480px) {
+    .guidanceContainer {
+        padding: 20px; /* Further adjusted padding */
+    }
+
+    .title {
+        font-size: 1.5rem; /* Further adjusted */
+    }
+
+    .instruction {
+        font-size: 0.9rem; /* Further adjusted */
+    }
+
+    .pointsList li {
+        font-size: 0.85rem; /* Further adjusted */
+    }
+
+    .startButton {
+        padding: 10px 25px; /* Further adjusted */
+        font-size: 1rem; /* Further adjusted */
     }
 }

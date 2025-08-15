@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { ChevronLeft, ChevronDown, ChevronRight } from "lucide-react";
 import styles from "./HelpPage.module.css";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const faqData = [
     {
         id: 1,
-        title: "What is Project Iris?",
+        title: "What Is Project Iris?",
         content: [
             "Project Iris is a web-based smart assistant designed for the visually impaired.",
             "It provides real-time environmental awareness through advanced object and depth detection.",
@@ -15,16 +15,6 @@ const faqData = [
     },
     {
         id: 2,
-        title: "How to calibrate device?",
-        content: [
-            "Calibration is crucial for accurate depth estimation.",
-            "Align your phone securely in a pocket or strap, ensuring the camera has a clear view.",
-            "Record a reference distance using your hand or a known object.",
-            "Verify the calibration by walking towards your hand/object and observing the alerts."
-        ],
-    },
-    {
-        id: 3,
         title: "Starting & Stopping Detection",
         content: [
             "Press ‘Start’ to begin real-time object and depth detection.",
@@ -33,7 +23,7 @@ const faqData = [
         ],
     },
     {
-        id: 4,
+        id: 3,
         title: "Interpreting Alerts (Audio & Haptic)",
         content: [
             "Project Iris provides both audio cues and haptic (vibration) feedback.",
@@ -45,17 +35,7 @@ const faqData = [
         ],
     },
     {
-        id: 5,
-        title: "How to re-calibrate device?",
-        content: [
-            "You may need to re-calibrate if you change your phone's position, or if you notice inaccuracies in distance alerts.",
-            "Navigate to Settings > Calibration within the application.",
-            "Follow the on-screen guide step-by-step to ensure precise re-calibration.",
-            "Tap ‘Save’ once the re-calibration process is complete to apply the new settings."
-        ],
-    },
-    {
-        id: 6,
+        id: 4,
         title: "Customizing Alert Settings",
         content: [
             "Project Iris allows you to personalize your alert experience.",
@@ -120,6 +100,15 @@ function AccordionItem({ number, title, content, isOpen, onToggle }) {
 export default function HelpPage() {
     const navigate = useNavigate();
     const [openItems, setOpenItems] = useState(new Set([1]));
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const filteredFaqData = useMemo(() => {
+        if (!searchTerm) return faqData;
+        return faqData.filter(item =>
+            item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.content.some(line => line.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+    }, [searchTerm]);
 
     function toggleItem(itemNo) {
         const next = new Set(openItems);
@@ -147,8 +136,17 @@ export default function HelpPage() {
             </header>
 
             <main className={styles.helpMain}>
+                <div className={styles.searchContainer}>
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        className={styles.searchInput}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
                 <div className={styles.accordionContainer}>
-                    {faqData.map((item) => (
+                    {filteredFaqData.map((item) => (
                         <AccordionItem
                             key={item.id}
                             number={item.id}

@@ -8,7 +8,7 @@ const Stats = ({ sessions }) => {
     const totalUniqueObjects = sessions.reduce((acc, session) => acc + session.uniqueObjects, 0);
     const totalDetections = sessions.reduce((acc, session) => acc + session.totalDetections, 0);
     const averageSessionDuration = totalSessions > 0 ? totalDuration / totalSessions : 0;
-    const uniqueUsers = [...new Set(sessions.map(session => session.userId))].length;
+    const uniqueUsers = new Set(sessions.map(session => session.userId?._id).filter(Boolean)).size;
 
     const formatDuration = (ms) => {
         const minutes = Math.floor(ms / 60000);

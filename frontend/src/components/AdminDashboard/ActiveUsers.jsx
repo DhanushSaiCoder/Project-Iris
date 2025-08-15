@@ -25,8 +25,11 @@ const ActiveUsers = ({ sessions }) => {
                 {uniqueUserIds.length > 0 ? (
                     uniqueUserIds.slice(0, 5).map((userId, index) => (
                         <div key={userId + index} className={styles.UserCard}>
-                            <p className={styles.SessionId}>USER ID: {"  "}<span>{userId}</span></p>
-                            <p className={styles.Moniter} onClick={() => handleMonitorUser(userId)}>Monitor User</p>
+                            <div className={styles.UserInfo}>
+                                <div className={styles.Avatar}>{userId.charAt(0).toUpperCase()}</div>
+                                <p className={styles.UserId}>User ID: <span>{userId}</span></p>
+                            </div>
+                            <button className={styles.MonitorButton} onClick={() => handleMonitorUser(userId)}>Monitor</button>
                         </div>
                     ))
                 ) : (

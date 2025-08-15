@@ -90,73 +90,87 @@
     justify-content: space-between;
     flex-direction: row;
     margin-top: 10px;
+    margin-bottom: 1rem;
 }
 
 .ActiveUsersTitleContainer h1 {
-    font-size: 18px;
+    font-size: 1.5rem;
+    color: var(--text-primary);
 }
 
 .ActiveUsersDetails {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    display: grid;
+    gap: 1rem;
 }
 
 .UserCard {
-    width: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 24px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
     background-color: var(--color-card);
-    margin-top: 16px; /* Increased margin */
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    position: relative; /* Added for absolute positioning of monitor button */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .UserCard:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.UserCard p {
-    margin: 0;
+.UserCard .userInfo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.UserCard .userIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.UserCard .userDetails {
+    display: flex;
+    flex-direction: column;
 }
 
 .fullName {
     font-weight: 600;
-    font-size: 1.2em;
-    color: var(--color-primary);
-    margin-bottom: 4px;
-}
-
-.SessionId span{
-    font-weight: normal;
-    font-size: 0.9em;
-    color: var(--color-text-secondary);
-    margin-bottom: 12px; /* Space between ID and button */
-}
-
-.Moniter {
-    font-size: 0.9em;
+    font-size: 1.1em;
     color: var(--color-text-primary);
+}
+
+.SessionId span {
+    font-size: 0.85em;
+    color: var(--color-text-secondary);
+}
+
+.MonitorButton {
     background-color: var(--color-cta);
-    padding: 8px 16px;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
     border-radius: 5px;
     cursor: pointer;
-    text-decoration: none;
-    transition: background-color 0.2s ease-in-out;
-    position: absolute; /* Position absolutely */
-    bottom: 24px; /* Distance from bottom */
-    right: 24px; /* Distance from right */
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.Moniter:hover {
-    background-color: #1a73e8; /* A slightly darker shade of --color-cta */
+.MonitorButton:hover {
+    background-color: var(--color-cta-hover);
+    transform: scale(1.03);
 }
 
 /* Inlined History Component Styles */
@@ -291,5 +305,28 @@
 @media (max-width: 480px) {
     .AdminToolCard {
         flex: 1 1 100%; /* 1 card per row on extra small screens */
+    }
+
+    .UserCard {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .MonitorButton {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (hover: none) {
+    .UserCard:hover {
+        transform: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .MonitorButton:hover {
+        background-color: var(--color-cta);
+        transform: none;
     }
 }

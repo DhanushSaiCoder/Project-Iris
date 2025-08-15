@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
+import profileImage from "../Images/profile.png";
 
 import styles from "./AdminDashboardPage.module.css";
 import chartStyles from "./Charts.module.css";
@@ -381,6 +382,16 @@ const AdminDashboardPage = () => {
                 const response = await axios.get(
                     `${process.env.REACT_APP_BACKEND_URL}/session`
                 );
+                console.log("Fetched sessions:", response.data.data);
+                const uniqueUserIds = [
+                    ...new Set(
+                        response.data.data
+                            .map((session) => session.userId?._id)
+                            .filter(Boolean)
+                    ),
+                ];
+                console.log("Unique user IDs found:", uniqueUserIds);
+                console.log("Number of unique users:", uniqueUserIds.length);
                 setSessions(response.data.data);
             } catch (err) {
                 setError(err);
@@ -393,7 +404,11 @@ const AdminDashboardPage = () => {
     }, []);
 
     const uniqueUserIds = useMemo(
-        () => [...new Set(sessions.map((session) => session.userId))],
+        () => [
+            ...new Set(
+                sessions.map((session) => session.userId?._id).filter(Boolean)
+            ),
+        ],
         [sessions]
     );
 
@@ -414,17 +429,20 @@ const AdminDashboardPage = () => {
             }
         };
 
-        if (!loading && sessions.length > 0) {
+        if (!loading) {
             fetchUserDetails();
-        } else if (!loading && sessions.length === 0) {
-            setActiveUsersDetails([]); // No sessions, no active users
         }
-    }, [loading, sessions, uniqueUserIds]);
+    }, [loading, uniqueUserIds]);
 
     // Event Handlers
     const handleMonitorUser = (userId) => {
         console.log(`Monitoring user: ${userId}`);
         navigate(`/monitor-user/${userId}`);
+    };
+
+    const getUserFullName = (userId) => {
+        const user = activeUsersDetails.find((user) => user._id === userId);
+        return user ? user.fullName : userId; // Fallback to userId if not found
     };
 
     // Data Calculations for Inlined Components
@@ -540,20 +558,27 @@ const AdminDashboardPage = () => {
                     {activeUsersDetails.length > 0 ? (
                         activeUsersDetails.map((user) => (
                             <div key={user._id} className={styles.UserCard}>
-                                <p className={styles.userFullName}>
-                                    <span className={styles.fullName}>
-                                        {user.fullName}
-                                    </span>
-                                </p>
-                                <p className={styles.SessionId}>
-                                    <span>{user._id}</span>
-                                </p>
-                                <p
-                                    className={styles.Moniter}
+                                <div className={styles.userInfo}>
+                                    <img
+                                        src={profileImage}
+                                        alt={user.fullName}
+                                        className={styles.userIcon}
+                                    />
+                                    <div className={styles.userDetails}>
+                                        <p className={styles.fullName}>
+                                            {user.fullName}
+                                        </p>
+                                        <p className={styles.SessionId}>
+                                            <span>ID: {user._id}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <button
+                                    className={styles.MonitorButton}
                                     onClick={() => handleMonitorUser(user._id)}
                                 >
-                                    Monitor User
-                                </p>
+                                    Monitor
+                                </button>
                             </div>
                         ))
                     ) : (
@@ -588,7 +613,11 @@ const AdminDashboardPage = () => {
                                     .map((session) => (
                                         <tr key={session._id}>
                                             <td>{session._id}</td>
-                                                                                        <td>{session.userId?._id}</td>
+                                            <td>
+                                                {getUserFullName(
+                                                    session.userId?._id
+                                                )}
+                                            </td>
                                             <td>
                                                 {formatDuration(
                                                     session.duration

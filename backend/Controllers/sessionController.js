@@ -3,16 +3,22 @@ import Session from "../models/sessionModel.js";
 export const createSession = async (req, res) => {
     try {
         console.log("Incoming POST data:", req.body); // Add this
-        const { userId, duration, uniqueObjects, totalDetections, allDetections } = req.body;
+        const { userId, duration, totalDetections, allDetections } = req.body;
 
         if (!userId || !duration || !Array.isArray(allDetections)) {
             return res.status(400).json({ error: "Invalid or missing data" });
         }
 
+        const uniqueObjectClasses = new Set(allDetections.map(d => d.class));
+        const uniqueObjects = uniqueObjectClasses.size;
+
+        console.log("Unique object classes:", uniqueObjectClasses);
+        console.log("Number of unique objects:", uniqueObjects);
+
         const newSession = new Session({
             userId,
             duration,
-            uniqueObjects,
+            uniqueObjects, // calculated value
             totalDetections,
             allDetections,
         });
@@ -70,5 +76,18 @@ export const importGuestSessions = async (req, res) => {
     } catch (error) {
         console.error("Error importing guest sessions:", error);
         res.status(500).json({ message: "Failed to import guest sessions." });
+    }
+};
+
+export const getUniqueObjects = async (req, res) => {
+    try {
+        const sessions = await Session.find({});
+        const allDetections = sessions.flatMap(session => session.allDetections);
+        const uniqueObjectClasses = [...new Set(allDetections.map(d => d.class))];
+        
+        res.status(200).json({ uniqueObjects: uniqueObjectClasses });
+    } catch (err) {
+        console.error("Error retrieving unique objects:", err.message);
+        res.status(500).json({ error: err.message });
     }
 };

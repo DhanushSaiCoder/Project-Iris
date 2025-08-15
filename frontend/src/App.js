@@ -19,6 +19,7 @@ import TimeLogger from './components/AdminDashboard/TimeLogger.jsx';
 import AllStatsPage from './pages/AllStatsPage.jsx';
 import AllActiveUsersPage from './pages/AllActiveUsersPage.jsx';
 import AllHistoryPage from './pages/AllHistoryPage.jsx';
+import UniqueObjectsPage from './pages/UniqueObjectsPage.jsx';
 import './App.css';
 import "./styles/variables.css"
 
@@ -68,6 +69,7 @@ const AppContent = () => {
                         <Route path="/all-stats" element={<AllStatsPage />} />
                         <Route path="/all-active-users" element={<AllActiveUsersPage />} />
                         <Route path="/all-history" element={<AllHistoryPage />} />
+                        <Route path="/unique-objects" element={<UniqueObjectsPage />} />
                         <Route path="/newSession" element={<NewSession />} />
                         <Route path="/calibration" element={<CalibrationPage />} />
                         <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />

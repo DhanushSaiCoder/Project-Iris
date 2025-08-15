@@ -12,6 +12,9 @@ router.post("/guest-import", sessionController.importGuestSessions);
 // GET: Fetch all summaries
 router.get("/", sessionController.getAllSessions);
 
+// GET: Fetch all unique objects
+router.get("/unique-objects", sessionController.getUniqueObjects);
+
 // GET: Fetch summary by ID
 router.get("/:id", sessionController.getSessionById);
 

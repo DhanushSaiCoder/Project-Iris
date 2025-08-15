@@ -1,0 +1,26 @@
+.UniqueObjectsPage {
+    padding: 2rem;
+    background-color: var(--color-background);
+    color: var(--text-primary);
+}
+
+.Title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.ObjectsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.ObjectCard {
+    background-color: var(--color-card);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
+}

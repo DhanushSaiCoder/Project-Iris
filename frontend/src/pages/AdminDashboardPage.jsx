@@ -353,6 +353,7 @@ const TotalDetectionsChartInlined = ({ sessions }) => {
 const AdminDashboardPage = () => {
     // State Management
     const [sessions, setSessions] = useState([]);
+    const [totalUniqueObjectsCount, setTotalUniqueObjectsCount] = useState(0);
     const [activeUsersDetails, setActiveUsersDetails] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -434,6 +435,21 @@ const AdminDashboardPage = () => {
         }
     }, [loading, uniqueUserIds]);
 
+    useEffect(() => {
+        const fetchUniqueObjects = async () => {
+            try {
+                const response = await axios.get(
+                    `${process.env.REACT_APP_BACKEND_URL}/session/unique-objects`
+                );
+                setTotalUniqueObjectsCount(response.data.uniqueObjects.length);
+            } catch (err) {
+                console.error("Error fetching unique objects:", err);
+            }
+        };
+
+        fetchUniqueObjects();
+    }, []);
+
     // Event Handlers
     const handleMonitorUser = (userId) => {
         console.log(`Monitoring user: ${userId}`);
@@ -449,10 +465,6 @@ const AdminDashboardPage = () => {
     const totalSessions = sessions.length;
     const totalDuration = sessions.reduce(
         (acc, session) => acc + session.duration,
-        0
-    );
-    const totalUniqueObjects = sessions.reduce(
-        (acc, session) => acc + session.uniqueObjects,
         0
     );
     const totalDetections = sessions.reduce(
@@ -499,6 +511,13 @@ const AdminDashboardPage = () => {
                             <h2>Manage Users</h2>
                             <p>View and modify user roles.</p>
                         </Link>
+                        <Link
+                            to="/unique-objects"
+                            className={styles.AdminToolCard}
+                        >
+                            <h2>Unique Objects</h2>
+                            <p>View all unique detected objects.</p>
+                        </Link>
                     </div>
                 </div>
             )}
@@ -528,7 +547,7 @@ const AdminDashboardPage = () => {
                     </div>
                     <div className={styles.StatsDetailsCard}>
                         <h1 className={styles.statsData}>
-                            {totalUniqueObjects}
+                            {totalUniqueObjectsCount}
                         </h1>
                         <p>Unique Objects</p>
                     </div>

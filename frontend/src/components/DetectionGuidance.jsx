@@ -14,14 +14,15 @@ const DetectionGuidance = () => {
     return (
         <div className={styles.guidanceContainer}>
             <h2 className={styles.title}>Object Detection Guidance</h2>
+            <p className={styles.instruction}>For the best experience, please follow these suggestions:</p>
             <ul className={styles.pointsList}>
-                <li>Ensure the device's camera has an unobstructed view of the desired area.</li>
-                <li>Operate the device in a well-illuminated environment for best results.</li>
-                <li>Maintain a stable device position during the detection process.</li>
-                <li>Alert distances and other preferences can be configured in the Settings menu.</li>
+                <li>Make sure nothing is blocking the camera's view.</li>
+                <li>Use the app in a place with good lighting for best results.</li>
+                <li>Try to keep your phone steady while the app is detecting objects.</li>
+                <li>You can change alert distances and other settings in the Settings menu.</li>
             </ul>
             <button className={styles.startButton} onClick={handleStart}>
-                Continue
+                Acknowledge & Continue
             </button>
         </div>
     );

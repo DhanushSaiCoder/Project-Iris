@@ -1,0 +1,119 @@
+/* frontend/src/components/DetectionGuidance.module.css */
+.guidanceContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px; /* Increased padding */
+    background-color: var(--color-card); /* Use card background color */
+    border-radius: 15px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+    max-width: 800px; /* Increased max-width */
+    margin: 50px auto; /* Center on page */
+    color: var(--color-text-primary);
+    text-align: center;
+    gap: 20px; /* Added gap for spacing */
+}
+
+.title {
+    font-size: 3rem; /* Larger title */
+    color: var(--color-primary); /* Use primary brand color */
+    margin-bottom: 20px;
+    font-weight: 700; /* Make it bolder */
+}
+
+.instruction {
+    font-size: 1.2rem; /* Slightly larger */
+    color: var(--color-text-secondary); /* Use secondary text color */
+    margin-bottom: 25px;
+    line-height: 1.7; /* Improved line height */
+    max-width: 90%; /* Wider instruction text */
+}
+
+.pointsList {
+    list-style: none; /* Remove default bullet points */
+    padding: 0;
+    margin-bottom: 30px;
+    text-align: left;
+    width: 100%;
+    max-width: 600px; /* Wider list */
+}
+
+.pointsList li {
+    font-size: 1.1rem; /* Slightly larger */
+    color: var(--color-text-primary);
+    margin-bottom: 12px; /* Increased margin */
+    position: relative;
+    padding-left: 30px; /* Space for custom bullet */
+}
+
+.pointsList li::before {
+    content: '\2022'; /* Unicode for a bullet point */
+    color: var(--color-cta); /* Use CTA color for bullet */
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    position: absolute;
+    left: 0;
+    font-size: 1.5em; /* Larger bullet */
+    line-height: 1; /* Align bullet vertically */
+}
+
+.startButton {
+    padding: 18px 50px; /* Larger padding */
+    font-size: 1.5rem; /* Larger font size */
+    background-color: var(--color-cta); /* Use CTA color */
+    color: var(--color-text-primary); /* Use primary text color */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-weight: 600; /* Make it bolder */
+}
+
+.startButton:hover {
+    transform: translateY(-3px); /* More pronounced lift */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .guidanceContainer {
+        padding: 25px; /* Adjusted padding */
+        margin: 20px auto;
+        border-radius: 10px;
+        max-width: 95%; /* Wider on mobile */
+        gap: 15px; /* Adjusted gap */
+    }
+
+    .title {
+        font-size: 2rem; /* Adjusted */
+        margin-bottom: 15px;
+    }
+
+    .instruction {
+        font-size: 1rem; /* Adjusted */
+        margin-bottom: 20px;
+    }
+
+    .pointsList {
+        max-width: 100%; /* Full width on mobile */
+    }
+
+    .pointsList li {
+        font-size: 0.95rem; /* Adjusted */
+        margin-bottom: 10px;
+        padding-left: 20px; /* Adjusted space for bullet */
+    }
+
+    .pointsList li::before {
+        font-size: 1.2em; /* Adjusted bullet size */
+    }
+
+    .startButton {
+        padding: 15px 40px; /* Adjusted */
+        font-size: 1.2rem; /* Adjusted */
+    }
+}

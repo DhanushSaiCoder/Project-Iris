@@ -10,6 +10,7 @@ const defaultSettings = {
     developerMode: false,
     autoCaliberateOnLaunch: false,
     torch: false,
+    hasSeenDetectionGuidance: false, // New default setting
 };
 
 // 2. Create Context
@@ -64,6 +65,12 @@ export function SettingsProvider({ children }) {
             ? JSON.parse(saved)
             : defaultSettings.torch;
     });
+    const [hasSeenDetectionGuidance, setHasSeenDetectionGuidance] = useState(() => {
+        const saved = localStorage.getItem("bw-detection-guidance");
+        return saved !== null
+            ? JSON.parse(saved)
+            : defaultSettings.hasSeenDetectionGuidance;
+    });
 
     // Persist to localStorage on changes
     useEffect(() => {
@@ -81,9 +88,12 @@ export function SettingsProvider({ children }) {
     useEffect(() => {
         localStorage.setItem("bw-auto-calibrate", JSON.stringify(autoCaliberateOnLaunch));
     }, [autoCaliberateOnLaunch]);
-    useEffect(() => {
+        useEffect(() => {
         localStorage.setItem("bw-torch", JSON.stringify(torch));
     }, [torch]);
+    useEffect(() => {
+        localStorage.setItem("bw-detection-guidance", JSON.stringify(hasSeenDetectionGuidance));
+    }, [hasSeenDetectionGuidance]);
 
     // 4. Provide state + setters
     const value = useMemo(
@@ -102,8 +112,10 @@ export function SettingsProvider({ children }) {
             setAutoCaliberateOnLaunch,
             torch,
             setTorch,
+            hasSeenDetectionGuidance,
+            setHasSeenDetectionGuidance,
         }),
-        [audioAnnouncements, hapticFeedback, sessionId, alertDistance, developerMode, autoCaliberateOnLaunch, torch]
+        [audioAnnouncements, hapticFeedback, sessionId, alertDistance, developerMode, autoCaliberateOnLaunch, torch, hasSeenDetectionGuidance]
     );
 
     return (

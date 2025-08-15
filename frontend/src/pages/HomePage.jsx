@@ -11,6 +11,7 @@ import styles from "./HomePage.module.css";
 import SessionSummary from "./SessionSummary";
 import { SettingsContext } from "../context/SettingsContext";
 import FullScreenLoading from "../components/common/FullScreenLoading"; // Import the new component
+import DetectionGuidance from "../components/DetectionGuidance"; // Import DetectionGuidance
 
 const HomePage = () => {
   const [isDetecting, setIsDetecting] = useState(false);
@@ -20,7 +21,7 @@ const HomePage = () => {
   const [isPostingSession, setIsPostingSession] = useState(false);
   
   const navigate = useNavigate();
-  const { developerMode } = useContext(SettingsContext);
+  const { developerMode, hasSeenDetectionGuidance } = useContext(SettingsContext);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -115,50 +116,53 @@ const HomePage = () => {
   
   return (
     <div className={styles.homePage}>
-        {modelsAreLoading && <FullScreenLoading />}
-        <>
-            <div
-                className={`${styles.mainContentWrapper} ${
-                    isDetecting ? styles.detecting : ""
-                }`}
-            >
-                <div className={styles.videoStreamDiv}>
-                    <div className={styles.videoWrapper}>
-                        <VideoStream
-                            isDetecting={isDetecting}
-                            onLoadingChange={handleLoadingChange}
-                            onObjectDetection={handleObjectDetection}
-                        />
-                    </div>
-                </div>
-                {isDetecting && developerMode && (
-                    <div className={styles.detectedObjectsListDiv}>
-                        <DetectedObjectsList detectedObjects={detectedObjects} />
-                    </div>
-                )}
-            </div>
-            
-            <div className={styles.controlsDiv}>
-                <button
-                    className={`${styles.controlBtn} ${
-                        isDetecting ? styles.endBtn : styles.startBtn
-                    } ${modelsAreLoading || isPostingSession ? styles.disabledBtn : ""}`}
-                    onClick={
-                        isDetecting ? handleEndDetection : handleStartDetection
-                    }
-                    disabled={modelsAreLoading || isPostingSession}
+        {!hasSeenDetectionGuidance ? (
+            <DetectionGuidance />
+        ) : (
+            <>
+                {modelsAreLoading && <FullScreenLoading />} {/* Moved here */}
+                <div
+                    className={`${styles.mainContentWrapper} ${
+                        isDetecting ? styles.detecting : ""
+                    }`}
                 >
-                    {modelsAreLoading || isPostingSession ? (
-                        <LoadingSpinner />
-                    ) : isDetecting ? (
-                        "End Detection"
-                    ) : (
-                        "Start Detection"
+                    <div className={styles.videoStreamDiv}>
+                        <div className={styles.videoWrapper}>
+                            <VideoStream
+                                isDetecting={isDetecting}
+                                onLoadingChange={handleLoadingChange}
+                                onObjectDetection={handleObjectDetection}
+                            />
+                        </div>
+                    </div>
+                    {isDetecting && developerMode && (
+                        <div className={styles.detectedObjectsListDiv}>
+                            <DetectedObjectsList detectedObjects={detectedObjects} />
+                        </div>
                     )}
-                </button>
-                {/* The loading message is now handled by FullScreenLoading */}
-            </div>
-        </>
+                </div>
+                
+                <div className={styles.controlsDiv}>
+                    <button
+                        className={`${styles.controlBtn} ${
+                            isDetecting ? styles.endBtn : styles.startBtn
+                        } ${modelsAreLoading || isPostingSession ? styles.disabledBtn : ""}`}
+                        onClick={
+                            isDetecting ? handleEndDetection : handleStartDetection
+                        }
+                        disabled={modelsAreLoading || isPostingSession}
+                    >
+                        {modelsAreLoading || isPostingSession ? (
+                            <LoadingSpinner />
+                        ) : isDetecting ? (
+                            "End Detection"
+                        ) : (
+                            "Start Detection"
+                        )}
+                    </button>
+                </div>
+            </>
+        )}
     </div>
   );
 };

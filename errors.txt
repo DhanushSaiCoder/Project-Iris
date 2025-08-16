@@ -1,0 +1,447 @@
+VideoStream: Calling predictDepth
+574VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:47 Depth model warmed up.
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+42VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+37VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+25VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+18VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+32VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+21VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+40VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+30VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+27VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+19VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+18VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+34VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+33VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+25VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+24VideoStream.jsx:61 VideoStream: Calling predictDepth
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+HomePage.jsx:87 Session posted successfully: {message: 'Session saved', session: {…}}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:47 Depth model warmed up.
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+27VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+26VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+24VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+21VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+18VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+27VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+21VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+33VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+20VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+28VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+24VideoStream.jsx:61 VideoStream: Calling predictDepth
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+2VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:178 Worker: CRITICAL ERROR (full logic with data logging): Error: Argument 'b' passed to 'where' must be a Tensor or TensorLike, but got 'null'
+    at convertToTensor (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:105200:11)
+    at where_ (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:96631:79)
+    at where__op (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:86604:22)
+    at push.../node_modules/@tensorflow/tfjs-core/dist/public/chained_ops/where.js.where (vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-a4be4…:103739:59)
+    at predictDepth (src_workers_depth_worker_js.chunk.js:141:46)
+predictDepth @ depth.worker.js:170
+await in predictDepth
+__webpack_modules__../src/workers/depth.worker.js.self.onmessage @ depth.worker.js:197Understand this error
+useDepthModel.jsx:27 Depth Analysis Debug Info: {cpzSliceShape: Array(2), cpzSliceSize: 27648, cpzSliceData: Array(144), conditionShape: Array(2), conditionSize: 27648, …}MAX_DEPTH_VALID: 1MIN_DEPTH_VALID: 0.01MIN_VALID_PIXEL_RATIO: 0.01conditionFloatShape: (2) [144, 192]conditionFloatSize: 27648conditionShape: (2) [144, 192]conditionSize: 27648cpzShape: (2) [144, 192]cpzSize: 27648cpzSliceData: (144) [Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), …]cpzSliceShape: (2) [144, 192]cpzSliceSize: 27648currentQuantileDepth: nullfilteredDepthsData: (144) [Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), …]filteredDepthsShape: (2) [144, 192]filteredDepthsSize: 27648resizedDepthShape: (2) [480, 640]totalCPZPixels: 27648validCount: 0[[Prototype]]: Object
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+src_workers_depth_worker_js.chunk.js:211 Worker: onmessage received predict, calling predictDepth
+src_workers_depth_worker_js.chunk.js:70 Worker: predictDepth entered (full logic with data logging)
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+VideoStream.jsx:61 VideoStream: Calling predictDepth
+HomePage.jsx:87 Session posted successfully: {message: 'Session saved', session: {…}}

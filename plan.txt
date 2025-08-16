@@ -1,0 +1,155 @@
+--- Review Request for Implementation Plan --- **Context:** I am an AI agent working on "Project Iris," a web-based smart assistant for the visually impaired. The app uses a React frontend and Node.js backend. Core functionality involves: 1. **Object Detection:** Using TensorFlow.js with COCO-SSD. 2. **Depth Estimation:** Using TensorFlow.js with ARPortraitDepth (and FastDepth models). 3. **Audio/Haptic Feedback:** Notifying users of detected objects and their distance. **Problem Identified:** The current system fails to detect obstacles that are not part of the COCO-SSD model's training set (e.g., a plain wall, a large, unclassified box). This is a critical safety gap. **Proposed Solution (Refined Depth-Based Obstacle Detection):** To address this, I've proposed a solution that leverages the existing depth map without introducing new, heavy ML models. The core idea is: 1. Define a "Critical Proximity Zone" (CPZ) in the center of the video stream's depth map. 2. Continuously find the *minimum* depth value within this CPZ. 3. If this minimum depth consistently falls below a predefined "unidentified obstacle" alert distance, AND no known COCO-SSD object is detected in that CPZ, trigger a distinct alert. **Implementation Plan:** 1. **Feature Branching:** Create a new Git branch (`feature/depth-obstacle-detection`). 2. **Update `SettingsContext`:** Add a new setting for the "unidentified obstacle" alert distance. 3. **Modify `useDepthModel` Hook:** Expose the calculated `minimum_depth_in_CPZ` and its consistency (e.g., a boolean `isCriticalDepthConsistent`). 4. **Modify `VideoStream` Component:** * Integrate logic to define the CPZ. * Calculate the minimum depth within the CPZ. * Implement the consistency check for the minimum depth. * Implement the conditional alerting logic: * If `isCriticalDepthConsistent` is true AND COCO-SSD *has NOT* detected an object in the CPZ, trigger a new alert type. 5. **Update Feedback Mechanisms (`haptics.js`, `speech.js`):** Add distinct audio/haptic feedback for the "unidentified obstacle" alert. 6. **User Interface (Optional but Recommended):** Add a toggle in `SettingsPage` to enable/disable this new alert. 7. **Testing:** * Unit tests for depth map analysis logic. * Thorough manual integration tests (walking towards walls, known objects, false positive scenarios). 8. **Documentation:** Update `README.md` or `FEATURES.md`. **Request for Review:** Please review this plan. Are there any best practices I've missed? Any potential edge cases or alternative considerations that could improve this plan, especially regarding performance, accuracy, or user experience? Are there any specific implementation details within the mentioned steps that I should pay extra attention to? --- End of Review Request ---
+
+
+# Summary assessment
+
+
+
+
+
+
+
+You’re closing a life-critical gap without adding a heavy model — that’s smart. The plan is solid. To make it resilient in the messy real world, focus on: robust depth handling (noise, invalid pixels, ground-plane), temporal logic (hysteresis, FPS variance), GPU-friendly reductions, crisp UX cues, and strong testing on low-end devices. Below are concrete improvements and implementation details to make this feature trustworthy.
+
+---
+
+# Performance and architecture
+
+- **Choose the fastest backend:** Prefer WebGPU when available, then WebGL, then WASM; fall back gracefully and downscale the processing resolution dynamically if frame time exceeds a budget (e.g., 30–40 ms).  
+- **Keep computations on-GPU where possible:** Compute CPZ min (or quantile) via a tensor reduction to avoid JS loops. Use a downsampled depth map (e.g., 128×96) for obstacle logic to save time.  
+- **Use quantile over raw min:** Replace raw min with a low percentile (e.g., 5th) to resist salt-and-pepper noise.  
+- **Apply temporal smoothing:** Use an exponential moving average (EMA) for stability:  
+  \[
+  d_{\text{ema}}(t)=\alpha \cdot d_{\text{cpz}}(t)+(1-\alpha)\cdot d_{\text{ema}}(t-1)
+  \]
+  Choose \(\alpha\) around 0.3–0.5.  
+- **Hysteresis and cooldowns:** Use two thresholds to avoid alert chatter:  
+  \[
+  d < T_{\text{on}} \Rightarrow \text{arm}, \quad d > T_{\text{off}} \Rightarrow \text{disarm}, \quad T_{\text{off}} > T_{\text{on}}
+  \]
+  Add a cooldown (e.g., 1.5–2 s) between repeated alerts.  
+- **Frame-time aware consistency:** Don’t count “N frames”; use actual time below threshold (e.g., ≥ 250 ms) because FPS varies.  
+- **Memory hygiene:** Wrap tensor ops in tf.tidy, dispose intermediate tensors, and reuse buffers to prevent leaks during continuous streaming.
+
+---
+
+# Depth signal quality and robustness
+
+- **Validate depth:** Many models output invalid depth as 0, NaN, or extreme values.  
+  - **Mask invalids:** Ignore pixels outside [minDepth, maxDepth], and optionally use a model-provided confidence if available.  
+  - **Fallback if sparse:** If valid pixel ratio in the CPZ drops below a threshold (e.g., 60%), treat the estimate as unreliable; reduce alert aggressiveness and prompt the user (“Depth unreliable”).  
+- **Quantile and spatial smoothing:**  
+  - **Median/gaussian smoothing:** Light 3×3 median or gaussian before quantile to tame spikes.  
+  - **Erosion before min/quantile:** Morphological erosion can remove isolated near pixels that cause false alarms.  
+- **Absolute scale caveat:** Monocular depth (e.g., ARPortraitDepth/FastDepth) often has scale drift.  
+  - **Per-device calibration:** Add a quick setup that asks the user to stand 1 m from a wall to scale/offset raw depth to meters.  
+  - **Relative safety bands:** If no calibration, base thresholds on relative proximity (e.g., “top 10% nearest depths indicate hazard”) plus empirical distance mapping.  
+- **Ground-plane handling:** Floors close to the camera can trigger false “near” values when angled downward.  
+  - **Estimate ground plane:** Fit a dominant plane from the lower image region and ignore CPZ depths within a small offset of that plane.  
+  - **Simpler heuristic:** If the CPZ is near the lower third and depth forms a smooth gradient consistent with a floor, down-weight it.  
+- **Textureless, glass, mirrors:** Expect depth failures. Combine with optical-flow “looming” as a secondary signal: rapid uniform expansion in the CPZ implies approach even if depth is noisy.  
+- **Very close saturation:** Clamp impossible minima (e.g., < 0.1 m). If repeatedly saturated, treat as “camera occluded” and announce gently.
+
+---
+
+# Detection logic and thresholds
+
+- **CPZ design:**  
+  - **Size and position:** Start with ~25–35% of the frame width/height centered. Adjust by device FOV; widen if walking speed increases.  
+  - **Multi-zone option:** Consider left/center/right zones for directional cues and to catch thin obstacles off-center.  
+- **Min vs quantile:** Use 5th–10th percentile within CPZ for stability.  
+- **Consistency check:**  
+  - **Time-based:** Require the EMA depth to be below \(T_{\text{on}}\) for ≥ 200–300 ms.  
+  - **Motion-aware:** If IMU or optical flow indicates higher forward speed, raise the distance threshold (earlier warning) and shorten required consistency time.  
+- **Time-to-collision (TTC) adjunct:**  
+  \[
+  \text{TTC} \approx \frac{d}{-\dot{d}}
+  \]
+  If \(\dot{d} < 0\) and TTC < configurable limit (e.g., 2 s), escalate even if depth is slightly above the distance threshold.  
+- **COCO-SSD gating:**  
+  - **Coordinate alignment:** Ensure consistent transforms between depth and detection boxes (same aspect ratio, account for letterboxing and rotation).  
+  - **Overlap logic:** Only suppress “unidentified obstacle” if a known object’s box overlaps the CPZ and its estimated depth is consistent; otherwise still warn.  
+  - **Duplicate suppression:** If both known-object-near and unidentified-near fire, prioritize one alert and include the best label (“Object ahead: person, 1 meter”).  
+- **Alert states:**  
+  - **Two-stage alerts:** “Caution” band and “Stop” band with distinct haptics and tones.  
+  - **Cooldown:** Prevent repeated announcements; allow haptic tapering instead.
+
+#### Example pseudo-code for stability
+
+```js
+// Pseudocode inside a tf.tidy block
+const depthCPZ = depthTensor.slice([y0, x0, 0], [h, w, 1]).reshape([h*w]);
+// Remove invalids and outliers
+const valid = depthCPZ.where(depthCPZ.greater(minD).logicalAnd(depthCPZ.less(maxD)));
+const q = tf.topk(valid.neg(), Math.max(1, Math.floor(valid.size * 0.05))).values.neg().min(); // ~5th percentile
+
+ema = alpha * q.dataSync()[0] + (1 - alpha) * ema;
+
+const now = performance.now();
+if (ema < Ton && (now - belowSince) > 250 && !coolingDown) triggerAlert();
+if (ema > Toff) belowSince = now; // reset
+```
+
+---
+
+# Integration with object detection and user experience
+
+- **Directional feedback:** If you adopt left/center/right zones, match feedback:  
+  - **Audio:** Short, distinct phrases (“Obstacle left, close”).  
+  - **Haptics:** Pattern and side mapping (left motor vs right motor on wearable/phone hand assumption).  
+- **Alert brevity and escalation:** Keep phrases under ~1.5 seconds. Escalate tone or haptic intensity as distance shrinks. Avoid interrupting ongoing guidance unless “Stop” tier.  
+- **Debug overlays (dev mode):** Toggle to show CPZ, depth heatmap, percentile value, thresholds, FPS, and overlap boxes. Essential for tuning and user trust during trials.  
+- **Settings:**  
+  - **Thresholds and modes:** Expose distance thresholds, TTC threshold, zone layout, verbosity, cooldown.  
+  - **Calibration wizard:** Simple 30–60 second flow to set depth scale.  
+  - **Power/performance:** “Battery saver” vs “Max safety” presets that change resolution and alert aggressiveness.  
+- **Accessibility polish:**  
+  - **Screen reader labels:** All toggles and states should be announced.  
+  - **Language and units:** Let users choose units and language; keep consistent phrasing.  
+  - **Recovery cues:** If depth is unreliable, instruct actionable steps (“Raise phone,” “Improve lighting,” “Clean camera”).
+
+---
+
+# Testing and tooling
+
+- **Synthetic and recorded replays:** Record labeled sessions (walking toward walls, openings, corners, glass) and replay to deterministically evaluate changes.  
+- **Unit tests for math:**  
+  - **Quantile and masking:** Outlier handling, invalid value masking.  
+  - **Hysteresis and timing:** Verify behavior under variable FPS and jitter.  
+  - **TTC math:** Finite differences with noise and clamping.  
+- **Stress and perf tests:**  
+  - **Low-end Androids:** Target devices with weak GPUs; test at 15–30 FPS.  
+  - **Thermal:** 10–15 minute continuous runs to check throttling.  
+  - **Memory:** Track tensor counts; ensure steady-state without growth.  
+- **Field scenarios:**  
+  - **Walls and doors:** Matte vs glossy walls, doorways (depth discontinuity).  
+  - **Thin obstacles:** Poles, tripod legs, chair backs slightly off-center.  
+  - **Crowds:** Moving people with occlusions.  
+  - **Stairs and ramps:** Downward views to validate ground-plane handling.  
+  - **Lighting:** Low light, backlight, outdoor sun, reflective floors.  
+- **False-positive drills:** Stationary camera, panning without translation, camera partially occluded, lens smudge.
+
+---
+
+# Step-specific notes on your plan
+
+- **SettingsContext:**  
+  - **Add:** min/max bounds, defaults per mode, units, TTC toggle, cooldown duration. Persist per device.  
+- **useDepthModel:**  
+  - **Expose:** depth validity ratio, EMA depth, percentile value, TTC, and “depthReliable” flag.  
+  - **Provide:** a calibrated depth-to-meters function or a scale factor.  
+- **VideoStream:**  
+  - **Coordinate transforms:** Centralize mapping utilities for depth↔RGB↔detection boxes, handling rotation and letterboxing.  
+  - **Zones:** Optional left/right/center with per-zone min/quantile.  
+  - **Timers:** Use timestamps for consistency checks.  
+- **Feedback modules:**  
+  - **Distinct IDs:** New alert type constants and cooldown management.  
+  - **Parameterize:** Intensity vs distance curves; short audio with SSML prosody where supported.  
+- **UI:**  
+  - **Dev toggles:** “Show overlays,” “Log metrics,” “Replay session.”  
+  - **Calibration wizard:** One-time and re-run options.  
+- **Docs:**  
+  - **Explain scale caveats:** When calibration is absent, how thresholds are interpreted.  
+  - **Safety note:** Alerts are assistive, not guarantees.
+
+If you want, I can draft a minimal reference implementation for the CPZ quantile + EMA + hysteresis loop and the box-overlap gating, tailored to your current component structure.

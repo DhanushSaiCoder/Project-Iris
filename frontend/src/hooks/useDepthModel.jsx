@@ -6,20 +6,29 @@ export function useDepthModel() {
     const isBusyRef = useRef(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [depthMap, setDepthMap] = useState(null);
+    const [depthMap, setDepthMap] = useState(null); // Keep if still needed for other purposes
+    const [emaDepthValue, setEmaDepthValue] = useState(null); // New state for EMA depth
+    const [isDepthReliable, setIsDepthReliable] = useState(false); // New state for depth reliability
 
     useEffect(() => {
         workerRef.current = new Worker(new URL("../workers/depth.worker.js", import.meta.url));
 
         const onMessage = (e) => {
-            const { type, data, width, height, error: workerError } = e.data;
+            const { type, data, width, height, error: workerError, emaDepth, depthReliable } = e.data;
 
             if (type === "model_loaded") {
                 setLoading(false);
             } else if (type === "depth_map") {
+                // This might still be used if you need the full depth map for visualization or other features
                 setDepthMap({ data, width, height });
+            } else if (type === "depth_analysis") { // New message type
+                setEmaDepthValue(emaDepth);
+                setIsDepthReliable(depthReliable);
+                console.log("Depth Analysis Debug Info:", e.data.debugInfo);
             } else if (type === "prediction_complete") {
                 isBusyRef.current = false;
+            } else if (type === "test_message") { // New test message type
+                console.log("Worker Test Message:", e.data.message);
             } else if (type === "error") {
                 setError(workerError);
                 setLoading(false);
@@ -56,5 +65,5 @@ export function useDepthModel() {
         workerRef.current.postMessage({ type: "predict", imageData }, [imageData.data.buffer]);
     }, []);
 
-    return { loading, error, depthMap, predictDepth };
+    return { loading, error, depthMap, predictDepth, emaDepthValue, isDepthReliable };
 }

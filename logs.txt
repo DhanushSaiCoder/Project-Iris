@@ -1,15 +1,27 @@
-UniqueObjectsPage.jsx:13 Uncaught TypeError: (0 , _hooks_isMobile__WEBPACK_IMPORTED_MODULE_5__.default) is not a function
-    at UniqueObjectsPage (UniqueObjectsPage.jsx:13:1)
-UniqueObjectsPage	@	UniqueObjectsPage.jsx:13
-<UniqueObjectsPage>		
-AppContent	@	App.js:75
-<AppContent>		
-App	@	App.js:106
-<App>		
-./src/index.js	@	index.js:14
-options.factory	@	react refresh:37
-__webpack_require__	@	bootstrap:22
-(anonymous)	@	startup:7
-(anonymous)	@	startup:7
-
-﻿
+MAX_DEPTH_VALID
+: 
+1
+MIN_DEPTH_VALID
+: 
+0.01
+MIN_VALID_PIXEL_RATIO
+: 
+0.01
+cpzShape
+: 
+(2) [144, 192]
+cpzSize
+: 
+27648
+cpzSliceData
+: 
+(144) [Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), Array(192), …]
+cpzSliceShape
+: 
+(2) [144, 192]
+cpzSliceSize
+: 
+27648
+resizedDepthShape
+: 
+(2) [480, 640]

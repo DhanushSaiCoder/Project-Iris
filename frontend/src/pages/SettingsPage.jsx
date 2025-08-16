@@ -15,6 +15,10 @@ import DeveloperMode from "../components/SettingsPage/DeveloperMode/DeveloperMod
 import AudioAnnouncements from "../components/SettingsPage/AudioAnnouncements/AudioAnnouncements";
 import LogoutButton from "../components/SettingsPage/LogoutButton/LogoutButton";
 import Torch from "../components/SettingsPage/Torch/Torch";
+import UnidentifiedObstacleAlertToggle from "../components/SettingsPage/UnidentifiedObstacleAlertToggle/UnidentifiedObstacleAlertToggle";
+import UnidentifiedObstacleAlertThreshold from "../components/SettingsPage/UnidentifiedObstacleAlertThreshold/UnidentifiedObstacleAlertThreshold";
+import UnidentifiedObstacleAlertTiming from "../components/SettingsPage/UnidentifiedObstacleAlertTiming/UnidentifiedObstacleAlertTiming";
+import DeveloperModeDebugOverlays from "../components/SettingsPage/DeveloperModeDebugOverlays/DeveloperModeDebugOverlays";
 
 const SettingsPage = () => {
     const navigate = useNavigate();
@@ -78,6 +82,18 @@ const SettingsPage = () => {
                         <h3 className={styles.sectionTitle}>Admin & Developer</h3>
                         <div className={styles.settingItem}>
                             <DeveloperMode />
+                        </div>
+                        <div className={styles.settingItem}>
+                            <UnidentifiedObstacleAlertToggle />
+                        </div>
+                        <div className={styles.settingItem}>
+                            <UnidentifiedObstacleAlertThreshold />
+                        </div>
+                        <div className={styles.settingItem}>
+                            <UnidentifiedObstacleAlertTiming />
+                        </div>
+                        <div className={styles.settingItem}>
+                            <DeveloperModeDebugOverlays />
                         </div>
                         <div className={styles.buttonsDiv}>
                             <AdminDashboardBtn />

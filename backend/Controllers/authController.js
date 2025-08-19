@@ -79,3 +79,7 @@ export const login = async (req, res) => {
     }
 }
 
+export const healthCheck = (req, res) => {
+    res.status(200).json({ message: 'Backend is healthy' })
+}
+

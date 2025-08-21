@@ -22,7 +22,7 @@
 ## Features
 
 -   **Real-time Object Detection:** Uses the COCO-SSD model to identify a wide range of objects.
--   **Depth Estimation:** Provides depth information to determine the distance of objects using the Midas v2.1 model.
+-   **Depth Estimation:** Provides depth information to determine the distance of objects using the fastDepth model.
 -   **Audio and Haptic Feedback:** Alerts users to nearby objects through sound and vibration.
 -   **Session Tracking:** Records and saves detection sessions for later review.
 -   **User Management:** Allows admins to manage user roles and view user activity.
@@ -36,8 +36,8 @@
 
 -   **Framework:** Node.js with Express.js
 -   **Database:** MongoDB with Mongoose
--   **Authentication:** bcryptjs, jsonwebtoken
--   **Dependencies:** `cors`, `dotenv`, `express`, `mongoose`, `nodemon`
+-   **Authentication:** bcrypt, jsonwebtoken
+-   **Dependencies:** `axios`, `bcrypt`, `cors`, `dotenv`, `express`, `jsonwebtoken`, `mongodb`, `mongoose`, `nodemon`
 
 **Frontend:**
 
@@ -45,7 +45,7 @@
 -   **Object Detection:** TensorFlow.js with COCO-SSD
 -   **Depth Estimation:** TensorFlow.js with fastDepth
 -   **UI Libraries:** Material-UI, Lucide React, Recharts
--   **Dependencies:** `@emotion/react`, `@emotion/styled`, `@mui/material`, `@tensorflow-models/coco-ssd`, `@tensorflow/tfjs`, `axios`, `jwt-decode`, `lucide-react`, `nanoid`, `react`, `react-dom`, `react-router-dom`, `recharts`, `@vercel/analytics`
+-   **Dependencies:** `@emotion/react`, `@emotion/styled`, `@mui/material`, `@mui/x-charts`, `@tensorflow-models/coco-ssd`, `@tensorflow-models/depth-estimation`, `@tensorflow/tfjs`, `@tensorflow/tfjs-backend-webgl`, `@tensorflow/tfjs-converter`, `@vercel/analytics`, `axios`, `cra-template-pwa`, `fuse.js`, `jwt-decode`, `lucide-react`, `nanoid`, `react`, `react-dom`, `react-icons`, `react-router-dom`, `react-scripts`, `recharts`, `web-vitals`
 
 ## Getting Started
 

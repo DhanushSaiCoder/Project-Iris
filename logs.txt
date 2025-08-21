@@ -1,15 +1,30 @@
-UniqueObjectsPage.jsx:13 Uncaught TypeError: (0 , _hooks_isMobile__WEBPACK_IMPORTED_MODULE_5__.default) is not a function
-    at UniqueObjectsPage (UniqueObjectsPage.jsx:13:1)
-UniqueObjectsPage	@	UniqueObjectsPage.jsx:13
-<UniqueObjectsPage>		
-AppContent	@	App.js:75
-<AppContent>		
-App	@	App.js:106
-<App>		
-./src/index.js	@	index.js:14
-options.factory	@	react refresh:37
-__webpack_require__	@	bootstrap:22
-(anonymous)	@	startup:7
-(anonymous)	@	startup:7
 
-﻿
+C:\Users\dhanu\Documents\codes\RepoDestinations\Project-Iris\Project-Iris\backend>npm run dev
+
+> backend@1.0.0 dev
+> cross-env NODE_ENV=development nodemon server.js
+
+[nodemon] 3.1.10
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting `node server.js`
+[dotenv@17.2.1] injecting env (3) from .env.development -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+C:\Users\dhanu\Documents\codes\RepoDestinations\Project-Iris\Project-Iris\node_modules\path-to-regexp\dist\index.js:73
+            throw new TypeError(`Missing parameter name at ${i}: ${DEBUG_URL}`);
+                  ^
+
+TypeError: Missing parameter name at 1: https://git.new/pathToRegexpError
+    at name (C:\Users\dhanu\Documents\codes\RepoDestinations\Project-Iris\Project-Iris\node_modules\path-to-regexp\dist\index.js:73:19)
+    at lexer (C:\Users\dhanu\Documents\codes\RepoDestinations\Project-Iris\Project-Iris\node_modules\path-to-regexp\dist\index.js:91:27)
+    at lexer.next (<anonymous>)
+    at Iter.peek (C:\Users\dhanu\Documents\codes\RepoDestinations\Project-Iris\Project-Iris\node_modules\path-to-regexp\dist\index.js:106:38)
+    at Iter.tryConsume (C:\Users\dhanu\Documents\codes\RepoDestinations\Project-Iris\Project-Iris\node_modules\path-to-regexp\dist\index.js:112:28)
+    at Iter.text (C:\Users\dhanu\Documents\codes\RepoDestinations\Project-Iris\Project-Iris\node_modules\path-to-regexp\dist\index.js:128:30)
+    at consume (C:\Users\dhanu\Documents\codes\RepoDestinations\Project-Iris\Project-Iris\node_modules\path-to-regexp\dist\index.js:152:29)
+    at parse (C:\Users\dhanu\Documents\codes\RepoDestinations\Project-Iris\Project-Iris\node_modules\path-to-regexp\dist\index.js:183:20)
+    at C:\Users\dhanu\Documents\codes\RepoDestinations\Project-Iris\Project-Iris\node_modules\path-to-regexp\dist\index.js:294:74
+    at Array.map (<anonymous>)
+
+Node.js v22.11.0
+[nodemon] app crashed - waiting for file changes before starting...

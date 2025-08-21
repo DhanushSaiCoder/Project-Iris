@@ -9,6 +9,7 @@
     },
     "scripts": {
         "dev": "concurrently \"npm run dev --workspace=backend\" \"npm run start --workspace=frontend\"",
+        "dev:mobile": "npm run dev:mobile --workspace=backend",
         "start": "concurrently \"npm start --workspace=backend\" \"npm run start --workspace=frontend\""
     },
     "dependencies": {

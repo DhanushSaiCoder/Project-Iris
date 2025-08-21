@@ -250,18 +250,13 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                     <input
                         type="range"
                         id="distanceMultiplier"
-                        min="1"
+                        min="0.8"
                         max="50"
                         step="0.5"
                         value={distanceMultiplier}
                         onChange={(e) => setDistanceMultiplier(parseFloat(e.target.value))}
                         className={styles.slider}
                     />
-                </div>
-            )}
-            {developerMode && (
-                <div className={styles.speechStatus}>
-                    <p>Speech Status: {speechStatus}</p>
                 </div>
             )}
         </div>

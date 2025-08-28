@@ -40,6 +40,163 @@ function movingAverage(arr, w) {
   }
 }
 
+// Temporal Tracking Helpers
+let nextTrackId = 1;
+const tracked = new Map(); // id -> TrackedBlob
+
+function iou(a, b) {
+  const x1 = Math.max(a.x, b.x);
+  const y1 = Math.max(a.y, b.y);
+  const x2 = Math.min(a.x + a.width, b.x + b.width);
+  const y2 = Math.min(a.y + a.height, b.y + b.height);
+  if (x2 <= x1 || y2 <= y1) return 0;
+  const inter = (x2 - x1) * (y2 - y1);
+  const union = a.width * a.height + b.width * b.height - inter;
+  return inter / union;
+}
+
+function centroid(b) {
+  return { cx: b.x + b.width / 2, cy: b.y + b.height / 2 };
+}
+
+function matchBlobsToTracks(newBlobs, frameWidth) {
+  const assignments = new Map(); // newIndex -> trackId
+
+  // Build a candidate list of matches with scores
+  const candidates = [];
+  for (let i = 0; i < newBlobs.length; i++) {
+    const nb = newBlobs[i];
+    for (const [id, tb] of tracked.entries()) {
+      const scoreIoU = iou(nb, tb.bbox);
+      const cnb = centroid(nb);
+      const d = Math.hypot(cnb.cx - tb.centroid.cx, cnb.cy - tb.cy);
+      candidates.push({ newIndex: i, trackId: id, iou: scoreIoU, dist: d });
+    }
+  }
+
+  // Greedy assign: prefer IoU >= 0.3; otherwise nearest distance (within threshold)
+  // Sort by descending IoU then ascending distance
+  candidates.sort((A, B) => {
+    if (B.iou !== A.iou) return B.iou - A.iou;
+    return A.dist - B.dist;
+  });
+
+  const usedNew = new Set();
+  const usedTrack = new Set();
+  const maxCentroidPx = Math.max(40, 0.06 * frameWidth);
+
+  for (const c of candidates) {
+    if (usedNew.has(c.newIndex) || usedTrack.has(c.trackId)) continue;
+    if (c.iou >= 0.30 || c.dist <= maxCentroidPx) {
+      assignments.set(c.newIndex, c.trackId);
+      usedNew.add(c.newIndex); usedTrack.add(c.trackId);
+    }
+  }
+
+  // Unassigned new blobs -> new tracks
+  for (let i = 0; i < newBlobs.length; i++) {
+    if (!assignments.has(i)) {
+      assignments.set(i, null); // mark as create
+    }
+  }
+
+  return assignments; // Map newIndex -> trackId
+}
+
+function createTrackedBlob(newBlob, features) {
+  const id = nextTrackId++;
+  const c = centroid(newBlob);
+  const tb = {
+    id,
+    bbox: newBlob,
+    centroid: c,
+    framesSeen: 1,
+    framesMissing: 0,
+    ewma: {
+      medianDepth: features.medianDepth,
+      depthStd: features.depthStd,
+      hazardScore: features.hazardScore || 0,
+      obstacleScore: features.obstacleScore || 0,
+      maxResidual: features.maxResidual || 0,
+      specificHazardLabel: features.specificHazardLabel || 'obstacle', // Default to 'obstacle'
+    },
+    history: [{ bbox: newBlob, features }]
+  };
+  tracked.set(id, tb);
+  return tb;
+}
+
+// EWMA update
+function ewmaUpdate(prev, value, alpha) {
+  if (prev === undefined || prev === null) return value;
+  return alpha * value + (1 - alpha) * prev;
+}
+
+function updateTrackWithBlob(tb, newBlob, features, alpha = 0.4) {
+  // update bbox & centroid
+  tb.bbox = newBlob;
+  tb.centroid = centroid(newBlob);
+
+  tb.framesSeen = tb.framesSeen + 1;
+  tb.framesMissing = 0;
+
+  tb.ewma.medianDepth = ewmaUpdate(tb.ewma.medianDepth, features.medianDepth, alpha);
+  tb.ewma.depthStd    = ewmaUpdate(tb.ewma.depthStd, features.depthStd, alpha);
+  tb.ewma.hazardScore = ewmaUpdate(tb.ewma.hazardScore, features.hazardScore || 0, alpha);
+  tb.ewma.obstacleScore= ewmaUpdate(tb.ewma.obstacleScore, features.obstacleScore || 0, alpha);
+  tb.ewma.maxResidual = Math.max(tb.ewma.maxResidual, features.maxResidual || 0); // max-based
+  tb.ewma.specificHazardLabel = features.specificHazardLabel || tb.ewma.specificHazardLabel; // Update if new specific label, otherwise keep old
+
+  tb.history.push({bbox: newBlob, features});
+  if (tb.history.length > 12) tb.history.shift();
+}
+
+function markTrackMissing(tb) {
+  tb.framesMissing = (tb.framesMissing || 0) + 1;
+}
+
+// cleanup (call each frame)
+function cleanupTracks(maxMissing = 4) {
+  for (const [id, tb] of tracked.entries()) {
+    if (tb.framesMissing >= maxMissing) tracked.delete(id);
+  }
+}
+
+// linearFitRows function
+function linearFitRows(rowIndices, rowMedians) {
+  // compute slope (a) and intercept (b) via least squares
+  let n = 0, sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+  for (let i = 0; i < rowMedians.length; i++) {
+    const y = rowMedians[i];
+    const x = rowIndices[i];
+    if (!isFinite(y)) continue;
+    n++;
+    sumX += x;
+    sumY += y;
+    sumXY += x * y;
+    sumXX += x * x;
+  }
+  if (n < 2) return null;
+  const denom = (n * sumXX - sumX * sumX);
+  if (Math.abs(denom) < 1e-6) return null;
+  const a = (n * sumXY - sumX * sumY) / denom;
+  const b = (sumY - a * sumX) / n;
+  // compute residuals and stats
+  const residuals = [];
+  for (let i = 0; i < rowMedians.length; i++) {
+    const y = rowMedians[i];
+    const x = rowIndices[i];
+    if (!isFinite(y)) { residuals.push(NaN); continue; }
+    const pred = a * x + b;
+    residuals.push(y - pred); // positive -> actual deeper than predicted
+  }
+  const finiteRes = residuals.filter(v => isFinite(v));
+  const meanRes = finiteRes.reduce((s, v) => s + v, 0) / finiteRes.length;
+  const maxRes = Math.max(...finiteRes);
+  const minRes = Math.min(...finiteRes);
+  return { a, b, residuals, meanRes, maxRes, minRes };
+}
+
 const connectedComponentLabeling = (mask, width, height) => {
     const labels = new Uint32Array(mask.length);
     let nextLabel = 1;
@@ -196,7 +353,6 @@ const useUnidentifiedObstacleDetection = () => {
         // 1. Create binary mask from depth data
         const mask = new Uint8Array(depthData.length);
         for (let i = 0; i < depthData.length; i++) {
-            // Assuming depthData contains distance in meters
             if (depthData[i] > 0 && depthData[i] < alertDistance) {
                 mask[i] = 1;
             } else {
@@ -207,13 +363,13 @@ const useUnidentifiedObstacleDetection = () => {
         // 2. Perform connected-component labeling to find blobs
         const blobs = connectedComponentLabeling(mask, frameWidth, frameHeight);
 
-        // 3. Filter blobs and cross-reference with COCO detections
-        const obstacles = [];
+        const perBlobResults = [];
+
         for (const blob of blobs) {
-            // Filter out small blobs (noise)
-            if (blob.width * blob.height < 50) { // Example threshold
-                continue;
-            }
+            // Filter out small blobs (noise) - this is already handled by minBlobArea in detectGroundHazard
+            // if (blob.width * blob.height < 50) {
+            //     continue;
+            // }
 
             let isIdentified = false;
             for (const detection of cocoDetections) {
@@ -224,96 +380,85 @@ const useUnidentifiedObstacleDetection = () => {
                     height: detection.bbox[3],
                 };
 
-                if (calculateIoU(blob, detectionBox) > 0.1) { // Example threshold
+                if (calculateIoU(blob, detectionBox) > 0.1) {
                     isIdentified = true;
                     break;
                 }
             }
 
             if (!isIdentified) {
-              // Integration constants (tune later)
-              const HAZARD_CONF_THRESH = 0.35;        // lower than 0.5 to catch more hazards
-              const OBSTACLE_CONF_MIN = 0.30;        // minimum confidence to call something an obstacle
-              const SPARSE_PIXELS_FRACTION = 0.15;   // require at least 15% valid pixels inside bbox
-              const AREA_MIN_PIXELS = 16;            // minimal absolute valid pixels
-              const CLOSE_FACTOR = 1.0;              // consider blob close if medianDepth <= alertDistance * CLOSE_FACTOR
+                // 1) run detectGroundHazard which also returns depthStd, fit, validPixels
+                const hr = detectGroundHazard(blob, depthData, frameWidth, frameHeight, alertDistance /*, {paramsOverride} */);
+                // 2) compute obstacleScore quick heuristic
+                const medianDepth = hr.details.medianDepth;
+                const depthStd = hr.details.depthStd;
+                const validFrac = hr.details.validFraction;
+                const planarThresh = 0.12 * Math.max(0.15, medianDepth);
+                let obstacleScore = 0;
+                if (validFrac >= 0.6 && depthStd <= planarThresh) obstacleScore = 0.8;
+                else {
+                    const closeness = Math.max(0, (alertDistance - medianDepth) / alertDistance);
+                    obstacleScore = Math.min(0.7, 0.2 + 0.7 * closeness * Math.min(1, validFrac / 0.5));
+                }
+                perBlobResults.push({ blob, features: {
+                    medianDepth, depthStd, validPixels: hr.details.validPixels,
+                    validFraction: hr.details.validFraction,
+                    hazardScore: hr.confidence || 0, obstacleScore, maxResidual: hr.details.fit?.maxRes || 0,
+                    // NEW: Store the specific hazard label if it's not 'none'
+                    specificHazardLabel: (hr.label !== 'none' && hr.confidence >= HAZARD_CONF_THRESH) ? hr.label : undefined
+                }, hazardResult: hr });
+            }
+        }
 
-              // 1) run hazard detector (pass tuned params via options if you made detectGroundHazard accept them)
-              const hazardResult = detectGroundHazard(blob, depthData, frameWidth, frameHeight, alertDistance /*, {paramsOverride} */);
+        // 3) match & update tracks
+        const assignments = matchBlobsToTracks(perBlobResults.map(r=>r.blob), frameWidth);
+        for (let i = 0; i < perBlobResults.length; i++) {
+            const assigned = assignments.get(i);
+            if (assigned === null) createTrackedBlob(perBlobResults[i].blob, perBlobResults[i].features);
+            else updateTrackWithBlob(tracked.get(assigned), perBlobResults[i].blob, perBlobResults[i].features, 0.45);
+        }
+        // mark missing tracks, cleanup
+        for (const [id, tb] of tracked) {
+            let foundThisFrame = false;
+            for (let i = 0; i < perBlobResults.length; i++) {
+                if (assignments.get(i) === id) {
+                    foundThisFrame = true;
+                    break;
+                }
+            }
+            if (!foundThisFrame) markTrackMissing(tb);
+        }
+        cleanupTracks(4);
 
-              // extract robust metrics (fallback to cheap recompute if missing)
-              const medianDepth = (hazardResult.details && hazardResult.details.medianDepth) || computeBlobMedianDepth(blob, depthData, frameWidth, frameHeight);
-              const depthStd    = (hazardResult.details && hazardResult.details.depthStd)    || computeBlobDepthStd(blob, depthData, frameWidth, frameHeight, medianDepth);
-              const validPixels = (hazardResult.details && hazardResult.details.validPixels) || computeBlobValidPixelCount(blob, depthData, frameWidth, frameHeight);
-              const blobArea    = Math.max(1, Math.floor(blob.width) * Math.floor(blob.height));
-              const validFraction = validPixels / Math.max(blobArea, 1);
-
-              // 2) If detectGroundHazard found a specific hazard with reasonable confidence -> register it
-              if (hazardResult.label && hazardResult.label !== 'none' && hazardResult.confidence >= HAZARD_CONF_THRESH) {
+        const obstacles = []; // This will now contain the *tracked* obstacles that should be alerted
+        // 4) generate alerts from tracked blobs that persisted
+        const HAZARD_CONF_THRESH = 0.35;
+        const OBSTACLE_CONF_MIN = 0.30;
+        for (const tb of tracked.values()) {
+            if (tb.framesSeen < 2) continue; // Require persistence for at least 2 frames
+            // use EWMA hazard / obstacle scores
+            const hz = tb.ewma.hazardScore;
+            const ob = tb.ewma.obstacleScore;
+            if (hz >= HAZARD_CONF_THRESH) {
                 obstacles.push({
-                  ...blob,
-                  type: 'specific_hazard',
-                  hazardLabel: hazardResult.label,         // 'stair_up', 'hole',...
-                  hazardConfidence: hazardResult.confidence,
-                  medianDepth, depthStd, validPixels
+                    ...tb.bbox, // Use the latest bbox from the tracked blob
+                    type: 'specific_hazard',
+                    hazardLabel: tb.ewma.specificHazardLabel, // Use the stored specific label
+                    hazardConfidence: hz,
+                    medianDepth: tb.ewma.medianDepth,
+                    depthStd: tb.ewma.depthStd,
+                    validPixels: tb.ewma.validPixels
                 });
-                continue; // done with this blob
-              }
-
-              // 3) If not a specific hazard, decide whether this is a general 'Obstacle' or just minor ground noise
-              // Quick reject conditions (treat as noise):
-              //  - too few valid pixels OR very small area -> ignore
-              if (validPixels < Math.max(AREA_MIN_PIXELS, SPARSE_PIXELS_FRACTION * blobArea)) {
-                // insufficient reliable depth inside blob -> ignore
-                continue;
-              }
-
-              // 4) Is it close enough to be relevant?
-              if (!(isFinite(medianDepth) && medianDepth > 0 && medianDepth <= alertDistance * CLOSE_FACTOR)) {
-                // Not close enough: ignore for now
-                continue;
-              }
-
-              // 5) Decide obstacle confidence from shape & depth stats:
-              // If the blob has low depth variance and covers decent area -> high chance it's a vertical/solid obstacle (wall, pillar).
-              // If variance is high but there was insufficient repeated step pattern, treat as "possibly irregular obstacle" with moderate confidence.
-
-              // Heuristics (numbers to tune):
-              const lowVarianceThresh = 0.12 * medianDepth;  // if depthStd is less than ~12% of median => fairly planar vertical surface
-              const largeAreaFraction = 0.4;                 // if >40% of bbox has valid pixels, it's a solid object
-              const tallThinRatio = (blob.height / Math.max(1, blob.width)) >= 1.3; // pillar-like
-
-              let obstacleConfidence = 0;
-
-              if (depthStd <= lowVarianceThresh) {
-                // solid, planar or vertical object close by -> strong obstacle
-                obstacleConfidence = 0.6 + 0.4 * Math.min(1, validFraction / largeAreaFraction);
-              } else {
-                // not planar: irregular surface, but still close and sizable -> moderate confidence
-                // scale by closeness (closer => more urgent)
-                const closeness = Math.max(0, (alertDistance - medianDepth) / alertDistance); // 0..1
-                obstacleConfidence = 0.25 + 0.6 * closeness * Math.min(1, validFraction / 0.5);
-              }
-
-              // Strong extra boosts for obvious wall/pillar shapes
-              if ( (blob.height >= 0.25 * frameHeight && tallThinRatio && medianDepth <= alertDistance) ||
-                   (validFraction >= 0.7 && blob.width >= 0.15 * frameWidth && blob.height >= 0.15 * frameHeight) ) {
-                obstacleConfidence = Math.max(obstacleConfidence, 0.75);
-              }
-
-              // 6) If obstacleConfidence passes a minimum, push generic obstacle
-              if (obstacleConfidence >= OBSTACLE_CONF_MIN) {
+            } else if (ob >= OBSTACLE_CONF_MIN) {
                 obstacles.push({
-                  ...blob,
-                  type: 'obstacle',
-                  hazardLabel: 'obstacle', // Assign 'obstacle' as the label for general obstacles
-                  hazardConfidence: obstacleConfidence,
-                  medianDepth, depthStd, validPixels
+                    ...tb.bbox, // Use the latest bbox from the tracked blob
+                    type: 'obstacle',
+                    hazardLabel: 'obstacle',
+                    hazardConfidence: ob,
+                    medianDepth: tb.ewma.medianDepth,
+                    depthStd: tb.ewma.depthStd,
+                    validPixels: tb.ewma.validPixels
                 });
-              } else {
-                // else: ignore as minor ground noise
-                // Optionally: log for offline tuning
-              }
             }
         }
 
@@ -392,7 +537,7 @@ function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDi
   const width = x1 - x0 + 1;
   const height = y1 - y0 + 1;
   const area = width * height;
-  if (area < params.minBlobArea) return { label: 'none', confidence: 0, details: { reason: 'tiny_blob', area } };
+  if (area < params.minBlobArea) return { label: 'none', confidence: 0, details: { reason: 'tiny_blob', area, validPixels: 0, validFraction: 0, depthStd: 0, medianDepth: 0, fit: null } };
 
   const rowMedians = [];
   const globalDepths = [];
@@ -417,7 +562,7 @@ function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDi
 
   if (globalDepths.length < Math.max(20, 0.2 * area)) {
     // Not enough valid measurements inside the blob -> unreliable
-    return { label: 'none', confidence: 0, details: { reason: 'sparse_depth', validPixels: globalDepths.length, area } };
+    return { label: 'none', confidence: 0, details: { reason: 'sparse_depth', validPixels, validFraction, depthStd: 0, medianDepth: 0, area, fit: null } };
   }
 
   // Clean row medians: replace NaN rows by linear interpolation or nearest valid
@@ -443,6 +588,10 @@ function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDi
   // Smooth the vertical profile to reduce speckle
   const smoothProfile = movingAverage(rowMedians, params.smoothingWindow);
 
+  // NEW: Perform ground-line fit
+  const rowIndices = Array.from({ length: smoothProfile.length }, (_, i) => y0 + i); // Absolute row indices
+  const fit = linearFitRows(rowIndices, smoothProfile);
+
   // Compute gradients (row -> next row). Positive gradient: depth increases (farther).
   const grads = [];
   for (let i = 0; i < smoothProfile.length - 1; i++) {
@@ -451,6 +600,12 @@ function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDi
 
   const medianDepth = median(globalDepths);
   const gradThreshAdaptive = Math.max(params.gradAbsMinMeters, params.gradRelFactor * medianDepth);
+
+  // NEW: Calculate depthStd and validFraction
+  const validPixels = globalDepths.length;
+  const blobArea = width * height; // Use the width and height from the blob's bounding box
+  const validFraction = validPixels / Math.max(blobArea, 1);
+  const depthStd = std(globalDepths, medianDepth);
 
   // Stats
   const absGrads = grads.map(g => Math.abs(g));
@@ -494,7 +649,11 @@ function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDi
           meanStepHeight: meanStep,
           stdStepHeight: stdStep,
           gradThreshAdaptive,
-          medianDepth
+          medianDepth,
+          depthStd,
+          validPixels,
+          validFraction,
+          fit
         }
       };
     }
@@ -524,7 +683,7 @@ function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDi
         return {
           label: 'hole',
           confidence: conf,
-          details: { index: i, depthIncrease, plateauLen, gradThreshAdaptive, medianDepth }
+          details: { index: i, depthIncrease, plateauLen, gradThreshAdaptive, medianDepth, depthStd, validPixels, validFraction, fit }
         };
       }
     }
@@ -544,7 +703,7 @@ function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDi
       return {
         label: 'ramp',
         confidence: conf,
-        details: { slope, gradsStd, gradThreshAdaptive, medianDepth }
+        details: { slope, gradsStd, gradThreshAdaptive, medianDepth, depthStd, validPixels, validFraction, fit }
       };
     }
   }
@@ -555,9 +714,9 @@ function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDi
   if (maxAbsGrad >= emergencyGrad) {
     // abrupt but not repeated -> likely big drop/edge; label as hole with lower confidence
     const conf = Math.min(1, 0.45 + 0.5 * ((maxAbsGrad - emergencyGrad) / Math.max(maxAbsGrad, emergencyGrad)));
-    return { label: 'hole', confidence: conf, details: { reason: 'single_abrupt_change', maxAbsGrad, emergencyGrad, medianDepth } };
+    return { label: 'hole', confidence: conf, details: { reason: 'single_abrupt_change', maxAbsGrad, emergencyGrad, medianDepth, depthStd, validPixels, validFraction, fit } };
   }
 
   // none detected
-  return { label: 'none', confidence: 0, details: { maxAbsGrad, meanGrad, stdGrad, gradThreshAdaptive, medianDepth } };
+  return { label: 'none', confidence: 0, details: { maxAbsGrad, meanGrad, stdGrad, gradThreshAdaptive, medianDepth, depthStd, validPixels, validFraction, fit } };
 }

@@ -20,11 +20,11 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const lastGlobalSpeechTime = useRef(0); // To globally debounce speech
     const GLOBAL_SPEECH_DEBOUNCE_MS = 3000; // 3 seconds debounce for all speech
 
-    const CENTRAL_CROP_PERCENTAGE_X = 0.50; // Keep central 50% of the width
-    const CROP_SIDE_PERCENTAGE_X = (1 - CENTRAL_CROP_PERCENTAGE_X) / 2; // 25% from each side
+    const CENTRAL_CROP_PERCENTAGE_X = 0.70; // Keep central 70% of the width
+    const CROP_SIDE_PERCENTAGE_X = (1 - CENTRAL_CROP_PERCENTAGE_X) / 2; // 15% from each side
 
-    const CENTRAL_CROP_PERCENTAGE_Y = 0.80; // Keep central 80% of the height
-    const CROP_SIDE_PERCENTAGE_Y = (1 - CENTRAL_CROP_PERCENTAGE_Y) / 2; // 10% from each side
+    const CENTRAL_CROP_PERCENTAGE_Y = 0.90; // Keep central 90% of the height
+    const CROP_SIDE_PERCENTAGE_Y = (1 - CENTRAL_CROP_PERCENTAGE_Y) / 2; // 5% from each side
 
     const tempCanvasRef = useRef(null);
 

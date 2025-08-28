@@ -121,6 +121,25 @@ For a quicker setup, use the provided installation scripts. These scripts will i
 
 The application will be available at `http://localhost:3000`.
 
+### Running for Mobile/Network Access
+
+To run the application and access it from other devices on your network (like a mobile phone), you can use the `dev:mobile` script. This is useful for testing the application on a real mobile device.
+
+1.  **Build the frontend:**
+
+    ```bash
+    cd frontend
+    npm run build
+    ```
+
+2.  **Run the `dev:mobile` script from the root directory:**
+
+    ```bash
+    npm run dev:mobile
+    ```
+
+This will start the backend server and serve the built frontend files. You can then access the application by navigating to your computer's network IP address on your mobile device.
+
 ## Project Structure
 
 ```

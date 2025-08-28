@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useContext } from "react";
 import { useCamera } from "../../hooks/useCamera";
 import { useModels } from "../../hooks/useModels";
 import { useDepthModel } from "../../hooks/useDepthModel";
+import useUnidentifiedObstacleDetection from '../../hooks/useUnidentifiedObstacleDetection';
 import { SettingsContext } from "../../context/SettingsContext";
 import { speak, cancelSpeech, clearSpeechQueue, setSpeechStatusCallback } from "../../utils/speech";
 import { triggerHapticFeedback } from "../../utils/haptics";
@@ -12,15 +13,55 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const { cocoModel, loading: cocoLoading, error: cocoError } = useModels();
     const { depthMap, predictDepth, loading: depthLoading, error: depthError } = useDepthModel();
     const { alertDistance, developerMode, audioAnnouncements, hapticFeedback } = useContext(SettingsContext);
+    const { calculateUnidentifiedObstacles } = useUnidentifiedObstacleDetection();
     const canvasRef = useRef(null);
     const lastDetected = useRef({});
     const lastAlerted = useRef({}); // To debounce alerts
     const lastGlobalSpeechTime = useRef(0); // To globally debounce speech
     const GLOBAL_SPEECH_DEBOUNCE_MS = 3000; // 3 seconds debounce for all speech
 
+    const lastDetectionsRef = useRef([]);
+
+    const CENTRAL_CROP_PERCENTAGE_X = 0.70; // Keep central 70% of the width
+    const CROP_SIDE_PERCENTAGE_X = (1 - CENTRAL_CROP_PERCENTAGE_X) / 2; // 15% from each side
+
+    const CENTRAL_CROP_PERCENTAGE_Y = 0.90; // Keep central 90% of the height
+    const CROP_SIDE_PERCENTAGE_Y = (1 - CENTRAL_CROP_PERCENTAGE_Y) / 2; // 5% from each side
+
+    const tempCanvasRef = useRef(null);
+
     useEffect(() => {
         onLoadingChange(cocoLoading || depthLoading);
     }, [cocoLoading, depthLoading, onLoadingChange]);
+
+    const drawUnidentifiedObstacles = (obstacles, ctx, canvasWidth, canvasHeight, depthMapWidth, depthMapHeight) => {
+        if (!obstacles) return;
+        ctx.globalAlpha = 0.8;
+        const scaleX = canvasWidth / depthMapWidth;
+        const scaleY = canvasHeight / depthMapHeight;
+        obstacles.forEach(obstacle => {
+            const { x, y, width, height } = obstacle;
+            const scaledX = x * scaleX;
+            const scaledY = y * scaleY;
+            const scaledWidth = width * scaleX;
+            const scaledHeight = height * scaleY;
+            ctx.beginPath();
+            ctx.rect(scaledX, scaledY, scaledWidth, scaledHeight);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#FF0000';
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            const text = obstacle.hazardLabel ? `${obstacle.hazardLabel.replace('_', ' ')} (${(obstacle.hazardConfidence * 100).toFixed(0)}%)` : 'Unidentified Obstacle';
+            ctx.font = '16px Arial';
+            const textWidth = ctx.measureText(text).width;
+            ctx.fillStyle = '#FF0000';
+            ctx.fillRect(scaledX, scaledY > 20 ? scaledY - 20 : scaledY, textWidth + 10, 25);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText(text, scaledX + 5, scaledY > 20 ? scaledY - 5 : scaledY + 15);
+        });
+        ctx.globalAlpha = 1.0;
+    };
 
     useEffect(() => {
         let animationFrameId;
@@ -31,46 +72,148 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                 const canvas = canvasRef.current;
                 const ctx = canvas.getContext("2d");
 
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                
+                // Ensure video dimensions are available and valid before proceeding
+                if (!video.videoWidth || !video.videoHeight || video.videoWidth <= 0 || video.videoHeight <= 0) {
+                    animationFrameId = requestAnimationFrame(detect);
+                    return;
+                }
 
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                // --- Cropping Logic Start ---
+                const videoWidth = video.videoWidth;
+                const videoHeight = video.videoHeight;
+
+                const sourceX = videoWidth * CROP_SIDE_PERCENTAGE_X;
+                const sourceY = videoHeight * CROP_SIDE_PERCENTAGE_Y;
+                const sourceWidth = videoWidth * CENTRAL_CROP_PERCENTAGE_X;
+                const sourceHeight = videoHeight * CENTRAL_CROP_PERCENTAGE_Y;
+
+                // Create or get temporary canvas
+                let tempCanvas = tempCanvasRef.current;
+                if (!tempCanvas) {
+                    tempCanvas = document.createElement('canvas');
+                    tempCanvasRef.current = tempCanvas;
+                }
+
+                tempCanvas.width = sourceWidth;
+                tempCanvas.height = sourceHeight;
+                const tempCtx = tempCanvas.getContext('2d');
+
+                // Draw the cropped portion of the video onto the temporary canvas
+                tempCtx.drawImage(
+                    video,
+                    sourceX, sourceY, sourceWidth, sourceHeight, // Source rectangle
+                    0, 0, sourceWidth, sourceHeight              // Destination rectangle
+                );
+                // --- Cropping Logic End ---
+
+                canvas.width = videoWidth; // Main canvas still uses full video dimensions for display
+                canvas.height = videoHeight;
+
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height); // Draw full video for background
+
+                // NEW: Draw detection area outline
+                ctx.strokeStyle = 'rgba(0, 255, 255, 0.7)'; // Cyan, semi-transparent
+                ctx.lineWidth = 2;
+                ctx.setLineDash([10, 5]); // Dashed line
+                ctx.strokeRect(sourceX, sourceY, sourceWidth, sourceHeight);
+                ctx.setLineDash([]); // Reset line dash
 
                 if (isDetecting && !cocoLoading && !depthLoading && cocoModel) {
-                    // Draw depth map first if available
-                    if (depthMap) {
-                        
+                    if (depthMap && depthMap.data && depthMap.width && depthMap.height && developerMode) {
+                        // drawDepthMap still uses full canvas dimensions, but its input is depthMap from cropped video
+                        // This might need adjustment if depthMap dimensions change due to cropping.
+                        // For now, assume predictDepth returns depthMap relative to cropped input.
                         drawDepthMap(depthMap.data, ctx, canvas.width, canvas.height, depthMap.width, depthMap.height);
                     }
 
-                    const predictions = await cocoModel.detect(video);
+                    // Pass the cropped canvas to models
+                    const predictions = await cocoModel.detect(tempCanvas); // Pass tempCanvas
                     const filteredPredictions = predictions.filter(prediction => prediction.score > 0.6);
 
                     let processedPredictions = filteredPredictions.map(p => ({ ...p, isClose: false }));
+                    let unidentifiedObstacles = [];
 
-                    if (depthMap) {
-                        processedPredictions = processPredictionsWithDepth(filteredPredictions, depthMap.data, canvas.width, canvas.height, depthMap.width, depthMap.height);
-                    }
+                    if (depthMap && depthMap.data && depthMap.width && depthMap.height) {
+                        // processPredictionsWithDepth and calculateUnidentifiedObstacles now receive depthMap from cropped video
+                        // Their internal logic needs to be aware of the cropped dimensions.
+                        // The depthMap.width and depthMap.height passed here should be tempCanvas.width/height.
+                        processedPredictions = processPredictionsWithDepth(
+                            filteredPredictions,
+                            depthMap.data,
+                            tempCanvas.width, // Use cropped width
+                            tempCanvas.height, // Use cropped height
+                            depthMap.width,
+                            depthMap.height
+                        );
+                        
+                        const depthDataForHook = depthMap.data[0].flat();
+                        unidentifiedObstacles = calculateUnidentifiedObstacles(
+                            depthDataForHook,
+                            filteredPredictions,
+                            tempCanvas.width, // Use cropped width
+                            tempCanvas.height, // Use cropped height
+                            depthMap.width,
+                            depthMap.height
+                        );
 
-                    drawBoundingBoxes(processedPredictions, ctx);
-
-                    if (filteredPredictions.length > 0 && onObjectDetection) {
-                        const currentTime = Date.now();
-                        const objectsToSend = [];
-                        filteredPredictions.forEach(p => {
-                            if (!lastDetected.current[p.class] || (currentTime - lastDetected.current[p.class] > 2000)) { // 2 seconds debounce for list
-                                objectsToSend.push({ ...p, timestamp: new Date().toLocaleTimeString() });
-                                lastDetected.current[p.class] = currentTime;
+                        if (unidentifiedObstacles.length > 0) {
+                            const currentTime = Date.now();
+                            const canSpeakGlobally = (currentTime - lastGlobalSpeechTime.current > GLOBAL_SPEECH_DEBOUNCE_MS);
+                            if (canSpeakGlobally) {
+                                if (audioAnnouncements) {
+                                    const firstHazard = unidentifiedObstacles[0];
+                                    const message = firstHazard.hazardLabel ?
+                                        `${firstHazard.hazardLabel.replace('_', ' ')} detected` :
+                                        'Obstacle detected';
+                                    speak(message);
+                                    lastGlobalSpeechTime.current = currentTime;
+                                }
+                                if (hapticFeedback) {
+                                    triggerHapticFeedback('warning');
+                                }
                             }
-                        });
-                        if (objectsToSend.length > 0) {
-                            onObjectDetection(objectsToSend);
                         }
                     }
 
-                    
-                    predictDepth(video); // Predict for the next frame
+                                                            const newDetections = processedPredictions.filter(p => {
+                        const lastDetection = lastDetectionsRef.current.find(ld => ld.class === p.class);
+                        if (!lastDetection) {
+                            return true;
+                        }
+                        const distanceChanged = Math.abs(lastDetection.avgDepthInMeters - p.avgDepthInMeters) > 0.5;
+                        const isCloseChanged = lastDetection.isClose !== p.isClose;
+                        return distanceChanged || isCloseChanged;
+                    });
+
+                    if (newDetections.length > 0) {
+                        onObjectDetection(newDetections);
+                        lastDetectionsRef.current = processedPredictions;
+                    }
+
+                    // Adjust bounding box x-coordinates for display on full canvas
+                    const adjustedPredictions = processedPredictions.map(p => ({
+                        ...p,
+                        bbox: [p.bbox[0] + sourceX, p.bbox[1] + sourceY, p.bbox[2], p.bbox[3]]
+                    }));
+                    drawBoundingBoxes(adjustedPredictions, ctx);
+
+                    const adjustedUnidentifiedObstacles = unidentifiedObstacles.map(o => ({
+                        ...o,
+                        x: o.x + sourceX,
+                        y: o.y + sourceY
+                    }));
+                    if (depthMap && depthMap.data && depthMap.width && depthMap.height) {
+                        drawUnidentifiedObstacles(
+                            adjustedUnidentifiedObstacles,
+                            ctx,
+                            canvas.width, // Full canvas width
+                            canvas.height, // Full canvas height
+                            depthMap.width,
+                            depthMap.height
+                        );
+                    }
+
+                    predictDepth(tempCanvas); // Pass tempCanvas
                 }
             }
             animationFrameId = requestAnimationFrame(detect);
@@ -81,7 +224,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         return () => {
             cancelAnimationFrame(animationFrameId);
         };
-    }, [cameraReady, cocoLoading, depthLoading, cocoModel, predictDepth, videoRef, isDetecting, depthMap, alertDistance]); // Add dependencies
+    }, [cameraReady, cocoLoading, depthLoading, cocoModel, predictDepth, videoRef, isDetecting, depthMap, alertDistance, calculateUnidentifiedObstacles, audioAnnouncements, hapticFeedback, developerMode, onObjectDetection]);
 
     // Clear speech queue if audio announcements are turned off
     useEffect(() => {

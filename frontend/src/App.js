@@ -100,7 +100,6 @@ const App = () => {
 
     return (
         <Router>
-            <Analytics />
             <NotificationProvider>
                 <ThemeProvider theme={darkTheme}>
                     <CssBaseline />

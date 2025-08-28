@@ -15,6 +15,7 @@ import DeveloperMode from "../components/SettingsPage/DeveloperMode/DeveloperMod
 import AudioAnnouncements from "../components/SettingsPage/AudioAnnouncements/AudioAnnouncements";
 import LogoutButton from "../components/SettingsPage/LogoutButton/LogoutButton";
 import Torch from "../components/SettingsPage/Torch/Torch";
+import UnidentifiedObstacleDetection from "../components/SettingsPage/UnidentifiedObstacleDetection/UnidentifiedObstacleDetection";
 
 const SettingsPage = () => {
     const navigate = useNavigate();
@@ -61,6 +62,9 @@ const SettingsPage = () => {
                 <div className={styles.settingItem}>
                     <AudioAnnouncements />
                 </div>
+                <div className={styles.settingItem}>
+                    <UnidentifiedObstacleDetection />
+                </div>
 
                 <h3 className={styles.sectionTitle}>Device</h3>
                 <div className={styles.settingItem}>
@@ -82,7 +86,7 @@ const SettingsPage = () => {
                         <div className={styles.buttonsDiv}>
                             <AdminDashboardBtn />
                         </div>
-                    </>
+                    </> 
                 )}
                 <LogoutButton />
             </div>

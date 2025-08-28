@@ -10,7 +10,8 @@ const defaultSettings = {
     developerMode: false,
     autoCaliberateOnLaunch: false,
     torch: false,
-    hasSeenDetectionGuidance: false, // New default setting
+    hasSeenDetectionGuidance: false,
+    enableUnidentifiedObstacleDetection: true, // New default setting
 };
 
 // 2. Create Context
@@ -23,6 +24,7 @@ export const SettingsContext = createContext({
     setDeveloperMode: () => {},
     setAutoCaliberateOnLaunch: () => {},
     setTorch: () => {},
+    setEnableUnidentifiedObstacleDetection: () => {},
 });
 
 // 3. Create Provider component
@@ -71,6 +73,17 @@ export function SettingsProvider({ children }) {
             ? JSON.parse(saved)
             : defaultSettings.hasSeenDetectionGuidance;
     });
+    const [
+        enableUnidentifiedObstacleDetection,
+        setEnableUnidentifiedObstacleDetection,
+    ] = useState(() => {
+        const saved = localStorage.getItem(
+            "bw-unidentified-obstacle-detection"
+        );
+        return saved !== null
+            ? JSON.parse(saved)
+            : defaultSettings.enableUnidentifiedObstacleDetection;
+    });
 
     // Persist to localStorage on changes
     useEffect(() => {
@@ -80,20 +93,38 @@ export function SettingsProvider({ children }) {
         localStorage.setItem("bw-haptic", JSON.stringify(hapticFeedback));
     }, [hapticFeedback]);
     useEffect(() => {
-        localStorage.setItem("bw-alert-distance", JSON.stringify(alertDistance));
+        localStorage.setItem(
+            "bw-alert-distance",
+            JSON.stringify(alertDistance)
+        );
     }, [alertDistance]);
     useEffect(() => {
-        localStorage.setItem("bw-developer-mode", JSON.stringify(developerMode));
+        localStorage.setItem(
+            "bw-developer-mode",
+            JSON.stringify(developerMode)
+        );
     }, [developerMode]);
     useEffect(() => {
-        localStorage.setItem("bw-auto-calibrate", JSON.stringify(autoCaliberateOnLaunch));
+        localStorage.setItem(
+            "bw-auto-calibrate",
+            JSON.stringify(autoCaliberateOnLaunch)
+        );
     }, [autoCaliberateOnLaunch]);
-        useEffect(() => {
+    useEffect(() => {
         localStorage.setItem("bw-torch", JSON.stringify(torch));
     }, [torch]);
     useEffect(() => {
-        localStorage.setItem("bw-detection-guidance", JSON.stringify(hasSeenDetectionGuidance));
+        localStorage.setItem(
+            "bw-detection-guidance",
+            JSON.stringify(hasSeenDetectionGuidance)
+        );
     }, [hasSeenDetectionGuidance]);
+    useEffect(() => {
+        localStorage.setItem(
+            "bw-unidentified-obstacle-detection",
+            JSON.stringify(enableUnidentifiedObstacleDetection)
+        );
+    }, [enableUnidentifiedObstacleDetection]);
 
     // 4. Provide state + setters
     const value = useMemo(
@@ -114,8 +145,20 @@ export function SettingsProvider({ children }) {
             setTorch,
             hasSeenDetectionGuidance,
             setHasSeenDetectionGuidance,
+            enableUnidentifiedObstacleDetection,
+            setEnableUnidentifiedObstacleDetection,
         }),
-        [audioAnnouncements, hapticFeedback, sessionId, alertDistance, developerMode, autoCaliberateOnLaunch, torch, hasSeenDetectionGuidance]
+        [
+            audioAnnouncements,
+            hapticFeedback,
+            sessionId,
+            alertDistance,
+            developerMode,
+            autoCaliberateOnLaunch,
+            torch,
+            hasSeenDetectionGuidance,
+            enableUnidentifiedObstacleDetection,
+        ]
     );
 
     return (

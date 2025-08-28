@@ -20,6 +20,8 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const lastGlobalSpeechTime = useRef(0); // To globally debounce speech
     const GLOBAL_SPEECH_DEBOUNCE_MS = 3000; // 3 seconds debounce for all speech
 
+    const lastDetectionsRef = useRef([]);
+
     const CENTRAL_CROP_PERCENTAGE_X = 0.70; // Keep central 70% of the width
     const CROP_SIDE_PERCENTAGE_X = (1 - CENTRAL_CROP_PERCENTAGE_X) / 2; // 15% from each side
 
@@ -171,6 +173,21 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                                 }
                             }
                         }
+                    }
+
+                                                            const newDetections = processedPredictions.filter(p => {
+                        const lastDetection = lastDetectionsRef.current.find(ld => ld.class === p.class);
+                        if (!lastDetection) {
+                            return true;
+                        }
+                        const distanceChanged = Math.abs(lastDetection.avgDepthInMeters - p.avgDepthInMeters) > 0.5;
+                        const isCloseChanged = lastDetection.isClose !== p.isClose;
+                        return distanceChanged || isCloseChanged;
+                    });
+
+                    if (newDetections.length > 0) {
+                        onObjectDetection(newDetections);
+                        lastDetectionsRef.current = processedPredictions;
                     }
 
                     // Adjust bounding box x-coordinates for display on full canvas

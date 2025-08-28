@@ -1,23 +1,25 @@
-import React, { useContext } from 'react';
-import { Switch } from '@mui/material';
-import { SettingsContext } from '../../../context/SettingsContext';
-import styles from './UnidentifiedObstacleDetection.module.css';
+import React, { useContext } from "react";
+import styles from "../HepticFeedback/HepticFeedback.module.css";
+import ToggleSwitch from "../ToggleSwitch";
+import { SettingsContext } from "../../../context/SettingsContext";
 
 const UnidentifiedObstacleDetection = () => {
-    const { enableUnidentifiedObstacleDetection, setEnableUnidentifiedObstacleDetection } = useContext(SettingsContext);
+    const {
+        enableUnidentifiedObstacleDetection,
+        setEnableUnidentifiedObstacleDetection,
+    } = useContext(SettingsContext);
 
     return (
-        <div className={styles.unidentifiedObstacleDetection}>
-            <div className={styles.label}>
+        <>
+            <p className={styles.settingLabel}>
                 Unidentified Obstacle Detection
-            </div>
-            <Switch
+            </p>
+            <ToggleSwitch
                 checked={enableUnidentifiedObstacleDetection}
-                onChange={(e) => setEnableUnidentifiedObstacleDetection(e.target.checked)}
-                name="enableUnidentifiedObstacleDetection"
-                color="primary"
+                onChange={setEnableUnidentifiedObstacleDetection}
+                label={enableUnidentifiedObstacleDetection ? "On" : "Off"}
             />
-        </div>
+        </>
     );
 };
 

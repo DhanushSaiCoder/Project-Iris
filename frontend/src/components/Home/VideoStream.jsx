@@ -20,6 +20,14 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const lastGlobalSpeechTime = useRef(0); // To globally debounce speech
     const GLOBAL_SPEECH_DEBOUNCE_MS = 3000; // 3 seconds debounce for all speech
 
+    const CENTRAL_CROP_PERCENTAGE_X = 0.50; // Keep central 50% of the width
+    const CROP_SIDE_PERCENTAGE_X = (1 - CENTRAL_CROP_PERCENTAGE_X) / 2; // 25% from each side
+
+    const CENTRAL_CROP_PERCENTAGE_Y = 0.80; // Keep central 80% of the height
+    const CROP_SIDE_PERCENTAGE_Y = (1 - CENTRAL_CROP_PERCENTAGE_Y) / 2; // 10% from each side
+
+    const tempCanvasRef = useRef(null);
+
     useEffect(() => {
         onLoadingChange(cocoLoading || depthLoading);
     }, [cocoLoading, depthLoading, onLoadingChange]);
@@ -62,29 +70,86 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                 const canvas = canvasRef.current;
                 const ctx = canvas.getContext("2d");
 
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
+                // Ensure video dimensions are available and valid before proceeding
+                if (!video.videoWidth || !video.videoHeight || video.videoWidth <= 0 || video.videoHeight <= 0) {
+                    animationFrameId = requestAnimationFrame(detect);
+                    return;
+                }
 
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                // --- Cropping Logic Start ---
+                const videoWidth = video.videoWidth;
+                const videoHeight = video.videoHeight;
+
+                const sourceX = videoWidth * CROP_SIDE_PERCENTAGE_X;
+                const sourceY = videoHeight * CROP_SIDE_PERCENTAGE_Y;
+                const sourceWidth = videoWidth * CENTRAL_CROP_PERCENTAGE_X;
+                const sourceHeight = videoHeight * CENTRAL_CROP_PERCENTAGE_Y;
+
+                // Create or get temporary canvas
+                let tempCanvas = tempCanvasRef.current;
+                if (!tempCanvas) {
+                    tempCanvas = document.createElement('canvas');
+                    tempCanvasRef.current = tempCanvas;
+                }
+
+                tempCanvas.width = sourceWidth;
+                tempCanvas.height = sourceHeight;
+                const tempCtx = tempCanvas.getContext('2d');
+
+                // Draw the cropped portion of the video onto the temporary canvas
+                tempCtx.drawImage(
+                    video,
+                    sourceX, sourceY, sourceWidth, sourceHeight, // Source rectangle
+                    0, 0, sourceWidth, sourceHeight              // Destination rectangle
+                );
+                // --- Cropping Logic End ---
+
+                canvas.width = videoWidth; // Main canvas still uses full video dimensions for display
+                canvas.height = videoHeight;
+
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height); // Draw full video for background
+
+                // NEW: Draw detection area outline
+                ctx.strokeStyle = 'rgba(0, 255, 255, 0.7)'; // Cyan, semi-transparent
+                ctx.lineWidth = 2;
+                ctx.setLineDash([10, 5]); // Dashed line
+                ctx.strokeRect(sourceX, sourceY, sourceWidth, sourceHeight);
+                ctx.setLineDash([]); // Reset line dash
 
                 if (isDetecting && !cocoLoading && !depthLoading && cocoModel) {
                     if (depthMap && depthMap.data && depthMap.width && depthMap.height && developerMode) {
+                        // drawDepthMap still uses full canvas dimensions, but its input is depthMap from cropped video
+                        // This might need adjustment if depthMap dimensions change due to cropping.
+                        // For now, assume predictDepth returns depthMap relative to cropped input.
                         drawDepthMap(depthMap.data, ctx, canvas.width, canvas.height, depthMap.width, depthMap.height);
                     }
 
-                    const predictions = await cocoModel.detect(video);
+                    // Pass the cropped canvas to models
+                    const predictions = await cocoModel.detect(tempCanvas); // Pass tempCanvas
                     const filteredPredictions = predictions.filter(prediction => prediction.score > 0.6);
 
                     let processedPredictions = filteredPredictions.map(p => ({ ...p, isClose: false }));
                     let unidentifiedObstacles = [];
 
                     if (depthMap && depthMap.data && depthMap.width && depthMap.height) {
-                        processedPredictions = processPredictionsWithDepth(filteredPredictions, depthMap.data, canvas.width, canvas.height, depthMap.width, depthMap.height);
+                        // processPredictionsWithDepth and calculateUnidentifiedObstacles now receive depthMap from cropped video
+                        // Their internal logic needs to be aware of the cropped dimensions.
+                        // The depthMap.width and depthMap.height passed here should be tempCanvas.width/height.
+                        processedPredictions = processPredictionsWithDepth(
+                            filteredPredictions,
+                            depthMap.data,
+                            tempCanvas.width, // Use cropped width
+                            tempCanvas.height, // Use cropped height
+                            depthMap.width,
+                            depthMap.height
+                        );
                         
                         const depthDataForHook = depthMap.data[0].flat();
                         unidentifiedObstacles = calculateUnidentifiedObstacles(
                             depthDataForHook,
                             filteredPredictions,
+                            tempCanvas.width, // Use cropped width
+                            tempCanvas.height, // Use cropped height
                             depthMap.width,
                             depthMap.height
                         );
@@ -108,26 +173,30 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                         }
                     }
 
-                    drawBoundingBoxes(processedPredictions, ctx);
+                    // Adjust bounding box x-coordinates for display on full canvas
+                    const adjustedPredictions = processedPredictions.map(p => ({
+                        ...p,
+                        bbox: [p.bbox[0] + sourceX, p.bbox[1] + sourceY, p.bbox[2], p.bbox[3]]
+                    }));
+                    drawBoundingBoxes(adjustedPredictions, ctx);
+
+                    const adjustedUnidentifiedObstacles = unidentifiedObstacles.map(o => ({
+                        ...o,
+                        x: o.x + sourceX,
+                        y: o.y + sourceY
+                    }));
                     if (depthMap && depthMap.data && depthMap.width && depthMap.height) {
-                        drawUnidentifiedObstacles(unidentifiedObstacles, ctx, canvas.width, canvas.height, depthMap.width, depthMap.height);
+                        drawUnidentifiedObstacles(
+                            adjustedUnidentifiedObstacles,
+                            ctx,
+                            canvas.width, // Full canvas width
+                            canvas.height, // Full canvas height
+                            depthMap.width,
+                            depthMap.height
+                        );
                     }
 
-                    if (filteredPredictions.length > 0 && onObjectDetection) {
-                        const currentTime = Date.now();
-                        const objectsToSend = [];
-                        filteredPredictions.forEach(p => {
-                            if (!lastDetected.current[p.class] || (currentTime - lastDetected.current[p.class] > 2000)) {
-                                objectsToSend.push({ ...p, timestamp: new Date().toLocaleTimeString() });
-                                lastDetected.current[p.class] = currentTime;
-                            }
-                        });
-                        if (objectsToSend.length > 0) {
-                            onObjectDetection(objectsToSend);
-                        }
-                    }
-
-                    predictDepth(video);
+                    predictDepth(tempCanvas); // Pass tempCanvas
                 }
             }
             animationFrameId = requestAnimationFrame(detect);

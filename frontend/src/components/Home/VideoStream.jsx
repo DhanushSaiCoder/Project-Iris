@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useContext } from "react";
 import { useCamera } from "../../hooks/useCamera";
 import { useModels } from "../../hooks/useModels";
 import { useDepthModel } from "../../hooks/useDepthModel";
+import useUnidentifiedObstacleDetection from '../../hooks/useUnidentifiedObstacleDetection';
 import { SettingsContext } from "../../context/SettingsContext";
 import { speak, cancelSpeech, clearSpeechQueue, setSpeechStatusCallback } from "../../utils/speech";
 import { triggerHapticFeedback } from "../../utils/haptics";
@@ -12,6 +13,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const { cocoModel, loading: cocoLoading, error: cocoError } = useModels();
     const { depthMap, predictDepth, loading: depthLoading, error: depthError } = useDepthModel();
     const { alertDistance, developerMode, audioAnnouncements, hapticFeedback } = useContext(SettingsContext);
+    const { calculateUnidentifiedObstacles } = useUnidentifiedObstacleDetection();
     const canvasRef = useRef(null);
     const lastDetected = useRef({});
     const lastAlerted = useRef({}); // To debounce alerts
@@ -21,6 +23,35 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     useEffect(() => {
         onLoadingChange(cocoLoading || depthLoading);
     }, [cocoLoading, depthLoading, onLoadingChange]);
+
+    const drawUnidentifiedObstacles = (obstacles, ctx, canvasWidth, canvasHeight, depthMapWidth, depthMapHeight) => {
+        if (!obstacles) return;
+        ctx.globalAlpha = 0.8;
+        const scaleX = canvasWidth / depthMapWidth;
+        const scaleY = canvasHeight / depthMapHeight;
+        obstacles.forEach(obstacle => {
+            const { x, y, width, height } = obstacle;
+            const scaledX = x * scaleX;
+            const scaledY = y * scaleY;
+            const scaledWidth = width * scaleX;
+            const scaledHeight = height * scaleY;
+            ctx.beginPath();
+            ctx.rect(scaledX, scaledY, scaledWidth, scaledHeight);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#FF0000';
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            const text = 'Unidentified Obstacle';
+            ctx.font = '16px Arial';
+            const textWidth = ctx.measureText(text).width;
+            ctx.fillStyle = '#FF0000';
+            ctx.fillRect(scaledX, scaledY > 20 ? scaledY - 20 : scaledY, textWidth + 10, 25);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText(text, scaledX + 5, scaledY > 20 ? scaledY - 5 : scaledY + 15);
+        });
+        ctx.globalAlpha = 1.0;
+    };
 
     useEffect(() => {
         let animationFrameId;
@@ -33,14 +64,11 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
-                
 
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                 if (isDetecting && !cocoLoading && !depthLoading && cocoModel) {
-                    // Draw depth map first if available
-                    if (depthMap) {
-                        
+                    if (depthMap && depthMap.data && depthMap.width && depthMap.height && developerMode) {
                         drawDepthMap(depthMap.data, ctx, canvas.width, canvas.height, depthMap.width, depthMap.height);
                     }
 
@@ -48,18 +76,44 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                     const filteredPredictions = predictions.filter(prediction => prediction.score > 0.6);
 
                     let processedPredictions = filteredPredictions.map(p => ({ ...p, isClose: false }));
+                    let unidentifiedObstacles = [];
 
-                    if (depthMap) {
+                    if (depthMap && depthMap.data && depthMap.width && depthMap.height) {
                         processedPredictions = processPredictionsWithDepth(filteredPredictions, depthMap.data, canvas.width, canvas.height, depthMap.width, depthMap.height);
+                        
+                        const depthDataForHook = depthMap.data[0].flat();
+                        unidentifiedObstacles = calculateUnidentifiedObstacles(
+                            depthDataForHook,
+                            filteredPredictions,
+                            depthMap.width,
+                            depthMap.height
+                        );
+
+                        if (unidentifiedObstacles.length > 0) {
+                            const currentTime = Date.now();
+                            const canSpeakGlobally = (currentTime - lastGlobalSpeechTime.current > GLOBAL_SPEECH_DEBOUNCE_MS);
+                            if (canSpeakGlobally) {
+                                if (audioAnnouncements) {
+                                    speak('Unidentified obstacle detected');
+                                    lastGlobalSpeechTime.current = currentTime;
+                                }
+                                if (hapticFeedback) {
+                                    triggerHapticFeedback('warning');
+                                }
+                            }
+                        }
                     }
 
                     drawBoundingBoxes(processedPredictions, ctx);
+                    if (depthMap && depthMap.data && depthMap.width && depthMap.height) {
+                        drawUnidentifiedObstacles(unidentifiedObstacles, ctx, canvas.width, canvas.height, depthMap.width, depthMap.height);
+                    }
 
                     if (filteredPredictions.length > 0 && onObjectDetection) {
                         const currentTime = Date.now();
                         const objectsToSend = [];
                         filteredPredictions.forEach(p => {
-                            if (!lastDetected.current[p.class] || (currentTime - lastDetected.current[p.class] > 2000)) { // 2 seconds debounce for list
+                            if (!lastDetected.current[p.class] || (currentTime - lastDetected.current[p.class] > 2000)) {
                                 objectsToSend.push({ ...p, timestamp: new Date().toLocaleTimeString() });
                                 lastDetected.current[p.class] = currentTime;
                             }
@@ -69,8 +123,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                         }
                     }
 
-                    
-                    predictDepth(video); // Predict for the next frame
+                    predictDepth(video);
                 }
             }
             animationFrameId = requestAnimationFrame(detect);
@@ -81,7 +134,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         return () => {
             cancelAnimationFrame(animationFrameId);
         };
-    }, [cameraReady, cocoLoading, depthLoading, cocoModel, predictDepth, videoRef, isDetecting, depthMap, alertDistance]); // Add dependencies
+    }, [cameraReady, cocoLoading, depthLoading, cocoModel, predictDepth, videoRef, isDetecting, depthMap, alertDistance, calculateUnidentifiedObstacles, audioAnnouncements, hapticFeedback, developerMode, onObjectDetection]);
 
     // Clear speech queue if audio announcements are turned off
     useEffect(() => {

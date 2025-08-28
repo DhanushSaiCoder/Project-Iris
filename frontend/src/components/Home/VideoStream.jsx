@@ -42,7 +42,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
             ctx.setLineDash([5, 5]);
             ctx.stroke();
             ctx.setLineDash([]);
-            const text = 'Unidentified Obstacle';
+            const text = obstacle.hazardLabel ? `${obstacle.hazardLabel.replace('_', ' ')} (${(obstacle.hazardConfidence * 100).toFixed(0)}%)` : 'Unidentified Obstacle';
             ctx.font = '16px Arial';
             const textWidth = ctx.measureText(text).width;
             ctx.fillStyle = '#FF0000';
@@ -94,7 +94,11 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                             const canSpeakGlobally = (currentTime - lastGlobalSpeechTime.current > GLOBAL_SPEECH_DEBOUNCE_MS);
                             if (canSpeakGlobally) {
                                 if (audioAnnouncements) {
-                                    speak('Unidentified obstacle detected');
+                                    const firstHazard = unidentifiedObstacles[0];
+                                    const message = firstHazard.hazardLabel ?
+                                        `${firstHazard.hazardLabel.replace('_', ' ')} detected` :
+                                        'Obstacle detected';
+                                    speak(message);
                                     lastGlobalSpeechTime.current = currentTime;
                                 }
                                 if (hapticFeedback) {

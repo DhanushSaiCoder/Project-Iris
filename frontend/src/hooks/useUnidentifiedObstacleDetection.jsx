@@ -343,7 +343,7 @@ const computeBlobValidPixelCount = (blob, depthMapData, frameWidth, frameHeight)
 };
 
 const useUnidentifiedObstacleDetection = () => {
-    const { alertDistance, enableUnidentifiedObstacleDetection } = useContext(SettingsContext);
+    const { alertDistance, enableUnidentifiedObstacleDetection, calibration } = useContext(SettingsContext);
 
     const calculateUnidentifiedObstacles = (depthData, cocoDetections, frameWidth, frameHeight) => {
         if (!enableUnidentifiedObstacleDetection || !depthData || !cocoDetections || !frameWidth || !frameHeight) {
@@ -388,7 +388,7 @@ const useUnidentifiedObstacleDetection = () => {
 
             if (!isIdentified) {
                 // 1) run detectGroundHazard which also returns depthStd, fit, validPixels
-                const hr = detectGroundHazard(blob, depthData, frameWidth, frameHeight, alertDistance /*, {paramsOverride} */);
+                const hr = detectGroundHazard(blob, depthData, frameWidth, frameHeight, alertDistance, calibration /*, {paramsOverride} */);
                 // 2) compute obstacleScore quick heuristic
                 const medianDepth = hr.details.medianDepth;
                 const depthStd = hr.details.depthStd;
@@ -546,7 +546,7 @@ function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDi
     const rowVals = [];
     for (let xx = x0; xx <= x1; xx++) {
       if (!inBounds(xx, yy)) continue;
-      const d = depthMapData[idx(xx, yy)];
+      const d = calibration ? getDistance(depthMapData[idx(xx, yy)], calibration) : Infinity;
       if (!isFinite(d) || d <= 0) continue;
       if (d < params.validDepthMin || d > params.validDepthMax) continue;
       rowVals.push(d);

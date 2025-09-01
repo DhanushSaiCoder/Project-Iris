@@ -72,7 +72,7 @@ export default function NewCalibrationPage() {
         }, 5000);
     }, [step, calibrationData, speak]);
 
-    useEffect(() => {
+        useEffect(() => {
         if (!depthMap) {
             return;
         }
@@ -82,31 +82,82 @@ export default function NewCalibrationPage() {
             return;
         }
 
-        const actualDepthData = rawDepthData[0];
-        if (!actualDepthData) {
+        // Normalize the incoming data into a 2D JS array depth2D[y][x]
+        let depth2D = null;
+
+        // Case 1: already array-ish
+        if (Array.isArray(rawDepthData)) {
+            // rawDepthData could be [H][W] or [1][H][W] or even [[[...]]] — handle common shapes
+            if (Array.isArray(rawDepthData[0])) {
+                // If first element is an array of numbers => probably [H][W]
+                if (typeof rawDepthData[0][0] === "number") {
+                    depth2D = rawDepthData;
+                } else if (Array.isArray(rawDepthData[0][0])) {
+                    // Could be [1][H][W] or [C][H][W], prefer the first matrix if length === 1
+                    if (rawDepthData.length === 1 && Array.isArray(rawDepthData[0][0])) {
+                        depth2D = rawDepthData[0];
+                    } else {
+                        // fallback: try to pick the first matrix that looks like H x W
+                        depth2D = rawDepthData.find(mat => Array.isArray(mat) && typeof mat[0]?.[0] === "number") || rawDepthData[0];
+                    }
+                } else {
+                    return;
+                }
+            } else {
+                // rawDepthData is a 1D JS array of numbers (rare if you used .array())
+                // convert to 2D
+                if (rawDepthData.length === width * height) {
+                    depth2D = [];
+                    for (let y = 0; y < height; y++) {
+                        const row = rawDepthData.slice(y * width, (y + 1) * width);
+                        depth2D.push(row);
+                    }
+                } else {
+                    return;
+                }
+            }
+        } else if (rawDepthData instanceof Float32Array || rawDepthData instanceof Uint8Array || ArrayBuffer.isView(rawDepthData)) {
+            // typed flat array
+            if (rawDepthData.length === width * height) {
+                depth2D = [];
+                for (let y = 0; y < height; y++) {
+                    const row = new Array(width);
+                    for (let x = 0; x < width; x++) row[x] = rawDepthData[y * width + x];
+                    depth2D.push(row);
+                }
+            } else {
+                return;
+            }
+        } else {
             return;
         }
 
+        // Patch extraction (center patch)
         const patchSize = 50;
-        const y0 = Math.floor((height - patchSize) / 2);
-        const x0 = Math.floor((width - patchSize) / 2);
+        const y0 = Math.max(0, Math.floor((height - patchSize) / 2));
+        const x0 = Math.max(0, Math.floor((width - patchSize) / 2));
 
         let sum = 0;
         let count = 0;
-        for (let y = y0; y < y0 + patchSize; y++) {
-            if (!actualDepthData[y]) continue;
-            for (let x = x0; x < x0 + patchSize; x++) {
-                if (actualDepthData[y] && actualDepthData[y][x] !== undefined) {
-                    sum += actualDepthData[y][x];
+        for (let y = y0; y < Math.min(height, y0 + patchSize); y++) {
+            for (let x = 0; x < Math.min(width, x0 + patchSize); x++) {
+                const v = depth2D[y] && depth2D[y][x];
+                if (v !== undefined && v !== null && Number.isFinite(v)) {
+                    // filter out zeros only if you want to treat zero as 'no reading'
+                    sum += v;
                     count++;
                 }
             }
         }
+
         const avg = count > 0 ? sum / count : 0;
         setCurrentDepth(avg);
 
         if (isRecordingRef.current) {
-            samples.current.push(avg);
+            // Push only valid finite values. Optionally ignore zero readings if those are invalid in your model.
+            if (count > 0 && Number.isFinite(avg) && !Number.isNaN(avg)) {
+                samples.current.push(avg);
+            }
         }
     }, [depthMap]);
 

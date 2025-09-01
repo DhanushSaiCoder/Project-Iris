@@ -40,15 +40,15 @@ export function useDepthModel() {
         if (!workerRef.current || !mediaEl || isBusyRef.current) {
             return;
         }
-        if (mediaEl.width === 0 || mediaEl.height === 0) {
+        if (mediaEl.videoWidth === 0 || mediaEl.videoHeight === 0) {
             return;
         }
 
         isBusyRef.current = true;
 
         const canvas = document.createElement("canvas");
-        canvas.width = mediaEl.width;
-        canvas.height = mediaEl.height;
+        canvas.width = mediaEl.videoWidth;
+        canvas.height = mediaEl.videoHeight;
         const ctx = canvas.getContext("2d");
         ctx.drawImage(mediaEl, 0, 0, canvas.width, canvas.height);
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);

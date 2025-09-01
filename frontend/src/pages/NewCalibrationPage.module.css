@@ -1,158 +1,148 @@
 /* src/pages/NewCalibrationPage.module.css */
 .container {
     display: flex;
-    flex-direction: column; /* Arrange children vertically by default (mobile-first) */
-    align-items: center; /* Center horizontally */
-    height: 100vh; /* Full viewport height */
-    width: 100vw; /* Full viewport width */
-    background-color: var(--color-background); /* Use CSS variable */
-    color: var(--color-text-primary); /* Use CSS variable */
-    text-align: center;
-    overflow: hidden; /* Hide overflow */
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--color-background-dark);
+    color: var(--color-text-primary);
+    overflow: hidden;
 }
 
-.videoFeed, .depthOverlay {
+.videoWrapper {
+    position: relative;
+    width: 100%;
+    height: 50vh; /* Explicitly 50% of viewport height */
+    flex-shrink: 0; /* Prevent shrinking */
+    background-color: #000;
+}
+
+.videoFeed, .depthOverlay, .videoLoading {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 0;
+}
+
+.videoLoading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background: rgba(0,0,0,0.5);
 }
 
 .depthOverlay {
-    opacity: 0.6;
+    opacity: 0.5;
+    z-index: 1;
 }
 
 .contentWrapper {
+    flex: 1; /* Take remaining vertical space */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px; /* Adjusted padding */
-    z-index: 1; /* Ensure it's on top of video/canvas */
-    position: relative; /* Position relative to its normal flow */
-    width: 100%;
-    height: 50%; /* Occupy the bottom half by default (mobile-first) */
-    max-width: 600px; /* Keep max-width for content */
-    background-color: var(--color-card); /* Use CSS variable */
-    border-radius: 10px;
+    padding: 2rem;
+    background-color: var(--color-card);
+    text-align: center;
+    z-index: 5;
+    overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+.stepIndicator {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background-color: var(--color-background);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--color-border);
 }
 
 .contentWrapper h2 {
-    font-size: 2.2rem; /* Increased */
-    margin-bottom: 12px; /* Adjusted margin */
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
     color: var(--color-text-primary);
 }
 
 .contentWrapper p {
-    font-size: 1.4rem; /* Increased */
-    color: var(--color-text-secondary); /* Use CSS variable */
-    margin-bottom: 20px; /* Adjusted margin */
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+    max-width: 400px;
 }
 
 .contentWrapper button {
-    padding: 12px 30px; /* Increased padding */
-    font-size: 1.2rem; /* Increased */
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin: 10px; /* Adjusted margin */
     z-index: 10;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    min-width: 200px; /* Added min-width */
-    display: flex; /* Added flex */
-    align-items: center; /* Added flex alignment */
-    justify-content: center; /* Added flex alignment */
-    gap: 8px; /* Added gap */
-    background-color: var(--color-cta); /* Use CSS variable */
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background-color: var(--color-cta);
     color: var(--color-text-primary);
 }
 
-.contentWrapper button:hover {
+.contentWrapper button:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-.countdown {
-    font-size: 2.2rem; /* Increased */
-    font-weight: bold;
-    color: var(--color-cta); /* Use CSS variable */
-    margin-top: 20px; /* Adjusted margin */
-    text-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
-    text-align: center;
+.contentWrapper button:disabled {
+    background-color: var(--color-disabled);
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
-/* Mobile responsiveness (default) */
-@media (max-width: 768px) {
-    .container {
-        padding: 0;
-    }
+.countdown {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-cta);
+    margin-top: 1rem;
+}
 
-    .contentWrapper {
-        padding: 10px;
-        max-width: 100%;
-        border-radius: 0;
-    }
-
-    .contentWrapper h2 {
-        font-size: 1.6rem;
-        margin-bottom: 8px;
-    }
-
-    .contentWrapper p {
-        font-size: 1.1rem;
-        margin-bottom: 10px;
-    }
-
-    .contentWrapper button {
-        padding: 6px 18px;
-        font-size: 0.9rem;
-        margin: 4px;
-        min-width: 150px; /* Adjusted min-width for mobile */
-        gap: 5px; /* Adjusted gap for mobile */
-    }
-
-    .countdown {
-        font-size: 1.6rem;
-        margin-top: 10px;
-    }
+.distanceDisplay {
+    font-size: 2.5rem !important; /* Use important to override generic p */
+    font-weight: 700;
+    color: var(--color-cta) !important;
+    margin: 0.5rem 0 1.5rem 0 !important;
 }
 
 /* Desktop layout */
 @media (min-width: 769px) {
     .container {
-        flex-direction: row; /* Arrange children horizontally */
+        flex-direction: row;
+    }
+
+    .videoWrapper {
+        flex: 1; /* Take up 50% of width */
+        height: 100%;
     }
 
     .contentWrapper {
-        width: 50%; /* Occupy right half */
-        height: 100%; /* Full height */
-        max-width: none; /* Remove max-width constraint */
-        border-radius: 0; /* Remove border-radius for full height */
+        flex-basis: 500px; /* Fixed width for content panel */
+        height: 100%;
+        justify-content: center;
+        border-top: none;
+        border-left: 1px solid var(--color-border);
     }
 
-    /* Adjust font sizes and spacing for desktop */
     .contentWrapper h2 {
-        font-size: 2.8rem;
-        margin-bottom: 18px;
+        font-size: 2.2rem;
     }
 
     .contentWrapper p {
-        font-size: 1.8rem;
-        margin-bottom: 30px;
-    }
-
-    .contentWrapper button {
-        padding: 18px 40px;
-        font-size: 1.4rem;
-        margin: 12px;
-    }
-
-    .countdown {
-        font-size: 3rem;
-        margin-top: 30px;
+        font-size: 1.1rem;
     }
 }

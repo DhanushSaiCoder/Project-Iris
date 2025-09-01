@@ -48,7 +48,7 @@ const AppContent = () => {
         }
     }, [location.pathname, navigate]);
 
-    const hiddenPaths = ['/settings', '/help', '/privacy-notes', '/developers', '/launch', '/login', '/signup', '/guest-limit', '/calibration'];
+    const hiddenPaths = ['/settings', '/help', '/privacy-notes', '/developers', '/launch', '/login', '/signup', '/guest-limit', '/calibration', '/new-calibration'];
     const showHeader = !hiddenPaths.includes(location.pathname);
     const hiddenFooterPaths = ['/login', '/signup', '/guest-limit', '/new-calibration'];
     const showFooter = !hiddenFooterPaths.includes(location.pathname);

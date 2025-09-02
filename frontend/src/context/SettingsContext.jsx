@@ -28,7 +28,8 @@ export const SettingsContext = createContext({
 });
 
 // 3. Create Provider component
-export function SettingsProvider({ children }) {
+export const SettingsProvider = ({ children }) => {
+    const [autoCapture, setAutoCapture] = useState(false);
     // Initialize from localStorage or defaults
     const [audioAnnouncements, setAudioAnnouncements] = useState(() => {
         const saved = localStorage.getItem("bw-audio");
@@ -156,6 +157,10 @@ export function SettingsProvider({ children }) {
             setHasSeenDetectionGuidance,
             enableUnidentifiedObstacleDetection,
             setEnableUnidentifiedObstacleDetection,
+            autoCapture,
+            setAutoCapture,
+            autoCapture,
+            setAutoCapture,
         }),
         [
             audioAnnouncements,

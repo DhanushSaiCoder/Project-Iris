@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { SettingsContext } from '../context/SettingsContext';
-import { getDistance } from '../../utils/calibration';
+import { getDistance } from '../utils/calibration';
 
 // Helper functions for array statistics and processing
 function median(arr) {
@@ -486,7 +486,7 @@ export default useUnidentifiedObstacleDetection;
  *    confidence: 0..1,
  *    details: { ... } }
  */
-function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDistance, options = {}) {
+function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDistance, calibration, options = {}) {
   // ---------- default params (tune these to your sensor & mount) ----------
   const params = {
     // allow slightly smaller blobs to be considered hazards (stairs/edges can be small in frame)

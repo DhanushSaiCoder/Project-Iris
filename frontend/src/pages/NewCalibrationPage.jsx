@@ -1,3 +1,4 @@
+
 // src/pages/NewCalibrationPage.jsx
 import React, { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { Camera, Check, Plus, Minus } from 'lucide-react';
@@ -10,6 +11,7 @@ import { SettingsContext } from "../context/SettingsContext";
 
 const DISTANCES = [1, 2]; // Distances in meters for calibration
 const ADJUSTMENT_FACTOR = 0.05;
+const TARGET_BOX_SIZE = 80; // Size of the target box in pixels
 
 const ProgressBar = ({ step, totalSteps }) => (
     <div className={styles.progressBar}>
@@ -36,6 +38,21 @@ export default function NewCalibrationPage() {
         const msg = new SpeechSynthesisUtterance(text);
         window.speechSynthesis.speak(msg);
     }, []);
+
+    const drawTargetBox = (ctx) => {
+        const canvas = ctx.canvas;
+        const x = (canvas.width - TARGET_BOX_SIZE) / 2;
+        const y = (canvas.height - TARGET_BOX_SIZE) / 2;
+
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        ctx.strokeRect(x, y, TARGET_BOX_SIZE, TARGET_BOX_SIZE);
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.fillRect(x, y, TARGET_BOX_SIZE, TARGET_BOX_SIZE);
+    };
 
     // Effect for processing the depth map
     useEffect(() => {
@@ -68,13 +85,12 @@ export default function NewCalibrationPage() {
             } else return;
         } else return;
 
-        const patchSize = 50;
-        const y0 = Math.max(0, Math.floor((height - patchSize) / 2));
-        const x0 = Math.max(0, Math.floor((width - patchSize) / 2));
+        const x0 = Math.floor((width - TARGET_BOX_SIZE) / 2);
+        const y0 = Math.floor((height - TARGET_BOX_SIZE) / 2);
 
         let sum = 0, count = 0;
-        for (let y = y0; y < Math.min(height, y0 + patchSize); y++) {
-            for (let x = x0; x < Math.min(width, x0 + patchSize); x++) {
+        for (let y = y0; y < y0 + TARGET_BOX_SIZE; y++) {
+            for (let x = x0; x < x0 + TARGET_BOX_SIZE; x++) {
                 const v = depth2D[y]?.[x];
                 if (v !== undefined && v !== null && Number.isFinite(v)) {
                     sum += v;
@@ -87,11 +103,23 @@ export default function NewCalibrationPage() {
         setCurrentDepth(avg);
     }, [depthMap]);
 
-    // Effect for running predictions
+    // Effect for running predictions and drawing on canvas
     useEffect(() => {
         if (!cameraReady || !videoRef.current || depthLoading) return;
         const video = videoRef.current;
-        const predict = () => predictDepth(video);
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        const predict = () => {
+            predictDepth(video);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            drawTargetBox(ctx);
+        };
+
         const interval = setInterval(predict, 200);
         return () => clearInterval(interval);
     }, [cameraReady, videoRef, predictDepth, depthLoading]);
@@ -182,7 +210,7 @@ export default function NewCalibrationPage() {
             <>
                 <div className={styles.stepIndicator}>Step {step + 1} of {totalSteps}</div>
                 <h2>Calibrate at {DISTANCES[step]}m</h2>
-                <p>Point the center of the camera at an object {DISTANCES[step]}m away, then press capture.</p>
+                <p>Place an object inside the target box at {DISTANCES[step]}m, then press capture.</p>
                 <button onClick={startCaptureCountdown} className={styles.primaryBtn} disabled={countdown > 0}>
                     {countdown > 0 ? `Capturing in ${countdown}...` : <><Camera size={20} /> Capture</>}
                 </button>
@@ -201,8 +229,9 @@ export default function NewCalibrationPage() {
                             playsInline
                             muted
                             className={styles.videoFeed}
+                            style={{ display: "none" }} // Hide the video element
                         />
-                        <canvas ref={canvasRef} className={styles.depthOverlay} />
+                        <canvas ref={canvasRef} className={styles.videoFeed} />
                         {(!cameraReady || depthLoading) && <div className={styles.videoLoading}><PageLoading /></div>}
                     </div>
                 </div>

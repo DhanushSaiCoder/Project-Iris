@@ -132,6 +132,14 @@
     margin-bottom: 1rem; /* from 1.5rem */
 }
 
+.calibrationValues {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    margin-top: 1rem;
+}
+
 .calibrationCard button {
     padding: 0.7rem 1.5rem; /* from 0.9rem 1.8rem */
     font-size: 1rem;

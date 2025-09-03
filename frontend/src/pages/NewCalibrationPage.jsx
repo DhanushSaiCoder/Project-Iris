@@ -147,6 +147,12 @@ export default function NewCalibrationPage() {
                             <button onClick={() => handleAdjustment('nearer')} className={styles.secondaryBtn}><Minus size={20} /> Too Near</button>
                             <button onClick={() => handleAdjustment('farther')} className={styles.secondaryBtn}><Plus size={20} /> Too Far</button>
                         </div>
+                        {adjustableCalibration && (
+                            <div className={styles.calibrationValues}>
+                                <p>m: {adjustableCalibration.m.toFixed(4)}</p>
+                                <p>c: {adjustableCalibration.c.toFixed(4)}</p>
+                            </div>
+                        )}
                     </div>
                     <div className={styles.cardFooter}>
                         <button onClick={finishCalibration} className={styles.successBtn}><Check size={20} /> Finish & Save</button>

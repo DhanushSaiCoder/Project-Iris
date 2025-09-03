@@ -10,7 +10,7 @@ import AlertDistance from "../components/SettingsPage/AlertDistance/AlertDistanc
 import HepticFeedback from "../components/SettingsPage/HepticFeedback/HepticFeedback";
 import AutoCaliberateOnLaunch from "../components/SettingsPage/AutoCaliberateOnLaunch/AutoCaliberateOnLaunch";
 import ReCaliberateDevice from "./../components/SettingsPage/ReCaliberateDeviceBtn/ReCaliberateDevice";
-import NewCalibrateDeviceBtn from "../components/SettingsPage/NewCalibrateDeviceBtn/NewCalibrateDeviceBtn";
+
 import AdminDashboardBtn from "../components/SettingsPage/AdminDashboard/AdminDashboardBtn";
 import DeveloperMode from "../components/SettingsPage/DeveloperMode/DeveloperMode";
 import AudioAnnouncements from "../components/SettingsPage/AudioAnnouncements/AudioAnnouncements";
@@ -80,7 +80,6 @@ const SettingsPage = () => {
                 </div>
                 <div className={styles.buttonsDiv}>
                     <ReCaliberateDevice />
-                    <NewCalibrateDeviceBtn />
                 </div>
 
                 {isAdminOrDeveloper && (

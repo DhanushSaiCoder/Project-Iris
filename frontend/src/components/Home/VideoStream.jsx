@@ -6,13 +6,14 @@ import useUnidentifiedObstacleDetection from '../../hooks/useUnidentifiedObstacl
 import { SettingsContext } from "../../context/SettingsContext";
 import { speak, cancelSpeech, clearSpeechQueue, setSpeechStatusCallback } from "../../utils/speech";
 import { triggerHapticFeedback } from "../../utils/haptics";
+import { getDistance } from "../../utils/calibration";
 import styles from "./VideoStream.module.css";
 
 const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const { videoRef, ready: cameraReady } = useCamera();
     const { cocoModel, loading: cocoLoading, error: cocoError } = useModels();
     const { depthMap, predictDepth, loading: depthLoading, error: depthError } = useDepthModel();
-    const { alertDistance, developerMode, audioAnnouncements, hapticFeedback } = useContext(SettingsContext);
+    const { alertDistance, developerMode, audioAnnouncements, hapticFeedback, calibration } = useContext(SettingsContext);
     const { calculateUnidentifiedObstacles } = useUnidentifiedObstacleDetection();
     const canvasRef = useRef(null);
     const lastDetected = useRef({});
@@ -29,6 +30,9 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const CROP_SIDE_PERCENTAGE_Y = (1 - CENTRAL_CROP_PERCENTAGE_Y) / 2; // 5% from each side
 
     const tempCanvasRef = useRef(null);
+
+    const lastFrameProcessTime = useRef(0);
+    const FRAME_PROCESS_INTERVAL_MS = 100; // Aim for 10 FPS
 
     useEffect(() => {
         onLoadingChange(cocoLoading || depthLoading);
@@ -71,6 +75,14 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                 const video = videoRef.current;
                 const canvas = canvasRef.current;
                 const ctx = canvas.getContext("2d");
+
+                // Add frame rate control
+                const now = Date.now();
+                if (now - lastFrameProcessTime.current < FRAME_PROCESS_INTERVAL_MS) {
+                    animationFrameId = requestAnimationFrame(detect);
+                    return;
+                }
+                lastFrameProcessTime.current = now;
 
                 // Ensure video dimensions are available and valid before proceeding
                 if (!video.videoWidth || !video.videoHeight || video.videoWidth <= 0 || video.videoHeight <= 0) {
@@ -224,7 +236,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         return () => {
             cancelAnimationFrame(animationFrameId);
         };
-    }, [cameraReady, cocoLoading, depthLoading, cocoModel, predictDepth, videoRef, isDetecting, depthMap, alertDistance, calculateUnidentifiedObstacles, audioAnnouncements, hapticFeedback, developerMode, onObjectDetection]);
+    }, [cameraReady, cocoLoading, depthLoading, cocoModel, predictDepth, videoRef, isDetecting, depthMap, alertDistance, calculateUnidentifiedObstacles, audioAnnouncements, hapticFeedback, developerMode, onObjectDetection, calibration]);
 
     // Clear speech queue if audio announcements are turned off
     useEffect(() => {
@@ -310,7 +322,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
             }
 
             const avgDepth = pixelCount > 0 ? totalDepth / pixelCount : 0;
-            const avgDepthInMeters = (1 - avgDepth) * distanceMultiplier; // Convert normalized depth to meters
+            const avgDepthInMeters = calibration ? getDistance(avgDepth, calibration) : 0; // Convert normalized depth to meters
             const isClose = avgDepthInMeters < alertDistance;
 
             if (isClose) {
@@ -366,7 +378,6 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
         ctx.globalAlpha = 1.0;
     };
 
-    const [distanceMultiplier, setDistanceMultiplier] = useState(2.25);
     const [speechStatus, setSpeechStatus] = useState('Initializing speech...');
 
     useEffect(() => {
@@ -387,23 +398,10 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                 style={{ display: "none" }}
             />
             <canvas ref={canvasRef} className={styles.canvas} />
-            {developerMode && (
-                <div className={styles.calibrationControls}>
-                    <label htmlFor="distanceMultiplier">Distance Multiplier: {distanceMultiplier.toFixed(2)}</label>
-                    <input
-                        type="range"
-                        id="distanceMultiplier"
-                        min="0.8"
-                        max="50"
-                        step="0.5"
-                        value={distanceMultiplier}
-                        onChange={(e) => setDistanceMultiplier(parseFloat(e.target.value))}
-                        className={styles.slider}
-                    />
-                </div>
-            )}
         </div>
     );
 };
 
 export default VideoStream;
+            
+                

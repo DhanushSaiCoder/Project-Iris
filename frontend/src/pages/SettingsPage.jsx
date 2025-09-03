@@ -10,12 +10,14 @@ import AlertDistance from "../components/SettingsPage/AlertDistance/AlertDistanc
 import HepticFeedback from "../components/SettingsPage/HepticFeedback/HepticFeedback";
 import AutoCaliberateOnLaunch from "../components/SettingsPage/AutoCaliberateOnLaunch/AutoCaliberateOnLaunch";
 import ReCaliberateDevice from "./../components/SettingsPage/ReCaliberateDeviceBtn/ReCaliberateDevice";
+
 import AdminDashboardBtn from "../components/SettingsPage/AdminDashboard/AdminDashboardBtn";
 import DeveloperMode from "../components/SettingsPage/DeveloperMode/DeveloperMode";
 import AudioAnnouncements from "../components/SettingsPage/AudioAnnouncements/AudioAnnouncements";
 import LogoutButton from "../components/SettingsPage/LogoutButton/LogoutButton";
 import Torch from "../components/SettingsPage/Torch/Torch";
 import UnidentifiedObstacleDetection from "../components/SettingsPage/UnidentifiedObstacleDetection/UnidentifiedObstacleDetection";
+
 
 const SettingsPage = () => {
     const navigate = useNavigate();
@@ -73,6 +75,7 @@ const SettingsPage = () => {
                 <div className={styles.settingItem}>
                     <Torch />
                 </div>
+                
                 <div className={styles.buttonsDiv}>
                     <ReCaliberateDevice />
                 </div>

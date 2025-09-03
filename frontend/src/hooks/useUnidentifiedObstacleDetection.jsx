@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { SettingsContext } from '../context/SettingsContext';
+import { getDistance } from '../utils/calibration';
 
 // Helper functions for array statistics and processing
 function median(arr) {
@@ -343,7 +344,7 @@ const computeBlobValidPixelCount = (blob, depthMapData, frameWidth, frameHeight)
 };
 
 const useUnidentifiedObstacleDetection = () => {
-    const { alertDistance, enableUnidentifiedObstacleDetection } = useContext(SettingsContext);
+    const { alertDistance, enableUnidentifiedObstacleDetection, calibration } = useContext(SettingsContext);
 
     const calculateUnidentifiedObstacles = (depthData, cocoDetections, frameWidth, frameHeight) => {
         if (!enableUnidentifiedObstacleDetection || !depthData || !cocoDetections || !frameWidth || !frameHeight) {
@@ -388,7 +389,7 @@ const useUnidentifiedObstacleDetection = () => {
 
             if (!isIdentified) {
                 // 1) run detectGroundHazard which also returns depthStd, fit, validPixels
-                const hr = detectGroundHazard(blob, depthData, frameWidth, frameHeight, alertDistance /*, {paramsOverride} */);
+                const hr = detectGroundHazard(blob, depthData, frameWidth, frameHeight, alertDistance, calibration);
                 // 2) compute obstacleScore quick heuristic
                 const medianDepth = hr.details.medianDepth;
                 const depthStd = hr.details.depthStd;
@@ -485,7 +486,7 @@ export default useUnidentifiedObstacleDetection;
  *    confidence: 0..1,
  *    details: { ... } }
  */
-function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDistance, options = {}) {
+function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDistance, calibration, options = {}) {
   // ---------- default params (tune these to your sensor & mount) ----------
   const params = {
     // allow slightly smaller blobs to be considered hazards (stairs/edges can be small in frame)
@@ -546,7 +547,7 @@ function detectGroundHazard(blob, depthMapData, frameWidth, frameHeight, alertDi
     const rowVals = [];
     for (let xx = x0; xx <= x1; xx++) {
       if (!inBounds(xx, yy)) continue;
-      const d = depthMapData[idx(xx, yy)];
+      const d = calibration ? getDistance(depthMapData[idx(xx, yy)], calibration) : Infinity;
       if (!isFinite(d) || d <= 0) continue;
       if (d < params.validDepthMin || d > params.validDepthMax) continue;
       rowVals.push(d);

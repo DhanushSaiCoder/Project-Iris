@@ -28,7 +28,8 @@ export const SettingsContext = createContext({
 });
 
 // 3. Create Provider component
-export function SettingsProvider({ children }) {
+export const SettingsProvider = ({ children }) => {
+    const [autoCapture, setAutoCapture] = useState(false);
     // Initialize from localStorage or defaults
     const [audioAnnouncements, setAudioAnnouncements] = useState(() => {
         const saved = localStorage.getItem("bw-audio");
@@ -45,9 +46,12 @@ export function SettingsProvider({ children }) {
     const [sessionId, setSessionId] = useState(defaultSettings.sessionId);
     const [alertDistance, setAlertDistance] = useState(() => {
         const saved = localStorage.getItem("bw-alert-distance");
-        return saved !== null
-            ? JSON.parse(saved)
-            : defaultSettings.alertDistance;
+        return saved ? JSON.parse(saved) : defaultSettings.alertDistance;
+    });
+
+    const [calibration, setCalibration] = useState(() => {
+        const saved = localStorage.getItem("bw-calibration");
+        return saved ? JSON.parse(saved) : null;
     });
     const [developerMode, setDeveloperMode] = useState(() => {
         const saved = localStorage.getItem("bw-developer-mode");
@@ -97,7 +101,11 @@ export function SettingsProvider({ children }) {
             "bw-alert-distance",
             JSON.stringify(alertDistance)
         );
-    }, [alertDistance]);
+        localStorage.setItem(
+            "bw-calibration",
+            JSON.stringify(calibration)
+        );
+    }, [alertDistance, calibration]);
     useEffect(() => {
         localStorage.setItem(
             "bw-developer-mode",
@@ -137,6 +145,8 @@ export function SettingsProvider({ children }) {
             setSessionId,
             alertDistance,
             setAlertDistance,
+            calibration,
+            setCalibration,
             developerMode,
             setDeveloperMode,
             autoCaliberateOnLaunch,
@@ -147,6 +157,10 @@ export function SettingsProvider({ children }) {
             setHasSeenDetectionGuidance,
             enableUnidentifiedObstacleDetection,
             setEnableUnidentifiedObstacleDetection,
+            autoCapture,
+            setAutoCapture,
+            autoCapture,
+            setAutoCapture,
         }),
         [
             audioAnnouncements,
@@ -158,6 +172,7 @@ export function SettingsProvider({ children }) {
             torch,
             hasSeenDetectionGuidance,
             enableUnidentifiedObstacleDetection,
+            calibration,
         ]
     );
 

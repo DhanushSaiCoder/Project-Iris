@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter as Router, Route, Routes, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AdminDashboardPage from './pages/AdminDashboardPage.jsx';
-import CalibrationPage from './pages/CalibrationPage.jsx';
+
 import CameraAccessDeniedPage from './pages/CameraAccessDeniedPage.jsx';
 import DevelopersPage from './pages/DevelopersPage.jsx';
 import HelpPage from './pages/HelpPage.jsx';
@@ -30,6 +30,7 @@ import { MobileGuard } from './utils/MobileGuard';
 import ProtectedRoute from './context/ProtectedRoute';
 import Footer from './components/Footer/Footer.jsx';
 import NewSession from './pages/NewSession';
+import NewCalibrationPage from './pages/NewCalibrationPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
 import GuestLimitPage from './pages/GuestLimitPage.jsx';
@@ -47,9 +48,9 @@ const AppContent = () => {
         }
     }, [location.pathname, navigate]);
 
-    const hiddenPaths = ['/settings', '/help', '/privacy-notes', '/developers', '/launch', '/login', '/signup', '/guest-limit', '/calibration'];
+    const hiddenPaths = ['/settings', '/help', '/privacy-notes', '/developers', '/launch', '/login', '/signup', '/guest-limit', '/calibration', '/new-calibration'];
     const showHeader = !hiddenPaths.includes(location.pathname);
-    const hiddenFooterPaths = ['/login', '/signup', '/guest-limit', '/calibration'];
+    const hiddenFooterPaths = ['/login', '/signup', '/guest-limit', '/new-calibration'];
     const showFooter = !hiddenFooterPaths.includes(location.pathname);
 
     return (
@@ -74,7 +75,8 @@ const AppContent = () => {
                         <Route path="/all-history" element={<AllHistoryPage />} />
                         <Route path="/unique-objects" element={<UniqueObjectsPage />} />
                         <Route path="/newSession" element={<NewSession />} />
-                        <Route path="/calibration" element={<CalibrationPage />} />
+                        
+                        <Route path="/new-calibration" element={<NewCalibrationPage />} />
                         <Route path="/camera-access-denied" element={<CameraAccessDeniedPage />} />
                         <Route path="/developers" element={<DevelopersPage />} />
                         <Route path="/help" element={<HelpPage />} />

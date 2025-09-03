@@ -17,7 +17,7 @@ import AudioAnnouncements from "../components/SettingsPage/AudioAnnouncements/Au
 import LogoutButton from "../components/SettingsPage/LogoutButton/LogoutButton";
 import Torch from "../components/SettingsPage/Torch/Torch";
 import UnidentifiedObstacleDetection from "../components/SettingsPage/UnidentifiedObstacleDetection/UnidentifiedObstacleDetection";
-import AutoCapture from "../components/SettingsPage/AutoCapture/AutoCapture";
+
 
 const SettingsPage = () => {
     const navigate = useNavigate();
@@ -75,9 +75,7 @@ const SettingsPage = () => {
                 <div className={styles.settingItem}>
                     <Torch />
                 </div>
-                <div className={styles.settingItem}>
-                    <AutoCapture />
-                </div>
+                
                 <div className={styles.buttonsDiv}>
                     <ReCaliberateDevice />
                 </div>

@@ -1,3 +1,8 @@
 .settingLabel {
     margin: 0;
 }
+
+.betaTag {
+    font-size: 0.8rem;
+    color: var(--color-warning);
+}

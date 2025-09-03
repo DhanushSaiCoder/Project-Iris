@@ -12,7 +12,7 @@ const UnidentifiedObstacleDetection = () => {
     return (
         <>
             <p className={styles.settingLabel}>
-                Unidentified Obstacle Detection
+                Unidentified Obstacle Detection <span className={styles.betaTag}>(beta)</span>
             </p>
             <ToggleSwitch
                 checked={enableUnidentifiedObstacleDetection}

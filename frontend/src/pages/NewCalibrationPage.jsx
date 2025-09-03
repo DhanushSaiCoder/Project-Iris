@@ -1,4 +1,3 @@
-
 // src/pages/NewCalibrationPage.jsx
 import React, { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { Camera, Check, Plus, Minus } from 'lucide-react';
@@ -23,6 +22,8 @@ export default function NewCalibrationPage() {
     const [calibrationData, setCalibrationData] = useState([]);
     const [adjustableCalibration, setAdjustableCalibration] = useState(null);
     const [currentDepth, setCurrentDepth] = useState(null);
+    const [countdown, setCountdown] = useState(0);
+    const countdownTimer = useRef(null);
 
     const { setCalibration } = useContext(SettingsContext);
     const { videoRef, ready: cameraReady } = useCamera();
@@ -95,7 +96,7 @@ export default function NewCalibrationPage() {
         return () => clearInterval(interval);
     }, [cameraReady, videoRef, predictDepth, depthLoading]);
 
-    const handleCapture = () => {
+    const handleCapture = useCallback(() => {
         if (currentDepth > 0) {
             const newPoint = [1 / currentDepth, DISTANCES[step]];
             const updatedData = [...calibrationData, newPoint];
@@ -113,6 +114,23 @@ export default function NewCalibrationPage() {
         } else {
             speak("Could not capture. Please try again.");
         }
+    }, [currentDepth, calibrationData, step]);
+
+    useEffect(() => {
+        if (countdown === 0 && countdownTimer.current) {
+            clearInterval(countdownTimer.current);
+            countdownTimer.current = null;
+            handleCapture();
+        } else if (countdown > 0) {
+            speak(countdown.toString());
+        }
+    }, [countdown, handleCapture]);
+
+    const startCaptureCountdown = () => {
+        setCountdown(3);
+        countdownTimer.current = setInterval(() => {
+            setCountdown(prev => prev - 1);
+        }, 1000);
     };
 
     const handleAdjustment = (direction) => {
@@ -165,7 +183,9 @@ export default function NewCalibrationPage() {
                 <div className={styles.stepIndicator}>Step {step + 1} of {totalSteps}</div>
                 <h2>Calibrate at {DISTANCES[step]}m</h2>
                 <p>Point the center of the camera at an object {DISTANCES[step]}m away, then press capture.</p>
-                <button onClick={handleCapture} className={styles.primaryBtn}><Camera size={20} /> Capture</button>
+                <button onClick={startCaptureCountdown} className={styles.primaryBtn} disabled={countdown > 0}>
+                    {countdown > 0 ? `Capturing in ${countdown}...` : <><Camera size={20} /> Capture</>}
+                </button>
             </>
         );
     };

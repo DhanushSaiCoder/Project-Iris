@@ -24,7 +24,11 @@ export function linearRegression(data) {
         sumXX += x * x;
     }
 
-    const m = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    const denominator = n * sumXX - sumX * sumX;
+    if (Math.abs(denominator) < 1e-9) { // Check for a very small denominator
+        return { m: -1, c: 1 }; // Return a default calibration
+    }
+    const m = (n * sumXY - sumX * sumY) / denominator;
     const c = (sumY - m * sumX) / n;
 
     return { m, c };

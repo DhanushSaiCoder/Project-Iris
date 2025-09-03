@@ -1,7 +1,7 @@
 
 // src/pages/NewCalibrationPage.jsx
 import React, { useState, useEffect, useRef, useCallback, useContext } from "react";
-import { Play, Check, Timer, MoveLeft, MoveRight, CheckCircle, XCircle, ArrowRight, ZapOff, Camera } from 'lucide-react';
+import { Camera, Check, Plus, Minus } from 'lucide-react';
 import PageLoading from "../components/common/PageLoading";
 import styles from "./NewCalibrationPage.module.css";
 import { useCamera } from "../hooks/useCamera";
@@ -9,114 +9,26 @@ import { useDepthModel } from "../hooks/useDepthModel";
 import { linearRegression, getDistance } from "../utils/calibration";
 import { SettingsContext } from "../context/SettingsContext";
 
-const DISTANCES = [1, 2, 3];
-const TOLERANCE = 0.1; 
-const STABILITY_THRESHOLD = 0.005; // Made it a bit more lenient
-const STABILITY_WINDOW = 15; // Check over 15 frames
-const RECORDING_SECONDS = 3;
+const DISTANCES = [1, 2]; // Distances in meters for calibration
+const ADJUSTMENT_FACTOR = 0.05;
 
 export default function NewCalibrationPage() {
-    const [step, setStep] = useState(0);
+    const [step, setStep] = useState(0); // 0, 1, 2 for capture, 3 for verification
     const [calibrationData, setCalibrationData] = useState([]);
-    const [calibration, setCalibration] = useState(null);
+    const [adjustableCalibration, setAdjustableCalibration] = useState(null);
     const [currentDepth, setCurrentDepth] = useState(null);
-    
-    // State Machine for the process
-    const [processState, setProcessState] = useState('idle'); // idle | guiding | stabilizing | pre-recording | recording | reviewing
-    const [guidance, setGuidance] = useState("Get ready to calibrate.");
-    const [stability, setStability] = useState(0); // 0-100 stability score
-    const [lastDepthValues, setLastDepthValues] = useState([]);
 
-    const { autoCapture } = useContext(SettingsContext);
+    const { setCalibration } = useContext(SettingsContext);
     const { videoRef, ready: cameraReady } = useCamera();
     const { predictDepth, loading: depthLoading, error: depthError, depthMap } = useDepthModel();
     
     const canvasRef = useRef(null);
-    const samples = useRef([]);
-    const timerRef = useRef(null);
 
     const speak = useCallback((text) => {
         window.speechSynthesis.cancel();
         const msg = new SpeechSynthesisUtterance(text);
         window.speechSynthesis.speak(msg);
     }, []);
-
-    const finish = useCallback(() => {
-        if (calibration) {
-            localStorage.setItem("bw-calibration", JSON.stringify(calibration));
-            speak("Calibration complete. Your device is now calibrated.");
-            window.location.href = "/";
-        }
-    }, [calibration, speak]);
-
-    const startCountdown = useCallback((isAuto) => {
-        const startRecord = () => {
-            setProcessState('recording');
-            samples.current = [];
-            speak(`Recording for ${RECORDING_SECONDS} seconds.`);
-            timerRef.current = setTimeout(() => {
-                if (samples.current.length > 0) {
-                    const avg = samples.current.reduce((a, b) => a + b, 0) / samples.current.length;
-                    const newPoint = [1 / avg, DISTANCES[step]];
-                    const updatedData = [...calibrationData, newPoint];
-                    setCalibrationData(updatedData);
-                    speak("Measurement saved.");
-                    if (updatedData.length >= DISTANCES.length) {
-                        setCalibration(linearRegression(updatedData));
-                    }
-                } else {
-                    speak("Recording failed. Please try again.");
-                }
-                setProcessState('reviewing');
-            }, RECORDING_SECONDS * 1000);
-        };
-
-        if (isAuto) {
-            setProcessState('pre-recording');
-            speak(`Object stable. Auto-capturing in 3 seconds. Say stop or press cancel.`);
-            timerRef.current = setTimeout(startRecord, 3000);
-        } else {
-            startRecord();
-        }
-    }, [step, calibrationData, speak]);
-
-    // Main logic for guidance and stability
-    useEffect(() => {
-        if (processState !== 'guiding') {
-            setStability(0);
-            return;
-        }
-
-        if (currentDepth) {
-            const target = DISTANCES[step];
-            const error = target - currentDepth;
-
-            if (Math.abs(error) > TOLERANCE) {
-                setGuidance(error > 0 ? "Move Closer" : "Move Farther");
-                setLastDepthValues([]);
-                setStability(0);
-            } else {
-                setGuidance("In position. Hold steady...");
-                const newDepths = [...lastDepthValues, currentDepth].slice(-STABILITY_WINDOW);
-                setLastDepthValues(newDepths);
-
-                if (newDepths.length === STABILITY_WINDOW) {
-                    const mean = newDepths.reduce((a, b) => a + b, 0) / newDepths.length;
-                    const variance = newDepths.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / newDepths.length;
-                    const newStability = Math.max(0, 100 - (variance / STABILITY_THRESHOLD) * 100);
-                    setStability(newStability);
-
-                    if (newStability >= 100) {
-                        if (autoCapture) {
-                            startCountdown(true);
-                        } else {
-                            setProcessState('stabilizing');
-                        }
-                    }
-                }
-            }
-        }
-    }, [currentDepth, processState, step, autoCapture, startCountdown, lastDepthValues]);
 
     // Effect for processing the depth map
     useEffect(() => {
@@ -125,7 +37,6 @@ export default function NewCalibrationPage() {
         if (!rawDepthData || !width || !height) return;
 
         let depth2D = null;
-        // ... (code to normalize depthData to 2D, unchanged)
         if (Array.isArray(rawDepthData)) {
             if (Array.isArray(rawDepthData[0])) {
                 if (typeof rawDepthData[0][0] === "number") depth2D = rawDepthData;
@@ -167,11 +78,7 @@ export default function NewCalibrationPage() {
 
         const avg = count > 0 ? sum / count : 0;
         setCurrentDepth(avg);
-
-        if (processState === 'recording' && count > 0 && Number.isFinite(avg)) {
-            samples.current.push(avg);
-        }
-    }, [depthMap, processState]);
+    }, [depthMap]);
 
     // Effect for running predictions
     useEffect(() => {
@@ -182,119 +89,71 @@ export default function NewCalibrationPage() {
         return () => clearInterval(interval);
     }, [cameraReady, videoRef, predictDepth, depthLoading]);
 
-    const handleCancel = () => {
-        clearTimeout(timerRef.current);
-        setProcessState('guiding');
-        speak("Cancelled.");
-    }
-
-    const handleRedo = () => {
-        setCalibrationData(prev => prev.slice(0, -1));
-        setProcessState('idle');
+    const handleCapture = () => {
+        if (currentDepth > 0) {
+            const newPoint = [1 / currentDepth, DISTANCES[step]];
+            const updatedData = [...calibrationData, newPoint];
+            setCalibrationData(updatedData);
+            speak(`Captured at ${DISTANCES[step]} meter.`);
+            
+            if (step < DISTANCES.length - 1) {
+                setStep(prev => prev + 1);
+            } else {
+                // Last capture, move to verification
+                const initialCalibration = linearRegression(updatedData);
+                setAdjustableCalibration(initialCalibration);
+                setStep(prev => prev + 1);
+                speak("Verification step. Adjust if needed.");
+            }
+        } else {
+            speak("Could not capture. Please try again.");
+        }
     };
 
-    const handleNext = () => {
-        if (step < DISTANCES.length - 1) {
-            setStep(prev => prev + 1);
-            setProcessState('idle');
-        } else {
-            setStep(prev => prev + 1); // Move to verification
+    const handleAdjustment = (direction) => {
+        if (!adjustableCalibration) return;
+        const adjustment = direction === 'nearer' ? -ADJUSTMENT_FACTOR : ADJUSTMENT_FACTOR;
+        setAdjustableCalibration(cal => ({ ...cal, c: cal.c + adjustment }));
+    };
+
+    const finishCalibration = () => {
+        if (adjustableCalibration) {
+            setCalibration(adjustableCalibration);
+            localStorage.setItem("bw-calibration", JSON.stringify(adjustableCalibration));
+            speak("Calibration complete. Your device is now calibrated.");
+            window.location.href = "/";
         }
     };
 
     const renderContent = () => {
+        // Verification Step
         if (step >= DISTANCES.length) {
             return (
                 <>
-                    <div className={styles.stepIndicator}>Verification</div>
-                    <h2>Calibration Complete!</h2>
-                    <p>Move an object to see the estimated distance.</p>
-                    {currentDepth && <p className={styles.distanceDisplay}>{(getDistance(currentDepth, calibration)).toFixed(2)}m</p>}
-                    <button onClick={finish}><Check size={20} /><span>Finish & Save</span></button>
+                    <div className={styles.stepIndicator}>Step {DISTANCES.length + 1} of {DISTANCES.length + 1}: Verification</div>
+                    <h2>Verify and Adjust</h2>
+                    <p>Point your camera at an object and check the estimated distance. Adjust if it feels off.</p>
+                    <div className={styles.distanceDisplay}>
+                        {currentDepth && adjustableCalibration ? getDistance(currentDepth, adjustableCalibration).toFixed(2) : "0.00"}m
+                    </div>
+                    <div className={styles.buttonGroup}>
+                        <button onClick={() => handleAdjustment('nearer')} className={styles.adjustmentButton}><Minus size={20} /><span>Too Near</span></button>
+                        <button onClick={() => handleAdjustment('farther')} className={styles.adjustmentButton}><Plus size={20} /><span>Too Far</span></button>
+                    </div>
+                    <button onClick={finishCalibration} className={styles.finishButton}><Check size={20} /><span>Looks Good, Finish</span></button>
                 </>
             );
         }
 
-        const commonHeader = (
+        // Capture Steps
+        return (
             <>
-                <div className={styles.stepIndicator}>Step {step + 1} of {DISTANCES.length}</div>
-                <h2>Calibrate at {DISTANCES[step]}m</h2>
+                <div className={styles.stepIndicator}>Step {step + 1} of {DISTANCES.length + 1}: Capture</div>
+                <h2>Point at an object {DISTANCES[step]}m away</h2>
+                <p>Ensure the object is in the center of the screen, then press Capture.</p>
+                <button onClick={handleCapture}><Camera size={20} /><span>Capture</span></button>
             </>
         );
-
-        switch (processState) {
-            case 'idle':
-                return (
-                    <>
-                        {commonHeader}
-                        <p>When ready, press Start to begin guidance.</p>
-                        <button onClick={() => { setProcessState('guiding'); speak(`Step ${step + 1}. Calibrate at ${DISTANCES[step]} meters.`)}}><Play size={20} /><span>Start Guidance</span></button>
-                    </>
-                );
-            case 'guiding':
-                return (
-                    <>
-                        {commonHeader}
-                        <div className={styles.guidanceBox}>
-                            {guidance === "Move Closer" ? <MoveLeft size={24} /> : <MoveRight size={24} />}
-                            <span>{guidance}</span>
-                        </div>
-                        <div className={styles.stabilityMeter}>
-                            <div className={styles.stabilityFill} style={{ width: `${stability}%` }}></div>
-                            <span className={styles.stabilityText}>{Math.round(stability)}% Stable</span>
-                        </div>
-                    </>
-                );
-            case 'stabilizing':
-                 return (
-                    <>
-                        {commonHeader}
-                        <div className={styles.guidanceBox}>
-                           <CheckCircle size={24} className={styles.successIcon} />
-                           <span>Object is stable.</span>
-                        </div>
-                        <p>Press the button to capture.</p>
-                        <button onClick={() => startCountdown(false)}><Camera size={20} /><span>Capture</span></button>
-                    </>
-                );
-            case 'pre-recording':
-                return (
-                    <>
-                        {commonHeader}
-                        <div className={styles.guidanceBox}>
-                            <Timer size={24} className={styles.recordingIcon} />
-                            <span>Auto-capture in 3s...</span>
-                        </div>
-                        <button onClick={handleCancel} className={styles.redoButton}><ZapOff size={20} /><span>Cancel</span></button>
-                    </>
-                );
-            case 'recording':
-                return (
-                    <>
-                        {commonHeader}
-                        <div className={styles.guidanceBox}>
-                            <Timer size={24} className={styles.recordingIcon} />
-                            <span>Recording...</span>
-                        </div>
-                    </>
-                );
-            case 'reviewing':
-                return (
-                    <>
-                        {commonHeader}
-                        <div className={styles.guidanceBox}>
-                            <CheckCircle size={24} className={styles.successIcon} />
-                            <span>Measurement Saved!</span>
-                        </div>
-                        <div className={styles.buttonGroup}>
-                            <button onClick={handleRedo} className={styles.redoButton}><XCircle size={20} /><span>Redo Step</span></button>
-                            <button onClick={handleNext}><span>{step < DISTANCES.length - 1 ? "Next Step" : "Finish Calibration"}</span><ArrowRight size={20} /></button>
-                        </div>
-                    </>
-                );
-            default:
-                return <PageLoading />;
-        }
     };
 
     return (
@@ -311,7 +170,7 @@ export default function NewCalibrationPage() {
                 {(!cameraReady || depthLoading) && <div className={styles.videoLoading}><PageLoading /></div>}
             </div>
             <div className={styles.contentWrapper}>
-                {renderContent()}
+                {(!cameraReady || depthLoading) ? <PageLoading /> : renderContent()}
             </div>
         </div>
     );

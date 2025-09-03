@@ -1,77 +1,82 @@
-
-# Plan for "Unidentified Obstacle Detection" Feature
+# Plan for New Calibration Process
 
 ## 1. Goal
 
-Implement a feature to alert users about nearby obstacles that are not identified by the existing COCO-SSD object detection model. This will enhance user safety by warning them about potential collisions with objects that the primary model doesn't recognize.
+To refactor the existing calibration process to a simpler, more user-driven workflow with an interactive verification and adjustment step.
 
-## 2. Core Concept
+## 2. New Workflow
 
-The implementation will leverage the existing depth estimation model (FastDepth) in conjunction with the object detection model (COCO-SSD).
+1.  **Step 1: Capture at 1m**
+    *   User is instructed to point the camera at an object 1 meter away.
+    *   User manually triggers a "Capture" button.
+    *   The application captures the raw depth value at the center of the screen.
 
-The process will be as follows:
-1.  The depth model generates a depth map of the scene.
-2.  This depth map is processed to identify contiguous regions (blobs) of pixels that are closer to the user than a predefined threshold. These are potential obstacles.
-3.  The system checks if these close-proximity blobs overlap with the bounding boxes of objects already detected by the COCO-SSD model.
-4.  If a blob does *not* significantly overlap with any known, detected object, it is classified as an "unidentified obstacle," and an alert is triggered.
+2.  **Step 2: Capture at 2m**
+    *   User is instructed to point the camera at an object 2 meters away and captures.
 
-## 3. Detailed Implementation Steps
+3.  **Step 3: (Optional) Capture at 3m**
+    *   User is instructed to point the camera at an object 3 meters away and captures.
 
-### 3.1. Frontend Logic (in a new hook `useUnidentifiedObstacleDetection.jsx`)
+4.  **Step 4: Verification & Adjustment**
+    *   The system calculates the initial calibration parameters (`m` and `c`) using linear regression on the captured data points.
+    *   The UI displays the live predicted distance of the object in the center of the camera view.
+    *   The user is presented with "+" (Too Far) and "-" (Too Near) buttons.
+    *   If the user clicks these buttons, the calibration parameters (`m` and/or `c`) are adjusted slightly, and the user can see the live prediction change.
+    *   The user can continue to adjust until they are satisfied with the accuracy.
 
-A new custom hook will be created to encapsulate the logic for this feature. This hook will be used in `VideoStream.jsx`.
+5.  **Step 5: Completion**
+    *   User clicks "Finish".
+    *   The final, adjusted calibration parameters are saved to `localStorage`.
 
-**Inputs to the hook:**
--   Depth map data from `useDepthModel`.
--   Detected objects array (with bounding boxes) from `useModels` (COCO-SSD).
--   The `alertDistance` setting from `SettingsContext`.
--   A new setting to enable/disable this feature, let's call it `enableUnidentifiedObstacleDetection`.
+## 3. Implementation Steps
 
-**Steps within the hook:**
+### 3.1. Refactor `NewCalibrationPage.jsx`
 
-1.  **Depth Map Processing:**
-    -   Create a binary mask from the depth map. Pixels representing a distance less than `alertDistance` will be set to `1`, and all others to `0`.
-    -   To reduce noise (e.g., small, spurious depth readings), apply a filtering step to the binary mask. A simple approach would be to ignore small blobs below a certain pixel count.
+This will be the main focus of the work. The existing state machine and logic for guidance, stability, and auto-capture will be removed and replaced with a simpler step-based UI.
 
-2.  **Blob Detection:**
-    -   Implement or use a library for connected-component analysis (blob detection) on the binary mask. This will group the `1`s into distinct obstacle blobs.
-    -   For each blob, calculate its bounding box. This gives us a list of potential "unidentified obstacles" with their locations on the screen.
+1.  **Simplify State:**
+    *   Remove the `processState` state machine (`idle`, `guiding`, `stabilizing`, etc.).
+    *   The primary state will be `step` (0, 1, 2 for capture, 3 for verification).
+    *   Keep `calibrationData` to store the `[1/depth, distance]` pairs.
+    *   Add a new state for the adjustable calibration model, e.g., `adjustableCalibration`.
 
-3.  **Cross-Referencing with COCO-SSD Detections:**
-    -   Iterate through each obstacle blob found in the previous step.
-    -   For each blob, iterate through the list of objects detected by COCO-SSD.
-    -   Calculate the Intersection over Union (IoU) between the blob's bounding box and each COCO-SSD object's bounding box.
-    -   If a blob's IoU with any COCO-SSD object is above a certain threshold (e.g., 0.2), we assume it's part of a known object and discard it.
-    -   If a blob has a low IoU with *all* COCO-SSD objects, it is confirmed as an "unidentified obstacle."
+2.  **Create New UI Components for Each Step:**
+    *   **Capture Step UI:**
+        *   Display the target distance (e.g., "Point at an object 1m away").
+        *   Show a "Capture" button.
+        *   When clicked, it should take the `currentDepth` value, create the data point, and advance the `step`.
+    *   **Verification Step UI:**
+        *   On entering this step, calculate the initial `linearRegression` and store it in `adjustableCalibration`.
+        *   Display the live distance calculated using `getDistance(currentDepth, adjustableCalibration)`.
+        *   Add three buttons: "Looks Good (Finish)", "Adjust: Too Far", "Adjust: Too Near".
 
-4.  **Output of the hook:**
-    -   The hook will return an array of bounding boxes for the confirmed "unidentified obstacles."
+3.  **Implement Adjustment Logic:**
+    *   When "Too Far" or "Too Near" is clicked, slightly modify the `m` or `c` value in the `adjustableCalibration` state.
+        *   A simple approach is to increase/decrease the intercept `c` by a small, fixed amount (e.g., 0.05). A more advanced approach could involve adjusting `m` as well.
+        *   `setAdjustableCalibration({ ...adjustableCalibration, c: adjustableCalibration.c + 0.05 })`
+    *   The UI will re-render with the new predicted distance, providing immediate feedback.
 
-### 3.2. User Interface and Notifications (`VideoStream.jsx`)
+4.  **Finish:**
+    *   The "Finish" button will save the `adjustableCalibration` object to `localStorage` (via `SettingsContext`) and navigate the user away from the page.
 
-1.  **Visualization:**
-    -   In the `VideoStream.jsx` component, the bounding boxes of the unidentified obstacles will be rendered on the canvas.
-    -   These bounding boxes will have a distinct style (e.g., a dashed red line) to differentiate them from the standard object detection boxes.
+### 3.2. Update `useCalibrationState.js` (Optional but Recommended)
 
-2.  **Alerts:**
-    -   When an unidentified obstacle is detected, a new, specific alert will be triggered.
-    -   A new audio announcement will be created (e.g., "Unidentified obstacle detected"). This will be spoken using the `speech.js` utility.
-    -   A new haptic feedback pattern will be created in `haptics.js` and triggered to provide a physical notification.
-    -   Alerts should be debounced to avoid overwhelming the user.
+The existing `useCalibrationState.js` hook is not currently used in the `NewCalibrationPage.jsx` but contains some of the same logic. To improve code structure, the logic for managing calibration data and state could be moved from the page component into this hook.
 
-### 3.3. Settings (`SettingsContext.jsx` and `SettingsPage.jsx`)
+1.  Add a function to the hook for the adjustment step, e.g., `adjustCalibration(adjustmentFactor)`.
+2.  Refactor `NewCalibrationPage.jsx` to consume this hook for all state management related to calibration.
 
-1.  **New Setting:**
-    -   A new boolean state, `enableUnidentifiedObstacleDetection`, will be added to `SettingsContext.jsx`. It will be persisted to `localStorage` like the other settings.
-    -   The default value for this setting will be `true`.
+### 3.3. No Changes Needed
 
-2.  **UI Toggle:**
-    -   A new switch or checkbox will be added to the `SettingsPage.jsx` to allow users to easily enable or disable this feature.
+*   **`calibration.js`**: The `linearRegression` and `getDistance` functions are still perfectly valid and will be used.
+*   **`useDepthModel.jsx`**: This hook will continue to provide the raw depth data as needed.
+*   **`SettingsContext.jsx`**: The mechanism for saving and loading the calibration data is already in place.
 
-## 4. Foreseen Challenges and Considerations
+## 4. Plan Execution Order
 
--   **Performance:** The blob detection and IoU calculations will run on every frame, so the implementation must be highly performant to avoid dropping the frame rate. The processing will be done on the main thread unless we can offload it to a worker.
--   **Blob Detection Implementation:** Finding a lightweight, dependency-free blob detection library for JavaScript, or implementing one from scratch, will be a key task. A simple scanline-based algorithm should be sufficient and performant.
--   **Tuning:** The distance threshold (`alertDistance`), the IoU threshold for cross-referencing, and the minimum blob size for noise reduction will need to be tuned to achieve a good balance between sensitivity and false positives.
--   **User Experience:** The frequency and nature of the alerts must be carefully managed to be helpful without being annoying. Debouncing and clear, concise alert messages are crucial.
-
+1.  Start with `NewCalibrationPage.jsx`. Strip out the existing complex UI logic (the `switch (processState)` block).
+2.  Implement the new, simpler UI for the capture steps (1m, 2m, 3m).
+3.  Implement the UI for the verification step, including the live distance display and the adjustment buttons.
+4.  Wire up the adjustment logic to modify the calibration parameters.
+5.  Ensure the final calibration is saved correctly.
+6.  (Optional) Refactor the state management logic into `useCalibrationState.js` for better separation of concerns.

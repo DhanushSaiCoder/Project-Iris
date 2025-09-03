@@ -31,6 +31,9 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 
     const tempCanvasRef = useRef(null);
 
+    const lastFrameProcessTime = useRef(0);
+    const FRAME_PROCESS_INTERVAL_MS = 100; // Aim for 10 FPS
+
     useEffect(() => {
         onLoadingChange(cocoLoading || depthLoading);
     }, [cocoLoading, depthLoading, onLoadingChange]);
@@ -72,6 +75,14 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                 const video = videoRef.current;
                 const canvas = canvasRef.current;
                 const ctx = canvas.getContext("2d");
+
+                // Add frame rate control
+                const now = Date.now();
+                if (now - lastFrameProcessTime.current < FRAME_PROCESS_INTERVAL_MS) {
+                    animationFrameId = requestAnimationFrame(detect);
+                    return;
+                }
+                lastFrameProcessTime.current = now;
 
                 // Ensure video dimensions are available and valid before proceeding
                 if (!video.videoWidth || !video.videoHeight || video.videoWidth <= 0 || video.videoHeight <= 0) {

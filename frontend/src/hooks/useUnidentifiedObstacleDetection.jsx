@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { SettingsContext } from '../context/SettingsContext';
+import { getDistance } from '../../utils/calibration';
 
 // Helper functions for array statistics and processing
 function median(arr) {
@@ -388,7 +389,7 @@ const useUnidentifiedObstacleDetection = () => {
 
             if (!isIdentified) {
                 // 1) run detectGroundHazard which also returns depthStd, fit, validPixels
-                const hr = detectGroundHazard(blob, depthData, frameWidth, frameHeight, alertDistance, calibration /*, {paramsOverride} */);
+                const hr = detectGroundHazard(blob, depthData, frameWidth, frameHeight, alertDistance, calibration);
                 // 2) compute obstacleScore quick heuristic
                 const medianDepth = hr.details.medianDepth;
                 const depthStd = hr.details.depthStd;

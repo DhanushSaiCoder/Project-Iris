@@ -12,8 +12,14 @@ import { SettingsContext } from "../context/SettingsContext";
 const DISTANCES = [1, 2]; // Distances in meters for calibration
 const ADJUSTMENT_FACTOR = 0.05;
 
+const ProgressBar = ({ step, totalSteps }) => (
+    <div className={styles.progressBar}>
+        <div className={styles.progressFill} style={{ width: `${(step / totalSteps) * 100}%` }} />
+    </div>
+);
+
 export default function NewCalibrationPage() {
-    const [step, setStep] = useState(0); // 0, 1, 2 for capture, 3 for verification
+    const [step, setStep] = useState(0); // 0, 1 for capture, 2 for verification
     const [calibrationData, setCalibrationData] = useState([]);
     const [adjustableCalibration, setAdjustableCalibration] = useState(null);
     const [currentDepth, setCurrentDepth] = useState(null);
@@ -99,7 +105,6 @@ export default function NewCalibrationPage() {
             if (step < DISTANCES.length - 1) {
                 setStep(prev => prev + 1);
             } else {
-                // Last capture, move to verification
                 const initialCalibration = linearRegression(updatedData);
                 setAdjustableCalibration(initialCalibration);
                 setStep(prev => prev + 1);
@@ -125,52 +130,67 @@ export default function NewCalibrationPage() {
         }
     };
 
+    const totalSteps = DISTANCES.length + 1;
+
     const renderContent = () => {
-        // Verification Step
         if (step >= DISTANCES.length) {
             return (
                 <>
-                    <div className={styles.stepIndicator}>Step {DISTANCES.length + 1} of {DISTANCES.length + 1}: Verification</div>
-                    <h2>Verify and Adjust</h2>
-                    <p>Point your camera at an object and check the estimated distance. Adjust if it feels off.</p>
-                    <div className={styles.distanceDisplay}>
-                        {currentDepth && adjustableCalibration ? getDistance(currentDepth, adjustableCalibration).toFixed(2) : "0.00"}m
+                    <div className={styles.cardContent}>
+                        <div className={styles.stepIndicator}>Step {step + 1} of {totalSteps}</div>
+                        <h2>Verify & Adjust</h2>
+                        <p>Check the estimated distance and adjust until it feels accurate.</p>
+                        <div className={styles.distanceDisplay}>
+                            {currentDepth && adjustableCalibration ? getDistance(currentDepth, adjustableCalibration).toFixed(2) : "0.00"}m
+                        </div>
+                        <div className={styles.buttonGroup}>
+                            <button onClick={() => handleAdjustment('nearer')} className={styles.secondaryBtn}><Minus size={20} /> Too Near</button>
+                            <button onClick={() => handleAdjustment('farther')} className={styles.secondaryBtn}><Plus size={20} /> Too Far</button>
+                        </div>
                     </div>
-                    <div className={styles.buttonGroup}>
-                        <button onClick={() => handleAdjustment('nearer')} className={styles.adjustmentButton}><Minus size={20} /><span>Too Near</span></button>
-                        <button onClick={() => handleAdjustment('farther')} className={styles.adjustmentButton}><Plus size={20} /><span>Too Far</span></button>
+                    <div className={styles.cardFooter}>
+                        <button onClick={finishCalibration} className={styles.successBtn}><Check size={20} /> Finish & Save</button>
                     </div>
-                    <button onClick={finishCalibration} className={styles.finishButton}><Check size={20} /><span>Looks Good, Finish</span></button>
                 </>
             );
         }
 
-        // Capture Steps
         return (
             <>
-                <div className={styles.stepIndicator}>Step {step + 1} of {DISTANCES.length + 1}: Capture</div>
-                <h2>Point at an object {DISTANCES[step]}m away</h2>
-                <p>Ensure the object is in the center of the screen, then press Capture.</p>
-                <button onClick={handleCapture}><Camera size={20} /><span>Capture</span></button>
+                <div className={styles.stepIndicator}>Step {step + 1} of {totalSteps}</div>
+                <h2>Calibrate at {DISTANCES[step]}m</h2>
+                <p>Point the center of the camera at an object {DISTANCES[step]}m away, then press capture.</p>
+                <button onClick={handleCapture} className={styles.primaryBtn}><Camera size={20} /> Capture</button>
             </>
         );
     };
 
     return (
         <div className={styles.container}>
-            <div className={styles.videoWrapper}>
-                <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    muted
-                    className={styles.videoFeed}
-                />
-                <canvas ref={canvasRef} className={styles.depthOverlay} />
-                {(!cameraReady || depthLoading) && <div className={styles.videoLoading}><PageLoading /></div>}
-            </div>
-            <div className={styles.contentWrapper}>
-                {(!cameraReady || depthLoading) ? <PageLoading /> : renderContent()}
+            <div className={styles.mainContentWrapper}>
+                <div className={styles.videoStreamDiv}>
+                    <div className={styles.videoWrapper}>
+                        <video
+                            ref={videoRef}
+                            autoPlay
+                            playsInline
+                            muted
+                            className={styles.videoFeed}
+                        />
+                        <canvas ref={canvasRef} className={styles.depthOverlay} />
+                        {(!cameraReady || depthLoading) && <div className={styles.videoLoading}><PageLoading /></div>}
+                    </div>
+                </div>
+                <div className={styles.contentWrapper}>
+                    {(!cameraReady || depthLoading) ? (
+                        <PageLoading />
+                    ) : (
+                        <div className={styles.calibrationCard}>
+                            <ProgressBar step={step} totalSteps={totalSteps} />
+                            {renderContent()}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

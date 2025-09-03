@@ -2,19 +2,36 @@
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    width: 100vw;
-    background-color: var(--color-background-dark);
-    color: var(--color-text-primary);
-    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 140px);
+    padding: 20px;
+    gap: 20px;
+}
+
+.mainContentWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.videoStreamDiv {
+    width: 100%;
+    max-width: 600px;
+    flex-shrink: 0;
 }
 
 .videoWrapper {
     position: relative;
     width: 100%;
-    height: 50vh; /* Explicitly 50% of viewport height */
-    flex-shrink: 0; /* Prevent shrinking */
-    background-color: #000;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    background-color: var(--color-card);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .videoFeed, .depthOverlay, .videoLoading {
@@ -40,150 +57,127 @@
 }
 
 .contentWrapper {
-    flex: 1; /* Take remaining vertical space */
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.calibrationCard {
+    background-color: var(--color-card);
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    background-color: var(--color-card);
-    text-align: center;
-    z-index: 5;
-    overflow-y: auto; /* Allow scrolling if content overflows */
+    flex-grow: 1; /* Make the card take up available space */
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.progressBar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--color-background);
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background-color: var(--color-cta);
+    border-radius: 4px;
+    transition: width 0.3s ease-in-out;
 }
 
 .stepIndicator {
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--color-text-secondary);
-    background-color: var(--color-background);
-    padding: 0.4rem 1rem;
-    border-radius: 20px;
-    margin-bottom: 1.5rem;
-    border: 1px solid var(--color-border);
+    margin-bottom: 0.5rem;
 }
 
-.contentWrapper h2 {
+.calibrationCard h2 {
     font-size: 1.8rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     color: var(--color-text-primary);
 }
 
-.guidanceBox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-    background-color: var(--color-background);
-    border: 1px solid var(--color-border);
-    min-width: 250px;
-    margin: 1rem 0;
-    font-size: 1.1rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
+.calibrationCard p {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem; /* from 2rem */
+    max-width: 350px;
+    text-align: center;
 }
 
-.stabilityMeter {
-    width: 80%;
-    max-width: 300px;
-    height: 20px;
-    background-color: var(--color-background-dark);
-    border-radius: 10px;
-    border: 1px solid var(--color-border);
-    margin-top: 1rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.stabilityFill {
-    height: 100%;
-    background-color: var(--color-success);
-    border-radius: 10px;
-    transition: width 0.2s ease-in-out;
-}
-
-.stabilityText {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-primary);
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-}
-
-.guidanceBox .successIcon {
-    color: var(--color-success);
-}
-
-.guidanceBox .recordingIcon {
+.distanceDisplay {
+    font-size: 3rem; /* from 3.5rem */
+    font-weight: 700;
     color: var(--color-cta);
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+    margin: 0.5rem 0 1rem 0; /* from 1rem 0 2rem 0 */
 }
 
 .buttonGroup {
     display: flex;
     gap: 1rem;
-    margin-top: 1.5rem;
+    margin-bottom: 1rem; /* from 1.5rem */
 }
 
-.contentWrapper button {
-    padding: 1rem 2rem;
+.calibrationCard button {
+    padding: 0.7rem 1.5rem; /* from 0.9rem 1.8rem */
     font-size: 1rem;
     font-weight: 600;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    z-index: 10;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.calibrationCard button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.primaryBtn {
     background-color: var(--color-cta);
+    color: white;
+}
+
+.secondaryBtn {
+    background-color: var(--color-secondaryCta);
     color: var(--color-text-primary);
 }
 
-.contentWrapper button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+.successBtn {
+    background-color: var(--color-success);
+    color: white;
+    width: 100%;
+    margin-top: auto; /* Push the button to the bottom */
 }
 
-.redoButton {
-    background-color: var(--color-danger-bg) !important;
-    color: var(--color-danger-text) !important;
-}
+/* Desktop layout */
+@media (min-width: 900px) {
+    .mainContentWrapper {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+    }
 
-.distanceDisplay {
-    font-size: 2.5rem !important;
-    font-weight: 700;
-    color: var(--color-cta) !important;
-    margin: 0.5rem 0 1.5rem 0 !important;
-}
-
-
-.adjustmentButton {
-    background-color: var(--color-background-light) !important;
-    color: var(--color-text-secondary) !important;
-    border: 1px solid var(--color-border) !important;
-}
-
-.finishButton {
-    margin-top: 1.5rem;
-    background-color: var(--color-success) !important;
-    color: var(--color-text-primary) !important;
+    .contentWrapper {
+        max-width: 400px;
+    }
 }

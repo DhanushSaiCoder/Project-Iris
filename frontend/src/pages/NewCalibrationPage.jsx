@@ -148,9 +148,8 @@ export default function NewCalibrationPage() {
                             <button onClick={() => handleAdjustment('farther')} className={styles.secondaryBtn}><Plus size={20} /> Too Far</button>
                         </div>
                         {adjustableCalibration && (
-                            <div className={styles.calibrationValues}>
-                                <p>m: {adjustableCalibration.m.toFixed(4)}</p>
-                                <p>c: {adjustableCalibration.c.toFixed(4)}</p>
+                            <div className={styles.correctionFactor}>
+                                <p>Correction: { (adjustableCalibration.c * 100).toFixed(1) } cm</p>
                             </div>
                         )}
                     </div>

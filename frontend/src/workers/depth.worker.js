@@ -32,6 +32,7 @@ async function warmUpModel() {
 }
 
 async function loadModel() {
+    console.log("Depth worker: Starting model load.");
     try {
         await tf.ready();
         await tf.setBackend("cpu");
@@ -40,15 +41,18 @@ async function loadModel() {
         
         // Warm up the model after loading it
         await warmUpModel();
-
+        console.log("Depth worker: Model loaded and warmed up.");
         self.postMessage({ type: "model_loaded" });
     } catch (e) {
+        console.error("Depth worker: Error during model loading:", e);
         self.postMessage({ type: "error", error: e.message || "Unknown error during model loading." });
     }
 }
 
 async function predictDepth(imageData) {
+    console.log("Depth worker: Received predict request.");
     if (!model) {
+        console.warn("Depth worker: Model not loaded, cannot predict.");
         return;
     }
 
@@ -91,6 +95,7 @@ async function predictDepth(imageData) {
         const depthWidth = depthTensor.shape[2];
         const depthData = await depthTensor.array();
         
+        console.log("Depth worker: Sending depth_map.", { width: depthWidth, height: depthHeight });
         self.postMessage({ type: "depth_map", data: depthData, width: depthWidth, height: depthHeight });
 
         // Dispose tensors to free up memory
@@ -108,6 +113,7 @@ async function predictDepth(imageData) {
         }
 
     } catch (e) {
+        console.error("Depth worker: Error during depth prediction:", e);
         self.postMessage({ type: "error", error: e.message || "Unknown error during depth prediction." });
     } finally {
         self.postMessage({ type: "prediction_complete" });

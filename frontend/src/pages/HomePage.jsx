@@ -12,10 +12,10 @@ import SessionSummary from "./SessionSummary";
 import { SettingsContext } from "../context/SettingsContext";
 import FullScreenLoading from "../components/common/FullScreenLoading"; // Import the new component
 import DetectionGuidance from "../components/DetectionGuidance"; // Import DetectionGuidance
+import { useModelContext } from "../context/ModelContext"; // Import useModelContext
 
 const HomePage = () => {
   const [isDetecting, setIsDetecting] = useState(false);
-  const [modelsAreLoading, setModelsAreLoading] = useState(true);
   const [detectedObjects, setDetectedObjects] = useState([]);
   const [sessionStartTime, setSessionStartTime] = useState(null);
   const [isPostingSession, setIsPostingSession] = useState(false);
@@ -23,6 +23,9 @@ const HomePage = () => {
   const navigate = useNavigate();
   const { developerMode, hasSeenDetectionGuidance } = useContext(SettingsContext);
   const { user } = useContext(AuthContext);
+  const { models, status } = useModelContext(); // Use ModelContext
+
+  const modelsAreLoading = status.coco === 'loading' || status.depth === 'loading';
 
   useEffect(() => {
     const guestLimitReached = localStorage.getItem("guestLimitReached");
@@ -103,10 +106,6 @@ const HomePage = () => {
     }
   };
 
-  const handleLoadingChange = (loading) => {
-    setModelsAreLoading(loading);
-  };
-  
   const handleObjectDetection = (objects) => {
     setDetectedObjects((prevObjects) => [...prevObjects, ...objects]);
   };
@@ -130,7 +129,8 @@ const HomePage = () => {
                         <div className={styles.videoWrapper}>
                             <VideoStream
                                 isDetecting={isDetecting}
-                                onLoadingChange={handleLoadingChange}
+                                cocoModel={models.coco}
+                                depthWorker={models.depthWorker}
                                 onObjectDetection={handleObjectDetection}
                             />
                         </div>

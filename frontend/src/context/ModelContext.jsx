@@ -14,6 +14,7 @@ export function ModelProvider({ children }) {
   const [status, setStatus] = useState({ coco: 'idle', depth: 'idle', error: null });
 
   useEffect(() => {
+    console.log("ModelContext status changed:", status);
     let mounted = true;
 
     setStatus(s => ({ ...s, coco: 'loading' }));
@@ -30,12 +31,28 @@ export function ModelProvider({ children }) {
     setStatus(s => ({ ...s, depth: 'loading' }));
     const worker = getDepthWorker();
     modelsRef.current.depthWorker = worker;
-    // optionally send init
-    worker.postMessage({ type: 'init' });
+    console.log("ModelContext: Sending 'load' message to depth worker.");
+    worker.postMessage({ type: 'load' });
 
-    setStatus(s => ({ ...s, depth: 'ready' }));
+    // Add listener for depth worker messages
+    const onDepthWorkerMessage = (e) => {
+      if (!mounted) return;
+      if (e.data.type === "model_loaded") {
+        console.log("ModelContext: Depth model loaded and warmed up.");
+        setStatus(s => ({ ...s, depth: 'ready' }));
+      } else if (e.data.type === "error") {
+        console.error("ModelContext: Depth worker error:", e.data.error);
+        setStatus(s => ({ ...s, depth: 'error', error: e.data.error }));
+      }
+    };
 
-    return () => { mounted = false; /* do not dispose here, keep models alive */ };
+    worker.addEventListener("message", onDepthWorkerMessage);
+
+    return () => {
+      mounted = false;
+      worker.removeEventListener("message", onDepthWorkerMessage); // Clean up listener
+      /* do not dispose here, keep models alive */
+    };
   }, []);
 
   return (

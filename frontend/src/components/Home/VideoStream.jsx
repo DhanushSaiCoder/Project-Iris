@@ -1,7 +1,5 @@
-import React, { useRef, useEffect, useState, useContext } from "react";
+import React, { useRef, useEffect, useState, useContext, useCallback } from "react";
 import { useCamera } from "../../hooks/useCamera";
-import { useModels } from "../../hooks/useModels";
-import { useDepthModel } from "../../hooks/useDepthModel";
 import useUnidentifiedObstacleDetection from '../../hooks/useUnidentifiedObstacleDetection';
 import { SettingsContext } from "../../context/SettingsContext";
 import { speak, cancelSpeech, clearSpeechQueue, setSpeechStatusCallback } from "../../utils/speech";
@@ -9,10 +7,10 @@ import { triggerHapticFeedback } from "../../utils/haptics";
 import { getDistance } from "../../utils/calibration";
 import styles from "./VideoStream.module.css";
 
-const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
+const VideoStream = ({ isDetecting, cocoModel, depthWorker, onObjectDetection }) => {
+    console.log("VideoStream props: cocoModel", cocoModel, "depthWorker", depthWorker);
+
     const { videoRef, ready: cameraReady } = useCamera();
-    const { cocoModel, loading: cocoLoading, error: cocoError } = useModels();
-    const { depthMap, predictDepth, loading: depthLoading, error: depthError } = useDepthModel();
     const { alertDistance, developerMode, audioAnnouncements, hapticFeedback, calibration } = useContext(SettingsContext);
     const { calculateUnidentifiedObstacles } = useUnidentifiedObstacleDetection();
     const canvasRef = useRef(null);
@@ -22,6 +20,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const GLOBAL_SPEECH_DEBOUNCE_MS = 3000; // 3 seconds debounce for all speech
 
     const lastDetectionsRef = useRef([]);
+    const [depthMap, setDepthMap] = useState(null); // State to store depth map
 
     const CENTRAL_CROP_PERCENTAGE_X = 0.70; // Keep central 70% of the width
     const CROP_SIDE_PERCENTAGE_X = (1 - CENTRAL_CROP_PERCENTAGE_X) / 2; // 15% from each side
@@ -34,9 +33,32 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
     const lastFrameProcessTime = useRef(0);
     const FRAME_PROCESS_INTERVAL_MS = 100; // Aim for 10 FPS
 
-    useEffect(() => {
-        onLoadingChange(cocoLoading || depthLoading);
-    }, [cocoLoading, depthLoading, onLoadingChange]);
+    // Function to send predict message to depth worker
+    const predictDepth = useCallback((mediaEl) => {
+        if (!depthWorker || !mediaEl) {
+            return;
+        }
+
+        const isVideo = mediaEl instanceof HTMLVideoElement;
+        const sourceWidth = isVideo ? mediaEl.videoWidth : mediaEl.width;
+        const sourceHeight = isVideo ? mediaEl.videoHeight : mediaEl.height;
+
+        if (!sourceWidth || !sourceHeight) return;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = sourceWidth;
+        canvas.height = sourceHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(mediaEl, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        try {
+            depthWorker.postMessage({ type: "predict", imageData }, [imageData.data.buffer]);
+        } catch (e) {
+            console.error("Failed to post predict to depth worker", e);
+        }
+    }, [depthWorker]);
+
 
     const drawUnidentifiedObstacles = (obstacles, ctx, canvasWidth, canvasHeight, depthMapWidth, depthMapHeight) => {
         if (!obstacles) return;
@@ -69,6 +91,20 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 
     useEffect(() => {
         let animationFrameId;
+
+        // Listener for depth worker messages
+        const onDepthWorkerMessage = (e) => {
+            if (e.data.type === "depth_map") {
+                console.log("VideoStream: Received depth_map from worker:", e.data);
+                setDepthMap({ data: e.data.data, width: e.data.width, height: e.data.height });
+            } else if (e.data.type === "error") {
+                console.error("Depth worker error:", e.data.error);
+            }
+        };
+
+        if (depthWorker) {
+            depthWorker.addEventListener("message", onDepthWorkerMessage);
+        }
 
         const detect = async () => {
             if (cameraReady && videoRef.current && canvasRef.current) {
@@ -130,14 +166,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                 ctx.strokeRect(sourceX, sourceY, sourceWidth, sourceHeight);
                 ctx.setLineDash([]); // Reset line dash
 
-                if (isDetecting && !cocoLoading && !depthLoading && cocoModel) {
-                    if (depthMap && depthMap.data && depthMap.width && depthMap.height && developerMode) {
-                        // drawDepthMap still uses full canvas dimensions, but its input is depthMap from cropped video
-                        // This might need adjustment if depthMap dimensions change due to cropping.
-                        // For now, assume predictDepth returns depthMap relative to cropped input.
-                        drawDepthMap(depthMap.data, ctx, canvas.width, canvas.height, depthMap.width, depthMap.height);
-                    }
-
+                if (isDetecting && cocoModel && depthWorker) {
                     // Pass the cropped canvas to models
                     const predictions = await cocoModel.detect(tempCanvas); // Pass tempCanvas
                     const filteredPredictions = predictions.filter(prediction => prediction.score > 0.6);
@@ -145,10 +174,8 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                     let processedPredictions = filteredPredictions.map(p => ({ ...p, isClose: false }));
                     let unidentifiedObstacles = [];
 
+                    console.log("VideoStream: Current depthMap state before use:", depthMap);
                     if (depthMap && depthMap.data && depthMap.width && depthMap.height) {
-                        // processPredictionsWithDepth and calculateUnidentifiedObstacles now receive depthMap from cropped video
-                        // Their internal logic needs to be aware of the cropped dimensions.
-                        // The depthMap.width and depthMap.height passed here should be tempCanvas.width/height.
                         processedPredictions = processPredictionsWithDepth(
                             filteredPredictions,
                             depthMap.data,
@@ -187,7 +214,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                         }
                     }
 
-                                                            const newDetections = processedPredictions.filter(p => {
+                    const newDetections = processedPredictions.filter(p => {
                         const lastDetection = lastDetectionsRef.current.find(ld => ld.class === p.class);
                         if (!lastDetection) {
                             return true;
@@ -224,8 +251,7 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
                             depthMap.height
                         );
                     }
-
-                    predictDepth(tempCanvas); // Pass tempCanvas
+                    predictDepth(tempCanvas); // Send image data to depth worker
                 }
             }
             animationFrameId = requestAnimationFrame(detect);
@@ -235,8 +261,11 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 
         return () => {
             cancelAnimationFrame(animationFrameId);
+            if (depthWorker) {
+                depthWorker.removeEventListener("message", onDepthWorkerMessage);
+            }
         };
-    }, [cameraReady, cocoLoading, depthLoading, cocoModel, predictDepth, videoRef, isDetecting, depthMap, alertDistance, calculateUnidentifiedObstacles, audioAnnouncements, hapticFeedback, developerMode, onObjectDetection, calibration]);
+    }, [cameraReady, cocoModel, depthWorker, videoRef, isDetecting, depthMap, alertDistance, calculateUnidentifiedObstacles, audioAnnouncements, hapticFeedback, developerMode, onObjectDetection, calibration, predictDepth]);
 
     // Clear speech queue if audio announcements are turned off
     useEffect(() => {
@@ -403,5 +432,3 @@ const VideoStream = ({ isDetecting, onLoadingChange, onObjectDetection }) => {
 };
 
 export default VideoStream;
-            
-                

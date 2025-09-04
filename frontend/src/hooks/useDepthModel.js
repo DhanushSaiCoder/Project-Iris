@@ -1,8 +1,9 @@
 // src/hooks/useDepthModel.js
 import { useState, useEffect, useRef, useCallback } from "react";
-import { getDepthWorker } from "../services/depthWorkerService";
+import { useModelContext } from "../context/ModelContext";
 
 export function useDepthModel() {
+  const { models, status } = useModelContext();
   const workerRef = useRef(null);
   const isBusyRef = useRef(false);
   const [loading, setLoading] = useState(true);
@@ -11,7 +12,9 @@ export function useDepthModel() {
 
   useEffect(() => {
     let mounted = true;
-    workerRef.current = getDepthWorker();
+    if (models.depthWorker) {
+      workerRef.current = models.depthWorker;
+    }
 
     const onMessage = (e) => {
       if (!mounted) return;
@@ -30,15 +33,17 @@ export function useDepthModel() {
       }
     };
 
-    workerRef.current.addEventListener("message", onMessage);
+    if (workerRef.current) {
+      workerRef.current.addEventListener("message", onMessage);
 
-    // tell worker to load if it hasn't
-    try {
-      workerRef.current.postMessage({ type: "load" });
-    } catch (e) {
-      console.error("Failed to post load to depth worker", e);
-      setError(e);
-      setLoading(false);
+      // tell worker to load if it hasn't
+      try {
+        workerRef.current.postMessage({ type: "load" });
+      } catch (e) {
+        console.error("Failed to post load to depth worker", e);
+        setError(e);
+        setLoading(false);
+      }
     }
 
     return () => {
@@ -48,10 +53,23 @@ export function useDepthModel() {
         // DO NOT terminate the worker here — it's shared and cached by the service
       }
     };
-  }, []);
+  }, [models.depthWorker]); // Depend on models.depthWorker to ensure workerRef is updated
+
+  useEffect(() => {
+    if (status.depth === 'ready') {
+      setLoading(false);
+      setError(null);
+    } else if (status.depth === 'error') {
+      setLoading(false);
+      setError(status.error);
+    } else {
+      setLoading(true);
+      setError(null);
+    }
+  }, [status.depth, status.error]);
 
   const predictDepth = useCallback((mediaEl) => {
-    const worker = workerRef.current || getDepthWorker();
+    const worker = workerRef.current;
     if (!worker || !mediaEl || isBusyRef.current) {
       return;
     }

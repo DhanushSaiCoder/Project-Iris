@@ -6,6 +6,8 @@ import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter as Router, Route, Routes, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AdminDashboardPage from './pages/AdminDashboardPage.jsx';
 
+import { ModelProvider } from './context/ModelContext';
+
 import CameraAccessDeniedPage from './pages/CameraAccessDeniedPage.jsx';
 import DevelopersPage from './pages/DevelopersPage.jsx';
 import HelpPage from './pages/HelpPage.jsx';
@@ -105,7 +107,9 @@ const App = () => {
             <NotificationProvider>
                 <ThemeProvider theme={darkTheme}>
                     <CssBaseline />
-                    <AppContent />
+                    <ModelProvider>
+                        <AppContent />
+                    </ModelProvider>
                 </ThemeProvider>
             </NotificationProvider>
         </Router>

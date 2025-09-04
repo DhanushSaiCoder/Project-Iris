@@ -34,7 +34,7 @@ async function warmUpModel() {
 async function loadModel() {
     try {
         await tf.ready();
-        await tf.setBackend("webgl");
+        await tf.setBackend("cpu");
         const modelPath = `${self.location.origin}/tfjs_models/fastdepth/model.json`;
         model = await tf.loadGraphModel(modelPath);
         

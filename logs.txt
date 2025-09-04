@@ -1,146 +1,282 @@
-Good — you built something useful, but you mixed automation and ambiguity and that’s why users are lost. I’ll be blunt: the flow is *too* clever for its own good. It surprises people, and surprise is the enemy of trust — especially for visually impaired users. Below is a ruthless, practical breakdown and a better replacement state machine you can implement *today*.
+Good — no fluff. I converted your hooks to use a singleton service (promise-cached coco model + single shared depth worker) and kept the hook APIs the same. Paste these files into your project and replace the old hooks with the versions below.
 
-# 1) Primary usability flaws (what’s breaking)
+Key changes (straight to the point):
 
-1. **Automation Surprise** — switching from `guiding` → `recording` automatically without an explicit, obvious cue makes users unsure whether the app is doing something or failing. They don’t feel in control.
-2. **Poorly signaled readiness** — “object in correct position and held stable” is abstract. Users don’t know when they’ve reached that threshold or why the app will record now.
-3. **Timing ambiguity** — automatic countdown begins unexpectedly. Users can’t cancel easily or prepare to hold still.
-4. **Insufficient multimodal feedback** — on-screen text alone is not enough for visually impaired users. Audio/haptic cues are underspecified and inconsistent.
-5. **No visible stability metric** — users can’t see or hear how close they are to “stable enough.” So they guess, move, re-try.
-6. **Single-button entry point hides options** — “Start Guidance” offers no choice between manual capture and auto-capture, so preferences are unknown.
-7. **Failures are opaque** — if recording fails (movement, occlusion, low light) the user gets “Measurement failed” with no reason or next-step guidance.
-8. **Cognitive load from mixed control model** — blending passive automation with active user action without signposting forces constant monitoring/guessing.
-
-# 2) Balance assessment: which side is it on?
-
-It **leans too far into automation** while failing to provide *predictable* automation. Consequence: users feel out of control and anxious — they will either micromanage (defeat automation) or mistrust the app and use it incorrectly. For visually impaired users, predictability > speed. Automation must be explainable and cancellable.
-
-# 3) Better state machine(s) — pick one and implement
-
-Two practical alternatives. Both add clarity and preserve efficiency. Choose A (user-controlled) if you want predictability. Choose B (hybrid) if you must capture faster and provide power users with automation.
+* Models/workers are created once and cached at module level. No automatic termination on hook unmount.
+* Hooks add/remove event listeners only — they don’t terminate shared resources.
+* You must call `disposeCocoModel()` / `terminateDepthWorker()` manually when you truly want to free memory (logout, low-memory handling).
 
 ---
 
-## A — **User-triggered capture (default — conservative, accessible)**
+### `src/services/modelService.js`
 
-Flow: `idle` → `guiding` → `ready` → `capture-request` (user presses) → `countdown` → `recording` → `saved` → `reviewing`
+```javascript
+// src/services/modelService.js
+import * as tf from "@tensorflow/tfjs";
+import "@tensorflow/tfjs-backend-webgl";
+import * as cocoSsd from "@tensorflow-models/coco-ssd";
 
-**Details / UI & audio:**
+let cocoModel = null;
+let cocoPromise = null;
 
-* **idle:** “Step 1 of 3. Calibrate at 1 meter. Press Start Guidance.” (TTS + short vibration on button focus)
-* **guiding:** Real-time directional audio cues: “Move closer” / “Move farther” / “OK — hold.” Also a continuous *stability meter* spoken every 0.5–1s: “Stability: 40%.” Haptics: light pulse frequency increases as stability increases.
-* **ready:** When object is in target range and stability > threshold, announce: “Ready to capture. Press and hold Capture to start, or say ‘capture’.” Give an obvious single tactile/clickable big control.
-* **capture-request:** On button press or voice command, start a **3s visible & audible countdown**: “Recording in 3…2…1. Hold still.” Allow cancel (tactile tap, voice “cancel”) during countdown.
-* **recording:** “Recording — hold still” with subtle continuous tone and a short vibration at start and end. If movement exceeds threshold, announce “Movement detected — recording paused” and allow user to re-hold.
-* **saved/reviewing:** “Measurement saved. Press Redo or Continue.” TTS + short success vibration.
+/**
+ * Returns a Promise that resolves to a loaded coco-ssd model.
+ * Promise is cached to prevent double-loading; instance is cached.
+ * options: { backend: 'webgl'|'cpu', base: 'lite_mobilenet_v2'|'mobilenet_v1' }
+ */
+export function getCocoModel(options = { backend: "webgl", base: "lite_mobilenet_v2" }) {
+  if (cocoModel) return Promise.resolve(cocoModel);
+  if (cocoPromise) return cocoPromise;
 
-**Why:** gives the user explicit action and clear opportunity to cancel or stabilize. No surprises.
+  cocoPromise = (async () => {
+    await tf.ready();
+    try {
+      // try to set backend; if it fails, tf will fall back
+      await tf.setBackend(options.backend);
+      await tf.ready();
+    } catch (e) {
+      console.warn("Failed to set TF backend:", e);
+    }
 
----
+    const model = await cocoSsd.load({ base: options.base });
 
-## B — **Hybrid (recommended default with opt-in auto mode)**
+    // Warm-up: do a tiny detect call to compile kernels (avoid runtime stall later)
+    try {
+      const warmupCanvas = document.createElement("canvas");
+      warmupCanvas.width = 1;
+      warmupCanvas.height = 1;
+      await model.detect(warmupCanvas);
+    } catch (err) {
+      // non-fatal
+      console.warn("Coco warmup failed:", err);
+    }
 
-Flow: `idle` → `guiding` → `in-range-unsteady` → `pre-recording-countdown` (announced + cancellable) → `recording` → `saved` → `reviewing`
+    cocoModel = model;
+    cocoPromise = null;
+    return cocoModel;
+  })();
 
-**Key differences:**
+  return cocoPromise;
+}
 
-* **Toggle at start:** On Start Guidance, app prompts: “Auto-capture ON. Say ‘manual’ to switch.” Keep a setting for user preference.
-* **Staged guidance:**
+export function isCocoLoaded() {
+  return !!cocoModel;
+}
 
-  * *in-range-unsteady:* “You’re close — a little closer and hold.” Stability % updates.
-  * *pre-recording-countdown:* When stability crosses the threshold, **announce**: “Auto-capture will begin in 3 seconds. Say ‘now’ to start immediately, or ‘stop’ to cancel.” Then do a **3-second audible countdown** and a distinct haptic pattern.
-* **Cancel options:** Voice (“stop”), two-finger tap, or big Cancel button during countdown.
-* **Recording & feedback** as in A.
-* **If user prefers speed:** reduce countdown to 1 second; otherwise use 3 seconds by default.
-
-**Why:** preserves automation speed while removing surprise — the app tells the user exactly *when* it will record and how to stop it.
-
----
-
-## State diagram (simple text)
-
+export function disposeCocoModel() {
+  if (cocoModel) {
+    try {
+      if (typeof cocoModel.dispose === "function") cocoModel.dispose();
+    } catch (e) {
+      console.warn("Error disposing coco model:", e);
+    }
+  }
+  cocoModel = null;
+  cocoPromise = null;
+}
 ```
-idle
-  └─(Start Guidance)→ guiding
-                       ├─(in-range & stable?)→ ready/pre-recording
-                       │                       └─(user-cancel?)→ guiding
-                       └─(user presses Capture)→ countdown → recording → saved → reviewing
+
+---
+
+### `src/services/depthWorkerService.js`
+
+```javascript
+// src/services/depthWorkerService.js
+let depthWorker = null;
+
+/**
+ * Returns the single shared depth worker. Creates it if missing.
+ * The worker script path must match your bundler (this uses Vite/CRA-style new URL).
+ */
+export function getDepthWorker() {
+  if (depthWorker) return depthWorker;
+
+  depthWorker = new Worker(new URL("../workers/depth.worker.js", import.meta.url), {
+    type: "module",
+  });
+
+  depthWorker.onerror = (e) => {
+    console.error("Depth worker error:", e);
+  };
+
+  return depthWorker;
+}
+
+export function terminateDepthWorker() {
+  if (depthWorker) {
+    try {
+      depthWorker.terminate();
+    } catch (e) {
+      console.warn("Error terminating depth worker:", e);
+    }
+    depthWorker = null;
+  }
+}
 ```
 
-Implement clear events: `start_guidance`, `range_established`, `stability_crossed`, `capture_command`, `countdown_cancel`, `movement_detected`, `save_confirm`, `redo`.
+---
 
-# 4) Onboarding — what to say and how to practice
+### Updated hook: `src/hooks/useDepthModel.js`
 
-Users must *experience* the flow before relying on it.
+```javascript
+// src/hooks/useDepthModel.js
+import { useState, useEffect, useRef, useCallback } from "react";
+import { getDepthWorker } from "../services/depthWorkerService";
 
-**Short audio-first onboarding (30–45s)**
+export function useDepthModel() {
+  const workerRef = useRef(null);
+  const isBusyRef = useRef(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [depthMap, setDepthMap] = useState(null);
 
-* 3-step voice-run demo:
+  useEffect(() => {
+    let mounted = true;
+    workerRef.current = getDepthWorker();
 
-  1. “This app needs three measurements at 1, 2 and 3 meters. I’ll guide you.”
-  2. Do a **practice capture** with dummy data: guide → ready → announce countdown → record → saved. Let user hear the entire cycle.
-  3. Quick tips: “If you want full control, say ‘manual’ at the start. Say ‘stop’ to cancel a countdown. Press and hold Capture to start immediately.”
+    const onMessage = (e) => {
+      if (!mounted) return;
+      const { type, data, width, height, error: workerError } = e.data;
 
-**Practice mode:** Let user run a full practice and redo without datastore changes. Use exaggerated audio/haptic cues.
+      if (type === "model_loaded") {
+        setLoading(false);
+      } else if (type === "depth_map") {
+        setDepthMap({ data, width, height });
+      } else if (type === "prediction_complete") {
+        isBusyRef.current = false;
+      } else if (type === "error") {
+        setError(workerError || new Error("Depth worker error"));
+        setLoading(false);
+        isBusyRef.current = false;
+      }
+    };
 
-**Concise onboarding copy:** (TTS-friendly)
+    workerRef.current.addEventListener("message", onMessage);
 
-* “You will be guided and told when we’ll record. When you hear ‘Ready to capture,’ press Capture or say ‘capture’. During countdown say ‘stop’ to cancel. Try practice now.”
+    // tell worker to load if it hasn't
+    try {
+      workerRef.current.postMessage({ type: "load" });
+    } catch (e) {
+      console.error("Failed to post load to depth worker", e);
+      setError(e);
+      setLoading(false);
+    }
 
-# 5) Accessibility-specific audio & haptic rules (must ship)
+    return () => {
+      mounted = false;
+      if (workerRef.current) {
+        workerRef.current.removeEventListener("message", onMessage);
+        // DO NOT terminate the worker here — it's shared and cached by the service
+      }
+    };
+  }, []);
 
-1. **Always speak the step and distance** at each state change: “Step 2: Calibrate at 2 meters.”
-2. **Announce readiness explicitly**: “Ready to record in 3 seconds.” Never start a countdown silently.
-3. **Provide stability feedback** every ≈0.5–1s: “Stability: 70% — almost there.”
-4. **Distinct earcons**: beep pattern for “move closer”, rising tone for “ready”, two short tones for “start recording”. Keep them consistent.
-5. **Haptic patterns**: low single pulse for guidance ticks; steady small buzz when stable; long buzz on save.
-6. **Voice cancel commands**: support at least one word (“stop” or “cancel”) and a physical gesture (two-finger tap) to account for noisy environments.
+  const predictDepth = useCallback((mediaEl) => {
+    const worker = workerRef.current || getDepthWorker();
+    if (!worker || !mediaEl || isBusyRef.current) {
+      return;
+    }
 
-# 6) Stability UX: visual + audio affordances
+    const isVideo = mediaEl instanceof HTMLVideoElement;
+    const sourceWidth = isVideo ? mediaEl.videoWidth : mediaEl.width;
+    const sourceHeight = isVideo ? mediaEl.videoHeight : mediaEl.height;
 
-* **Stability meter** (0–100) visual and spoken: e.g., “Stability 84%.”
-* **Target band indicator:** say “In-range” vs “Too close/Too far.”
-* **Movement smoothing:** show smoothed stability (use short moving average) so the meter doesn’t jitter; jitter causes panic.
-* **Threshold hysteresis:** require stability > T for S ms and remain > (T - hysteresis) to avoid flip-flop. Example: T=80%, S=600ms, hysteresis=10%.
+    if (!sourceWidth || !sourceHeight) return;
 
-# 7) Failure handling — be explicit
+    isBusyRef.current = true;
 
-* If recording fails: speak reason: “Recording failed — too much movement. Try again or press Redo.”
-* Timeouts: “No object detected for 10s. Try using a flat, high-contrast object.”
-* Rejection: provide actionable tips: “Move object slightly left or right; remove background clutter.”
+    const canvas = document.createElement("canvas");
+    canvas.width = sourceWidth;
+    canvas.height = sourceHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(mediaEl, 0, 0, canvas.width, canvas.height);
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-# 8) Settings & power-user options
+    // Transfer the underlying buffer for speed. The buffer will be neutered on the main thread.
+    try {
+      worker.postMessage({ type: "predict", imageData }, [imageData.data.buffer]);
+    } catch (e) {
+      console.error("Failed to post predict to depth worker", e);
+      isBusyRef.current = false;
+    }
+  }, []);
 
-* **Default conservative mode** for new users.
-* **Advanced settings:** Auto-capture toggle, countdown length (0/1/2/3s), stability threshold slider. Save preference.
-* **Voice & haptics volume** settings.
+  return { loading, error, depthMap, predictDepth };
+}
+```
 
-# 9) Quick dev checklist & acceptance criteria
+---
 
-* [ ] Announce state transitions via TTS.
-* [ ] Provide stability meter and speak percentage.
-* [ ] Show and speak “Ready to capture” before any automatic countdown.
-* [ ] Allow cancel during countdown via voice and tap.
-* [ ] Distinct tones for guidance/ready/start/success.
-* [ ] Practice mode in onboarding.
-* [ ] Clear failure messages and tips.
-* [ ] Add settings for Auto-capture (off by default).
-* **KPIs** to validate: >90% successful captures in ≤20s per step during usability test; user-reported confusion <10% on first attempt; completion rate for full 3-step calibration ≥95%.
+### Updated hook: `src/hooks/useModels.js`
 
-# 10) Suggested exact audio snippets (copy-ready)
+```javascript
+// src/hooks/useModels.js
+import { useState, useEffect } from "react";
+import { getCocoModel } from "../services/modelService";
 
-* Idle: “Calibration. Step 1 of 3. Calibrate at one meter. Press Start Guidance when ready.”
-* Guiding approaching: “Move closer.”
-* Guiding receding: “Move farther.”
-* Stability updates: “Stability sixty percent.”
-* Ready (manual mode): “Ready to capture. Press Capture or say ‘capture’.”
-* Pre-recording (auto): “Auto-capture in 3 seconds. Say ‘stop’ to cancel.”
-* Recording start: “Recording — hold still.”
-* Saved: “Measurement saved.”
-* Failure: “Recording failed due to movement. Please hold still and try again.”
+export function useModels() {
+  const [cocoModel, setCocoModel] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-# Final blunt take
+  useEffect(() => {
+    let cancelled = false;
 
-Your flow tried to be smart but forgot to *tell* users what it's doing. Fix that by making automation **visible, announced, and cancellable** — or hand control to the user. Don’t remove control in the name of speed. Predictability builds trust; trust makes the calibration usable.
+    (async () => {
+      try {
+        setLoading(true);
+        const model = await getCocoModel(); // cached promise/instance
+        if (!cancelled) setCocoModel(model);
+      } catch (err) {
+        if (!cancelled) setError(err);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
 
-If you want, I’ll translate this into a concrete set of TTS prompts + vibration patterns and a tiny state-transition table you can hand to your devs for implementation and testing. Which option do you want defaulted for new users — **A (manual)** or **B (hybrid auto with explicit countdown)**?
+    return () => {
+      cancelled = true;
+      // DO NOT dispose the model here — keep it cached for other mounts.
+    };
+  }, []);
+
+  return { cocoModel, loading, error };
+}
+```
+
+---
+
+## Short list of important caveats you must handle (no sugar)
+
+1. **Manual memory release** — If you need to free GPU/JS memory (logout or low-memory), call:
+
+   ```js
+   import { disposeCocoModel } from "../services/modelService";
+   import { terminateDepthWorker } from "../services/depthWorkerService";
+   disposeCocoModel();
+   terminateDepthWorker();
+   ```
+
+   Don’t expect automatic cleanup on component unmount.
+
+2. **Worker message routing if you have multiple subscribers** — Shared worker broadcasts messages to all listeners. If multiple components use `useDepthModel`, every listener receives every message. If you need one-to-one responses, implement request IDs in messages:
+
+   * `postMessage({ type: 'predict', id: '<uuid>', imageData })`
+   * worker responds with `{ type:'depth_map', id, ... }` and hooks only handle messages matching their id(s).
+
+3. **Backends & WebGL** — TF.js WebGL backend generally doesn’t run in a worker. If your depth model needs GPU acceleration, either run inference on main thread or ensure your worker environment supports GPU (rare). Best: CPU in worker OR WebGL on main thread with heavy pre/post-processing in worker.
+
+4. **Warm-up & first-run stalls** — Even with caching, first load will take time. Use `requestIdleCallback` or lazy-load non-critical models after initial render. Show a spinner or small UX since it’s unavoidable.
+
+5. **Transfer semantics** — When transferring `imageData.data.buffer`, the main-thread buffer becomes neutered. That’s fine — don’t reuse it afterwards.
+
+6. **Concurrency & race conditions** — The `getCocoModel` promise prevents double-loading. Good. For other flows, always use cached promises or locks if multiple parts may trigger loads.
+
+---
+
+If you want, I’ll:
+
+* add request-id routing to the worker/client code so hooks won’t get cross-talk,
+* provide a ready `depth.worker.js` example that loads TF (cpu) and implements `{type: 'load'}`, `{type: 'predict', id, imageData}` messages and returns `{type: 'depth_map', id, ...}`.
+
+Pick one (I’ll give code). No baby talk.

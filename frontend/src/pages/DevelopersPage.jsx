@@ -8,12 +8,13 @@ import {
 } from 'lucide-react';
 import styles from './DevelopersPage.module.css';
 import profile from '../Images/profile.png';
+import DhanushProfile from "../Images/DhanushProfile.jpg"
 
 const DevelopersPage = () => {
 
     const DevelopersDetails = [
         {
-            profileImg: profile,
+            profileImg: DhanushProfile,
             name: "Dhanush Sai Nayak.V",
             role: "Lead Developer",
             socialMedia: {

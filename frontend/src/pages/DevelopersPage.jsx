@@ -14,109 +14,197 @@ const DevelopersPage = () => {
     const DevelopersDetails = [
         {
             profileImg: profile,
-            name: "Ravi Kumar",
-            role: "Frontend Developer",
+            name: "Dhanush Sai Nayak.V",
+            role: "Lead Developer",
             socialMedia: {
-                github: "https://github.com/ravikumar",
-                gmail: "ravikumar@gmail.com",
-                linkedin: "https://linkedin.com/in/ravikumar"
+                github: "https://github.com/DhanushSaiCoder",
+                instagram: "https://www.instagram.com/dhanush.saii/",
+                gmail: "dhanushsai.work@gmail.com",
+                linkedin: "https:https://www.linkedin.com/in/dhanush-sai-1517a8273/"
             }
         },
         {
             profileImg: profile,
-            name: "Priya Sharma",
+            name: "Subhash Relangi",
             role: "UI/UX Designer",
             socialMedia: {
-                github: "https://github.com/priyadesigns",
-                linkedin: "https://linkedin.com/in/priyasharma"
+                github: "https://github.com/SubhashRelangi",
+                instagram: "https://instagram.com/_subhash_16",
+                gmail: "subhashrelangi16@gmail.com",
             }
         },
         {
             profileImg: profile,
-            name: "Aman Verma",
+            name: "Nikhil Kilarapu",
             role: "Backend Developer",
             socialMedia: {
-                github: "https://github.com/amanverma",
-                instagram: "https://instagram.com/aman.codes",
-                gmail: "amanverma@gmail.com",
-                linkedin: "https://linkedin.com/in/amanverma"
+                github: "https://github.com/NIKHILKILARAPU",
+                instagram: "https://instagram.com/k.nikhil_79",
+                gmail: "nikhilkilarapu79@gmail.com",
             }
         },
         {
             profileImg: profile,
-            name: "Sneha Reddy",
+            name: "Sandeep Landa",
             role: "Data Analyst",
             socialMedia: {
-                github: "https://github.com/snehareddy",
-                instagram: "https://instagram.com/sneha.analytics",
-                gmail: "snehareddy@gmail.com",
-                linkedin: "https://linkedin.com/in/snehareddy"
+                github: "https://github.com/sandeeplanda50",
+                instagram: "https://instagram.com/sandeep_landa_18",
+                gmail: "sandeeplanda50@gmail.com",
             }
         },
         {
             profileImg: profile,
-            name: "Vikram Singh",
-            role: "DevOps Engineer",
-            socialMedia: {
-                github: "https://github.com/vikramsingh",
-                instagram: "https://instagram.com/vikram.devops",
-                gmail: "vikramsingh@gmail.com",
-                linkedin: "https://linkedin.com/in/vikramsingh"
-            }
-        },
-        {
-            profileImg: profile,
-            name: "Meera Joshi",
-            role: "Full Stack Developer",
-            socialMedia: {
-                github: "https://github.com/meerajoshi",
-                instagram: "https://instagram.com/meera.codes",
-                gmail: "meerajoshi@gmail.com",
-                linkedin: "https://linkedin.com/in/meerajoshi"
-            }
-        },
-        {
-            profileImg: profile,
-            name: "Arjun Das",
-            role: "AI Engineer",
-            socialMedia: {
-                github: "https://github.com/arjundas",
-                instagram: "https://instagram.com/arjun.ai",
-                gmail: "arjundas@gmail.com",
-                linkedin: "https://linkedin.com/in/arjundas"
-            }
-        },
-        {
-            profileImg: profile,
-            name: "Kavya Iyer",
-            role: "Machine Learning Intern",
-            socialMedia: {
-                github: "https://github.com/kavyaai",
-                instagram: "https://instagram.com/kavya.ml",
-                gmail: "kavyaiyer@gmail.com",
-                linkedin: "https://linkedin.com/in/kavyaiyer"
-            }
-        },
-        {
-            profileImg: profile,
-            name: "Rahul Mehta",
-            role: "Cybersecurity Analyst",
-            socialMedia: {
-                github: "https://github.com/rahulmehta",
-                instagram: "https://instagram.com/rahul.cyber",
-                gmail: "rahulmehta@gmail.com",
-                linkedin: "https://linkedin.com/in/rahulmehta"
-            }
-        },
-        {
-            profileImg: profile,
-            name: "Ananya Rao",
+            name: "Vpd Venkata Sagar",
             role: "Cloud Engineer",
             socialMedia: {
-                github: "https://github.com/ananyarao",
-                instagram: "https://instagram.com/ananya.cloud",
-                gmail: "ananyarao@gmail.com",
-                linkedin: "https://linkedin.com/in/ananyarao"
+                github: "https://github.com/DivyaPrakeshVenkataSagar",
+                instagram: "https://instagram.com/venkatasagar_09",
+                gmail: "venkatasagar35@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Poojith Gudavalli",
+            role: "DevOps Engineer",
+            socialMedia: {
+                github: "https://github.com/Rocky0794",
+                instagram: "https://instagram.com/demon_king_07",
+                gmail: "gudavallipujith@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Ch Indumathi",
+            role: "Full Stack Developer",
+            socialMedia: {
+                instagram: "https://instagram.com/indusri48",
+                gmail: "indumathichinnala@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "P Jyothi",
+            role: "AI Engineer",
+            socialMedia: {
+                instagram: "https://instagram.com/jyo__potti_99",
+                gmail: "pathivadajyothi2008@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Syam Sundar Rao Chippada",
+            role: "Machine Learning Intern",
+            socialMedia: {
+                instagram: "https://instagram.com/prince_syam_1330",
+                gmail: "syamsundarrao1330@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Tejaswara Rao Bairi",
+            role: "Cybersecurity Analyst",
+            socialMedia: {
+                instagram: "https://instagram.com/urs_teja._.007",
+                gmail: "bairiteja@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "M Akhila",
+            role: "Cloud Engineer",
+            socialMedia: {
+                github: "https://github.com/akhila10249",
+                gmail: "mattaakhila99@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "N Yamini Satya",
+            role: "Cloud Engineer",
+            socialMedia: {
+                gmail: "yaminisatya122007@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "P Bhuvaneswari",
+            role: "Cloud Engineer",
+            socialMedia: {
+                gmail: "devibhuvaneswari@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Sekhar Mugada",
+            role: "Cloud Engineer",
+            socialMedia: {
+                instagram: "https://instagram.com/sekhar.mugada_",
+                gmail: "sekharpspk04@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Jaya Simha Sunkara",
+            role: "Cloud Engineer",
+            socialMedia: {
+                instagram: "https://instagram.com/sunkarajayasimha",
+                gmail: "sunkarajayasimha@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Sasi Kumar Grandhi",
+            role: "Cloud Engineer",
+            socialMedia: {
+                instagram: "https://instagram.com/sasikumar_2309",
+                gmail: "g.aditya4123@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Naveen Palukuri",
+            role: "Cloud Engineer",
+            socialMedia: {
+                instagram:"https://instagram.com/naveen__palukuri__",
+                gmail: "palukurinaveen73@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Hari Krishna Mangalarapu",
+            role: "Cloud Engineer",
+            socialMedia: {
+                instagram: "https://instagram.com/x_tox_i_hari_.100",
+                gmail: "h.mangalarapu@gmail.com",
+            
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Jaswanth Pogiri",
+            role: "Cloud Engineer",
+            socialMedia: {
+                instagram:"https://instagram.com/mr_killer__111_",
+                gmail: "pogirijaswanth@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Mohammad Yonus",
+            role: "Cloud Engineer",
+            socialMedia: {
+                instagram: "https://instagram.com/_user_deleted_0025_",
+                gmail: "mohammad.yonus.1910@gmail.com",
+            }
+        },
+        {
+            profileImg: profile,
+            name: "Kishan",
+            role: "Cloud Engineer",
+            socialMedia: {
+                instagram: "https://instagram.com/itz._wicky.__",
+                gmail: "kishantejam@gmail.com",
             }
         }
     ];

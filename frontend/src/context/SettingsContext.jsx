@@ -11,7 +11,7 @@ const defaultSettings = {
     autoCaliberateOnLaunch: false,
     torch: false,
     hasSeenDetectionGuidance: false,
-    enableUnidentifiedObstacleDetection: true, // New default setting
+    enableUnidentifiedObstacleDetection: false, // New default setting
 };
 
 // 2. Create Context
